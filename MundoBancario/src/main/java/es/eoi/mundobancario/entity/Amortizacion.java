@@ -4,7 +4,10 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -22,4 +25,8 @@ public class Amortizacion {
 	private Date fecha;
 	@Column(name = "importe")
 	private float importe;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id", referencedColumnName = "id")
+	private Prestamo prestamo;
 }
