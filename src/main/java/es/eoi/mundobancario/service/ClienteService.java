@@ -1,0 +1,18 @@
+package es.eoi.mundobancario.service;
+
+import es.eoi.mundobancario.entity.Cliente;
+
+/*
+ * Cliente service
+ * =============
+ * 
+ * Service for the Cliente Repository
+ * 
+ * @author Carlos Sanchez <karlos.sangar@gmail.com>
+ */
+
+public interface ClienteService extends IService<Cliente, Integer> {
+	
+	
+
+}
