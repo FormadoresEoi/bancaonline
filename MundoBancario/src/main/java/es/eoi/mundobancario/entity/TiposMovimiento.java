@@ -23,6 +23,6 @@ public class TiposMovimiento {
 	@Column(name = "tipo")
 	private String tipo;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "id")
-	private List<Prestamo> prestamo;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tiposmovimiento")
+	private List<Movimiento> movimiento;
 }

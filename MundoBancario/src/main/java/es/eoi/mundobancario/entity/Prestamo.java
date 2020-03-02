@@ -34,7 +34,7 @@ public class Prestamo {
 	@JoinColumn(name = "id", referencedColumnName = "id")
 	private Cuenta Cuenta;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "prestamo")
 	private List<Amortizacion> listAmortizacion;
 
 	
