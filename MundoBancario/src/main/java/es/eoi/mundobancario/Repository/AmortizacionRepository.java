@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import es.eoi.mundobancario.entity.Amortizacion;
 
+@Repository
 public interface AmortizacionRepository extends JpaRepository<Amortizacion, Integer> {
 
 }
