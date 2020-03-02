@@ -70,8 +70,8 @@ public class ClientesController {
 	}
 	
 	@GetMapping
-	public List<CuentaDto> findAllCuentasByCliente(@PathVariable int IdCliente) {
-		List<CuentaDto> cuentas = clienteService.findAllCuentasByIdCliente(IdCliente)
+	public List<CuentaDto> findAllCuentasByCliente(@PathVariable int id) {
+		List<CuentaDto> cuentas = clienteService.findAllCuentasByIdCliente(id)
 				.stream()
 				.map(c -> model.map(c, CuentaDto.class))
 				.collect(Collectors.toList());

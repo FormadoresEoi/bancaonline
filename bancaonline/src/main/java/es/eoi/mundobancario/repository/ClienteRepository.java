@@ -14,5 +14,5 @@ public interface ClienteRepository extends JpaRepository<Cliente, Integer>{
 
 	Optional<Cliente> findClienteByUsuarioAndPass(String usuario, String pass);
 	
-	List<Cuenta> findAllCuentasByIdCliente(int IdCliente);
+	List<Cuenta> findAllCuentasByIdCliente(int id);
 }

@@ -16,7 +16,7 @@ public interface ClienteService {
 
 	List<Cliente> findAll();
 	
-	List<Cuenta> findAllCuentasByIdCliente(int IdCliente);
+	List<Cuenta> findAllCuentasByIdCliente(int id);
 
 	void updateCliente(Cliente cliente);
 }

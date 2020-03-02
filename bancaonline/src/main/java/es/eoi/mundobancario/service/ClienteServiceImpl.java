@@ -44,8 +44,8 @@ public class ClienteServiceImpl implements ClienteService{
 	}
 
 	@Override
-	public List<Cuenta> findAllCuentasByIdCliente(int IdCliente) {
-		return repository.findAllCuentasByIdCliente(IdCliente);
+	public List<Cuenta> findAllCuentasByIdCliente(int id) {
+		return repository.findAllCuentasByIdCliente(id);
 	}
 	
 }
