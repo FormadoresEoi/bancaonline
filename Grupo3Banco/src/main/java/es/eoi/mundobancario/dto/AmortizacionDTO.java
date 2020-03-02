@@ -1,5 +1,12 @@
 package es.eoi.mundobancario.dto;
 
-public class AmortizacionDTO {
+import java.util.Date;
 
+import lombok.Data;
+
+@Data
+public class AmortizacionDTO {
+	private int id;
+	private Date fecha;
+	private int importe;
 }

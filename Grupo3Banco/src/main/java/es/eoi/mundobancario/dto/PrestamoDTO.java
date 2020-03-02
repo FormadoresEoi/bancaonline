@@ -1,5 +1,14 @@
 package es.eoi.mundobancario.dto;
 
-public class PrestamoDTO {
+import java.util.Date;
 
+import lombok.Data;
+
+@Data
+public class PrestamoDTO {
+	private int id;
+	private String descripcion;
+	private Date fecha;
+	private double importe;
+	private int plazos;
 }
