@@ -1,10 +1,15 @@
 package es.eoi.mundobancario.entity;
 
-import java.util.Date;
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-import jdk.nashorn.internal.objects.annotations.Getter;
-import jdk.nashorn.internal.objects.annotations.Setter;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -18,6 +23,7 @@ public class TipoMovimiento {
 	private int id;
 	@Column(name = "TIPO")
 	private String tipo;
+
 	public TipoMovimiento(String tipo) {
 		super();
 		this.tipo = tipo;

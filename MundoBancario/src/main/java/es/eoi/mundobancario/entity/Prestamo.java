@@ -3,11 +3,20 @@ package es.eoi.mundobancario.entity;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
-import jdk.nashorn.internal.objects.annotations.Getter;
-import jdk.nashorn.internal.objects.annotations.Setter;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -32,6 +41,7 @@ public class Prestamo {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "NUM_CUENTA", referencedColumnName = "NUM_CUENTA")
 	private Cuenta cuenta;
+
 	public Prestamo(String descripcion, Date fecha, double importe, double plazo, List<Amortizacion> amortizacion,
 			Cuenta cuenta) {
 		super();
@@ -42,5 +52,5 @@ public class Prestamo {
 		this.amortizacion = amortizacion;
 		this.cuenta = cuenta;
 	}
-	
+
 }

@@ -12,9 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import jdk.nashorn.internal.objects.annotations.Getter;
-import jdk.nashorn.internal.objects.annotations.Setter;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -38,7 +38,7 @@ public class Movimiento {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "NUM_CUENTA", referencedColumnName = "NUM_CUENTA")
 	private Cuenta cuenta;
-	
+
 	public Movimiento(String descripcion, Date fecha, double importe, TipoMovimiento tipoMovimiento,
 			es.eoi.mundobancario.entity.Cuenta cuenta) {
 		super();
@@ -48,5 +48,5 @@ public class Movimiento {
 		this.tipoMovimiento = tipoMovimiento;
 		this.cuenta = cuenta;
 	}
-	
+
 }
