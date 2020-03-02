@@ -26,7 +26,7 @@ public class CuentaServiceImpl implements CuentaService {
 	 * @inheritDoc
 	 */
 	@Override
-	public Optional<Cuenta> find(String id) {
+	public Optional<Cuenta> find(Integer id) {
 		return repository.findById(id);
 	}
 
