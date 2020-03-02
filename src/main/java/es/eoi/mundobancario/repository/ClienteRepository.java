@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import es.eoi.mundobancario.entity.Cliente;
 
 /**
- * Cliente repository
+ * Cliente 
  * ====================
  *
  * Repository for the 'ClienteRepository'.
