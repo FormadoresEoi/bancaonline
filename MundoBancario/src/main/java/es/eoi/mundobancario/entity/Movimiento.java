@@ -1,6 +1,6 @@
 package es.eoi.mundobancario.entity;
 
-import java.util.List;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,13 +8,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import lombok.Getter;
+import jdk.nashorn.internal.objects.annotations.Getter;
+import jdk.nashorn.internal.objects.annotations.Setter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import springBoot.Entity.Cuenta;
 
 @Getter
 @Setter
@@ -26,10 +26,27 @@ public class Movimiento {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private int id;
-	@Column(name = "nombre")
-	private String nombre;
-	@Column(name = "ciudad")
-	private String ciudad;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "banco")
-	private List<Cuenta> cuenta;
+	@Column(name = "DESCRIPCION")
+	private String descripcion;
+	@Column(name = "FECHA")
+	private Date fecha;
+	@Column(name = "IMPORTE")
+	private double importe;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ID_TIPO_MOVIMIENTO", referencedColumnName = "ID")
+	private TipoMovimiento tipoMovimiento;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "NUM_CUENTA", referencedColumnName = "NUM_CUENTA")
+	private Cuenta cuenta;
+	
+	public Movimiento(String descripcion, Date fecha, double importe, TipoMovimiento tipoMovimiento,
+			es.eoi.mundobancario.entity.Cuenta cuenta) {
+		super();
+		this.descripcion = descripcion;
+		this.fecha = fecha;
+		this.importe = importe;
+		this.tipoMovimiento = tipoMovimiento;
+		this.cuenta = cuenta;
+	}
+	
 }
