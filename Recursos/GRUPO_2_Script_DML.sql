@@ -1,3 +1,4 @@
+delete from tipos_movimiento;
 insert into TIPOS_MOVIMIENTO values (0,'INGRESO');
 insert into TIPOS_MOVIMIENTO values (1,'PRESTAMO');
 insert into TIPOS_MOVIMIENTO values (2,'PAGO');
