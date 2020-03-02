@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.eoi.mundobancario.entity.Cliente;
+import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.repository.ClienteRepository;
 
 @Service
@@ -36,5 +37,15 @@ public class ClienteServiceImpl implements ClienteService{
 	 public void updateCliente(Cliente cliente) {
 	    this.repository.save(cliente);
 	 }
+
+	@Override
+	public Optional<Cliente> findClienteByUsuarioAndPass(String usuario, String pass) {
+		return repository.findClienteByUsuarioAndPass(usuario, pass);
+	}
+
+	@Override
+	public List<Cuenta> findAllCuentasByIdCliente(int IdCliente) {
+		return repository.findAllCuentasByIdCliente(IdCliente);
+	}
 	
 }

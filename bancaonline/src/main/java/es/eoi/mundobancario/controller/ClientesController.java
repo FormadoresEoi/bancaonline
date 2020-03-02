@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.ClienteDto;
+import es.eoi.mundobancario.dto.CuentaDto;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.service.ClienteService;
 
@@ -25,24 +26,33 @@ import es.eoi.mundobancario.service.ClienteService;
 public class ClientesController {
 
 	@Autowired
-	private ClienteService service;
+	private ClienteService clienteService;
 
 	@Autowired
 	private ModelMapper model;
 
 	@PostMapping
 	public ResponseEntity<String> create(@RequestBody ClienteDto dto) {
-		if (!service.find(dto.getId()).get().equals(null))
+		if (!clienteService.find(dto.getId()).get().equals(null))
 			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		else {
-			service.create(model.map(dto, Cliente.class));
+			clienteService.create(model.map(dto, Cliente.class));
 			return new ResponseEntity<>(HttpStatus.ACCEPTED);
 		}
 	}
 
+	@PostMapping(value = "/login")
+	public ResponseEntity<ClienteDto> findClienteByUsuarioAndPass(@PathVariable String usuario, @PathVariable String pass) {
+		Optional<Cliente> cliente = clienteService.findClienteByUsuarioAndPass(usuario, pass);
+		if (!cliente.isPresent())
+			return new ResponseEntity<ClienteDto>(HttpStatus.NOT_FOUND);
+		ClienteDto dto = model.map(cliente.get(), ClienteDto.class);
+		return new ResponseEntity<ClienteDto>(dto, HttpStatus.OK);
+	}
+	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<ClienteDto> find(@PathVariable int id) {
-		Optional<Cliente> cliente = service.find(id);
+	public ResponseEntity<ClienteDto> findById(@PathVariable int id) {
+		Optional<Cliente> cliente = clienteService.find(id);
 		if (!cliente.isPresent())
 			return new ResponseEntity<ClienteDto>(HttpStatus.NOT_FOUND);
 		ClienteDto dto = model.map(cliente.get(), ClienteDto.class);
@@ -51,16 +61,29 @@ public class ClientesController {
 
 	@GetMapping
 	public List<ClienteDto> findAll() {
-		List<ClienteDto> clientes = service.findAll().stream().map(c -> model.map(c, ClienteDto.class))
+		List<ClienteDto> clientes = clienteService.findAll()
+				.stream()
+				.map(c -> model.map(c, ClienteDto.class))
 				.collect(Collectors.toList());
 
 		return clientes;
 	}
+	
+	@GetMapping
+	public List<CuentaDto> findAllCuentasByCliente(@PathVariable int IdCliente) {
+		List<CuentaDto> cuentas = clienteService.findAllCuentasByIdCliente(IdCliente)
+				.stream()
+				.map(c -> model.map(c, CuentaDto.class))
+				.collect(Collectors.toList());
+
+		return cuentas;
+	}
+	
 
 	@PutMapping(value = "/{id}")
 	public void update(@RequestBody ClienteDto dto) {
 		Cliente cliente = model.map(dto, Cliente.class);
-		service.updateCliente(cliente);
+		clienteService.updateCliente(cliente);
 	}
 	
 }

@@ -1,4 +1,4 @@
-package es.eoi.mundobancario.repository;
+package es.eoi.mundobancario.service;
 
 import java.util.List;
 import java.util.Optional;
