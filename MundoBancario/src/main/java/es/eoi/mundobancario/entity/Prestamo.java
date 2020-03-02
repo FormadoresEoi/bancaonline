@@ -8,7 +8,6 @@ import javax.persistence.OneToMany;
 
 import jdk.nashorn.internal.objects.annotations.Getter;
 import jdk.nashorn.internal.objects.annotations.Setter;
-import springBoot.Entity.Cuenta;
 
 @Getter
 @Setter
@@ -33,4 +32,15 @@ public class Prestamo {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "NUM_CUENTA", referencedColumnName = "NUM_CUENTA")
 	private Cuenta cuenta;
+	public Prestamo(String descripcion, Date fecha, double importe, double plazo, List<Amortizacion> amortizacion,
+			Cuenta cuenta) {
+		super();
+		this.descripcion = descripcion;
+		this.fecha = fecha;
+		this.importe = importe;
+		this.plazo = plazo;
+		this.amortizacion = amortizacion;
+		this.cuenta = cuenta;
+	}
+	
 }
