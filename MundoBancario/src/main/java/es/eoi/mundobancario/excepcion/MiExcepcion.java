@@ -1,5 +1,6 @@
 package es.eoi.mundobancario.excepcion;
 
+@SuppressWarnings("serial")
 public class MiExcepcion extends Exception {
 	// Constructor
 	public MiExcepcion() {
