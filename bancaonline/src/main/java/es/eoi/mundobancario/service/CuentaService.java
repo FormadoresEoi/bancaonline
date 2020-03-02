@@ -16,5 +16,4 @@ public interface CuentaService {
 
 	void update(Cuenta dto);
 
-	void remove(int id);
 }

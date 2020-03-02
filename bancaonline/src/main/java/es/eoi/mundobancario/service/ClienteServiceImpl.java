@@ -11,6 +11,7 @@ import es.eoi.mundobancario.repository.ClienteRepository;
 
 @Service
 public class ClienteServiceImpl implements ClienteService{
+	
 	@Autowired
 	private ClienteRepository repository;
 
@@ -29,11 +30,6 @@ public class ClienteServiceImpl implements ClienteService{
 	
 	public List<Cliente> findAll(){
 		return repository.findAll();
-	}
-
-	@Override
-	public void remove(int id) {
-		repository.deleteById(id);
 	}
 	
 	 @Override

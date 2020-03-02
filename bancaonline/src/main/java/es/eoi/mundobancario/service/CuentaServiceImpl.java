@@ -37,11 +37,5 @@ public class CuentaServiceImpl implements CuentaService {
 	public void update(Cuenta dto) {
 		this.repository.save(dto);
 	}
-
-	@Override
-	public void remove(int id) {
-		repository.deleteById(id);
-	}
-	
 	
 }
