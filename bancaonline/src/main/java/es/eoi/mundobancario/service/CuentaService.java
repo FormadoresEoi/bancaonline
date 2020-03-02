@@ -10,11 +10,11 @@ public interface CuentaService {
 	
 	void create(Cuenta dto);
 
-	Optional<Cuenta> find(String id);
+	Optional<Cuenta> find(int id);
 
 	List<Cuenta> findAll();
 
-	void update(Cuenta cuenta);
+	void update(Cuenta dto);
 
 	void remove(int id);
 }

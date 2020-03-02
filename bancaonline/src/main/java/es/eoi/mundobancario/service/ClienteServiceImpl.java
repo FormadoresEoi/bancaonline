@@ -35,4 +35,10 @@ public class ClienteServiceImpl implements ClienteService{
 	public void remove(int id) {
 		repository.deleteById(id);
 	}
+	
+	 @Override
+	 public void updateCliente(Cliente cliente) {
+	    this.repository.save(cliente);
+	 }
+	
 }

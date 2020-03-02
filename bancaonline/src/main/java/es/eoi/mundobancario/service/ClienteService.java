@@ -14,4 +14,6 @@ public interface ClienteService {
 	List<Cliente> findAll();
 
 	void remove(int id);
+	
+	void updateCliente( Cliente cliente);
 }

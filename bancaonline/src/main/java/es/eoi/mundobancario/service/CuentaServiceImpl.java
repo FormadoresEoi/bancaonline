@@ -24,7 +24,7 @@ public class CuentaServiceImpl implements CuentaService {
 	}
 
 	@Override
-	public Optional<Cuenta> find(String id) {
+	public Optional<Cuenta> find(int id) {
 		return repository.findById(Integer.valueOf(id));
 	}
 	
@@ -35,18 +35,13 @@ public class CuentaServiceImpl implements CuentaService {
 
 	@Override
 	public void update(Cuenta dto) {
-		Optional<Cuenta> cuenta = this.find(String.valueOf(dto.getNumCuenta()));
-		if(!cuenta.equals(null)) {
-			Cuenta cuent = cuenta.get();
-			cuent.setSaldo(dto.getSaldo());
-			repository.save(cuent);			
-		}
+		this.repository.save(dto);
 	}
 
 	@Override
 	public void remove(int id) {
 		repository.deleteById(id);
 	}
-
+	
 	
 }
