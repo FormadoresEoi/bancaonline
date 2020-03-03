@@ -94,43 +94,6 @@ public class CuentaController implements IController<CuentaDto, String> {
     }
 
     /**
-     * @inheritDoc
-     */
-    @Override
-    @GetMapping
-    public List<CuentaDto> findAll() {
-        return cuentaService.find()
-                            .stream()
-                            .map(c -> mapper.map(c, CuentaDto.class))
-                            .collect(Collectors.toList());
-    }
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    @GetMapping("/{id}")
-    public CuentaDto findById(@PathVariable String id) {
-        return mapper.map(
-                cuentaService.find(id)
-                             .orElseThrow(RuntimeException::new),
-                CuentaDto.class
-        );
-    }
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    @PostMapping
-    public CuentaDto create(@RequestBody CuentaDto entity) {
-        return mapper.map(
-                cuentaService.update(mapper.map(entity, Cuenta.class)),
-                CuentaDto.class
-        );
-    }
-
-    /**
      * Crearemos un préstamo nuevo.
      *
      * @param id     Cuenta Id.
@@ -168,6 +131,43 @@ public class CuentaController implements IController<CuentaDto, String> {
         return mapper.map(
                 cuentaService.movimiento(id, movimiento),
                 MovimientoDto.class
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    @GetMapping
+    public List<CuentaDto> findAll() {
+        return cuentaService.find()
+                            .stream()
+                            .map(c -> mapper.map(c, CuentaDto.class))
+                            .collect(Collectors.toList());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    @GetMapping("/{id}")
+    public CuentaDto findById(@PathVariable String id) {
+        return mapper.map(
+                cuentaService.find(id)
+                             .orElseThrow(RuntimeException::new),
+                CuentaDto.class
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    @PostMapping
+    public CuentaDto create(@RequestBody CuentaDto entity) {
+        return mapper.map(
+                cuentaService.update(mapper.map(entity, Cuenta.class)),
+                CuentaDto.class
         );
     }
 
