@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import es.eoi.mundobancario.dto.ClienteBasicoDto;
 import es.eoi.mundobancario.dto.CuentaBasicaDto;
 import es.eoi.mundobancario.dto.CuentaDto;
 import es.eoi.mundobancario.dto.NewCuentaDto;
@@ -27,54 +29,57 @@ import es.eoi.mundobancario.service.CuentaService;
 @RestController
 @RequestMapping("/cuentas")
 public class CuentasController {
-	
+
 	@Autowired
 	private CuentaService cuentaService;
-	
+
 	@Autowired
 	private ClienteService clienteService;
-	
+
 	@Autowired
 	private ModelMapper model;
-	
+
 	@PostMapping
 	public ResponseEntity<String> create(@RequestBody NewCuentaDto dto) {
 		Optional<Cliente> cliente = clienteService.find(dto.getId_cliente());
-		
-		if(!cliente.isPresent())
+
+		if (!cliente.isPresent())
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		else {
 			Cuenta cuenta = model.map(dto, Cuenta.class);
 			cuenta.setCliente(cliente.get());
 			cuentaService.create(cuenta);
 		}
-		
+
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<CuentaBasicaDto> find(@PathVariable int id) {
 		Optional<Cuenta> cuenta = cuentaService.find(id);
-		if(!cuenta.isPresent())
+		if (!cuenta.isPresent())
 			return new ResponseEntity<CuentaBasicaDto>(HttpStatus.NOT_FOUND);
 		CuentaBasicaDto dto = model.map(cuenta.get(), CuentaBasicaDto.class);
 		return new ResponseEntity<CuentaBasicaDto>(dto, HttpStatus.OK);
 	}
-	
+
 	@GetMapping
-	public ResponseEntity<List<CuentaBasicaDto>> findAll(){
-		List<CuentaBasicaDto> cuentas = cuentaService.findAll()
-				.stream()
-				.map(c -> model.map(c, CuentaBasicaDto.class))
+	public ResponseEntity<List<CuentaBasicaDto>> findAll() {
+		List<CuentaBasicaDto> cuentas = cuentaService.findAll().stream().map(c -> model.map(c, CuentaBasicaDto.class))
 				.collect(Collectors.toList());
-		
+
 		return new ResponseEntity<List<CuentaBasicaDto>>(cuentas, HttpStatus.FOUND);
 	}
 
-	@PutMapping("/{id}")
-	public void update(@RequestBody CuentaDto dto) {
-		Cuenta cuenta = model.map(dto, Cuenta.class);
+
+
+	@PutMapping("/{num_cuenta}")
+	public ResponseEntity<CuentaBasicaDto> update(@PathVariable int num_cuenta, @RequestParam String alias) {
+		Cuenta cuenta = cuentaService.find(num_cuenta).get();
+		cuenta.setAlias(alias);
 		cuentaService.update(cuenta);
+		CuentaBasicaDto modifyCuenta = model.map(cuenta, CuentaBasicaDto.class);
+		return new ResponseEntity<CuentaBasicaDto>(modifyCuenta, HttpStatus.OK);
 	}
 
 }
