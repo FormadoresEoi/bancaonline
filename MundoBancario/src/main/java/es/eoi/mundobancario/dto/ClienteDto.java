@@ -9,7 +9,6 @@ public class ClienteDto {
 
 	int id;
 	String usuario;
-	String pass;
 	String nombre;
 	String email;
 
