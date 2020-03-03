@@ -7,6 +7,7 @@ public class ClienteDTO {
 	
 	private int id;
 	private String usuario;
+	private String pass;
 	private String nombre;
 	private String email;
 }

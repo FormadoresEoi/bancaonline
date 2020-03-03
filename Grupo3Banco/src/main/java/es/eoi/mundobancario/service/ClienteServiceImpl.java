@@ -31,7 +31,8 @@ public class ClienteServiceImpl implements ClienteService {
 	}
 
 	@Override
-	public void updateClient(Cliente cliente) {
+	public void updateClient(Cliente cliente,String email){
+		cliente.setEmail(email);
 		this.repository.save(cliente);
 		
 		
