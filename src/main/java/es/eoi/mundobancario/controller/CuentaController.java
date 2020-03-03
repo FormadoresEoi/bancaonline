@@ -68,6 +68,18 @@ public class CuentaController implements IController<CuentaDto, Integer> {
     }
 
     /**
+     * Devuelve los préstamos vivos de la cuenta.
+     * (incluirán las amortizaciones planificadas)
+     */
+    @GetMapping("/{id}/prestamosVivos")
+    public List<PrestamoDto> prestamosVivos(@PathVariable String id) {
+        return prestamoService.findAllByCuentaIdVivos(id)
+                              .stream()
+                              .map(c -> mapper.map(c, PrestamoDto.class))
+                              .collect(Collectors.toList());
+    }
+
+    /**
      * @inheritDoc
      */
     @Override

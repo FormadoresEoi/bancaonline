@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Prestamo service.
@@ -59,5 +60,16 @@ public class PrestamoServiceImpl implements PrestamoService {
     @Override
     public List<Prestamo> findAllByCuentaId(String id) {
         return repository.findAllByCuentasNumCuenta(id);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public List<Prestamo> findAllByCuentaIdVivos(String id) {
+        return this.findAllByCuentaId(id)
+                   .stream()
+                   .filter(p -> p.getAmortizacionesById().size() < p.getPlazos())
+                   .collect(Collectors.toList());
     }
 }
