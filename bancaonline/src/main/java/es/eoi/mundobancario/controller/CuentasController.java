@@ -41,8 +41,7 @@ public class CuentasController {
 
 	@Autowired
 	private PrestamoService prestamoService;
-	
-	
+
 	@Autowired
 	private ModelMapper model;
 
@@ -60,12 +59,11 @@ public class CuentasController {
 
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
-	
-	
+
 	@PostMapping("/{id}/prestamos")
-	public ResponseEntity<String> createPrestamo(@RequestBody NewPrestamoDto dto){
+	public ResponseEntity<String> createPrestamo(@RequestBody NewPrestamoDto dto) {
 		Optional<Cuenta> cuenta = cuentaService.find(dto.getId_cuenta());
-		if(!cuenta.isPresent())
+		if (!cuenta.isPresent())
 			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 		else {
 			CuentaBasicaDto cuentaDto = model.map(cuenta.get(), CuentaBasicaDto.class);
@@ -74,7 +72,7 @@ public class CuentasController {
 			prestamoService.create(model.map(prestamo, Prestamo.class));
 		}
 		return new ResponseEntity<String>(HttpStatus.OK);
-		
+
 	}
 
 	@GetMapping("/{id}")
@@ -95,17 +93,16 @@ public class CuentasController {
 
 		return new ResponseEntity<List<CuentaBasicaDto>>(cuentas, HttpStatus.FOUND);
 	}
-	
-	
+
 	@GetMapping("/deudoras")
 	public ResponseEntity<List<CuentaBasicaDto>> findAllNegative() {
-		//DOUBLE
-		List<CuentaBasicaDto> cuentas = cuentaService.findBySaldoLessThan(0.0).stream().map(c -> model.map(c, CuentaBasicaDto.class))
+		List<CuentaBasicaDto> cuentas = cuentaService.findBySaldoLessThan(0.0)
+				.stream()
+				.map(c -> model.map(c, CuentaBasicaDto.class))
 				.collect(Collectors.toList());
 
 		return new ResponseEntity<List<CuentaBasicaDto>>(cuentas, HttpStatus.FOUND);
 	}
-
 
 	@PutMapping("/{num_cuenta}")
 	public ResponseEntity<CuentaBasicaDto> update(@PathVariable int num_cuenta, @RequestParam String alias) {
@@ -115,13 +112,12 @@ public class CuentasController {
 		CuentaBasicaDto modifyCuenta = model.map(cuenta, CuentaBasicaDto.class);
 		return new ResponseEntity<CuentaBasicaDto>(modifyCuenta, HttpStatus.OK);
 	}
-	
-	
+
 	@GetMapping("/{num_cuenta}/movimientos")
 	public ResponseEntity<CuentaDto> findAllMovimientosById(@PathVariable int num_cuenta) {
 		CuentaDto cuenta = model.map(cuentaService.find(num_cuenta).get(), CuentaDto.class);
 
 		return new ResponseEntity<CuentaDto>(cuenta, HttpStatus.OK);
 	}
-	
+
 }
