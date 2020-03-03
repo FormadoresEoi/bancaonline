@@ -27,6 +27,17 @@ public class PrestamoServiceImpl implements PrestamoService {
 	public List<Prestamo> listPrestamos() {
 		return repository.findAll();
 	}
+
+	@Override
+	public List<Prestamo> FindByCuenta(int cuenta) {
+		return repository.FindByCuenta(cuenta);
+	}
+
+	@Override
+	public Prestamo FindByPrestamoVivo() {
+		return repository.FindByPrestamoVivo();
+	}
+	
 	
 	
 	
