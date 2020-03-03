@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/cuenta")
-public class CuentaController implements IController<CuentaDto, Integer> {
+public class CuentaController implements IController<CuentaDto, String> {
     private final CuentaService     cuentaService;
     private final MovimientoService movimientoService;
     private final PrestamoService   prestamoService;
@@ -110,7 +110,7 @@ public class CuentaController implements IController<CuentaDto, Integer> {
      */
     @Override
     @GetMapping("/{id}")
-    public CuentaDto findById(@PathVariable Integer id) {
+    public CuentaDto findById(@PathVariable String id) {
         return mapper.map(
                 cuentaService.find(id)
                              .orElseThrow(RuntimeException::new),
