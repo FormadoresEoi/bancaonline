@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -53,10 +54,11 @@ public class ClienteController {
 		return listbancdto;
 	}
 
-	@PutMapping(value = "/update")
+	@PutMapping(value = "/update/{id}",params= {"email"})
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public ClienteDTO updateCliente(@RequestBody ClienteDTO clientdto) {
-		Cliente cliente = modelmapper.map(clientdto, Cliente.class);
+	public ClienteDTO updateCliente(@PathVariable (value="id") int id, @RequestParam (value="email")String email) {
+		Cliente cliente = modelmapper.map(selectClienteAux(id), Cliente.class);
+		cliente.setEmail(email);
 		return modelmapper.map(clientserv.updateCliente(cliente), ClienteDTO.class);
 
 	}
@@ -64,9 +66,12 @@ public class ClienteController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ClienteDTO selectCliente(@PathVariable(value = "id") int id) {
 		ClienteDTO clientdto = modelmapper.map(clientserv.buscarCliente(id).get(), ClienteDTO.class);
-		// BeanUtils.copyProperties(bancdto,bncserv.buscarBanco(nombre)); OTRA FORMA DE
-		// PASAR EL DTO
 		return clientdto;
+
+	}
+	
+	public Cliente selectClienteAux(int id) {
+		return clientserv.buscarCliente(id).get();
 
 	}
 }
