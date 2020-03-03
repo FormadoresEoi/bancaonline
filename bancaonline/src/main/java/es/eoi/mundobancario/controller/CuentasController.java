@@ -93,8 +93,8 @@ public class CuentasController {
 	}
 	
 	
-	@GetMapping("/{id}/movimientos")
-	public ResponseEntity<CuentaDto> findAllMovimientosById(@RequestParam int num_cuenta) {
+	@GetMapping("/{num_cuenta}/movimientos")
+	public ResponseEntity<CuentaDto> findAllMovimientosById(@PathVariable int num_cuenta) {
 		CuentaDto cuenta = model.map(cuentaService.find(num_cuenta).get(), CuentaDto.class);
 
 		return new ResponseEntity<CuentaDto>(cuenta, HttpStatus.OK);
