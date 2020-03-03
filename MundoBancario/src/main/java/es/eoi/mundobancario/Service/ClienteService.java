@@ -9,7 +9,7 @@ public interface ClienteService {
 
 	Cliente Create(Cliente cliente);
 
-	Optional<Cliente> findById(int id);
+	Cliente findById(int id);
 
 	List<Cliente> findAll();
 
@@ -21,5 +21,7 @@ public interface ClienteService {
 
 	Cliente findCuentas(int id);
 
-	Optional<Cliente> updateEmail(int id);
+	Cliente updateEmail(int id);
+
+	Cliente findPrestamos(int id);
 }

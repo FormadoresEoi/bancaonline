@@ -40,7 +40,7 @@ public class ReportsController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/clientes/{id}")
 	public ClienteDto findClientes(@PathVariable int id) {
-		return toClienteDto(clienteService.findClienteById(id).get());
+		return toClienteDto(clienteService.findById(id));
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/clientes/{id}")
@@ -50,7 +50,7 @@ public class ReportsController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/prestamos/{id}")
 	public ClienteDto findPrestamos(@PathVariable int id) {
-		return toClienteDto(clienteService.findPrestamos(id).get());
+		return toClienteDto(clienteService.findPrestamos(id));
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/prestamos/{id}")
