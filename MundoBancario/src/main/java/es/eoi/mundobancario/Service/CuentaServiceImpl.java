@@ -10,21 +10,21 @@ import es.eoi.mundobancario.entity.Cuenta;
 @Service
 public class CuentaServiceImpl implements CuentaService {
 
-	CuentasRepository cuentasrepository;
+	CuentasRepository cuentasRepository;
 
 	public Cuenta CreateCuenta(Cuenta cuenta) {
-		return cuentasrepository.save(cuenta);
+		return cuentasRepository.save(cuenta);
 	}
 
 	public Optional<Cuenta> findCuentaByNumCuenta(int numCuenta) {
-		return cuentasrepository.findById(numCuenta);
+		return cuentasRepository.findById(numCuenta);
 	}
 
 	public Cuenta updateCuenta(Cuenta cuenta) {
-		return cuentasrepository.save(cuenta);
+		return cuentasRepository.save(cuenta);
 	}
 
 	public void removeCuenta(int numCuenta) {
-		cuentasrepository.deleteById(numCuenta);
+		cuentasRepository.deleteById(numCuenta);
 	}
 }
