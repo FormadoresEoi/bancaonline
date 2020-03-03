@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.ClienteBasicoDto;
+import es.eoi.mundobancario.dto.ClienteDto;
 import es.eoi.mundobancario.dto.NewClienteDto;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.service.ClienteService;
@@ -70,15 +71,12 @@ public class ClientesController {
 		return new ResponseEntity<List<ClienteBasicoDto>>(clientes, HttpStatus.OK);
 	}
 	
-//	@GetMapping
-//	public ResponseEntity<List<CuentaDto>> findAllCuentasByCliente(@PathVariable int id) {
-//		List<CuentaDto> cuentas = clienteService.findAllCuentasByIdCliente(id)
-//				.stream()
-//				.map(c -> model.map(c, CuentaDto.class))
-//				.collect(Collectors.toList());
-//
-//		return new ResponseEntity<List<CuentaDto>>(cuentas, HttpStatus.OK);
-//	}
+	@GetMapping("/{id}/cuentas")
+	public ResponseEntity<ClienteDto> findAllCuentasById(@PathVariable int id) {
+		ClienteDto cliente = model.map(clienteService.find(id).get(), ClienteDto.class);
+
+		return new ResponseEntity<ClienteDto>(cliente, HttpStatus.OK);
+	}
 	
 
 	@PutMapping(value = "/{id}")
