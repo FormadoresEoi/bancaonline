@@ -40,4 +40,9 @@ public class CuentaServiceImpl implements CuentaService {
 		return repository.findAll();
 	}
 
+	@Override
+	public Cuenta FindBySaldo() {
+		return repository.FindBySaldo();
+	}
+
 }

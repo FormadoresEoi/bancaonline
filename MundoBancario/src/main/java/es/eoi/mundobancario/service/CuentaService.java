@@ -16,4 +16,6 @@ public interface CuentaService {
 	
 	List<Cuenta> listCuentas();
 	
+	Cuenta FindBySaldo(); 
+	
 }

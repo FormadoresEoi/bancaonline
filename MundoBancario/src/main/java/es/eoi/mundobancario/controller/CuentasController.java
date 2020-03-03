@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.CuentaDto;
-import es.eoi.mundobancario.entity.Cliente;
+import es.eoi.mundobancario.dto.MovimientoDto;
 import es.eoi.mundobancario.entity.Cuenta;
-import es.eoi.mundobancario.service.ClienteService;
+import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.service.CuentaService;
+import es.eoi.mundobancario.service.MovimientoService;
 
 @RestController
 @RequestMapping(value = "/cuentas")
@@ -25,6 +26,9 @@ public class CuentasController {
 
 	@Autowired
 	CuentaService cuentaService;
+	
+	@Autowired
+	MovimientoService movimientoService;
 	
 	@GetMapping(value = "/{id}")
 	public CuentaDto FindById(@RequestParam(value = "id")int id) {
@@ -79,6 +83,33 @@ public class CuentasController {
 		return dto;
 	}
 	
+	@GetMapping(value = "/deudores")
+	public CuentaDto FindBySaldo() {
+		Cuenta cuenta = cuentaService.FindBySaldo();
+		CuentaDto dto = new CuentaDto();
+		dto.setNum_cuenta(cuenta.getNum_cuenta());
+		dto.setAlias(cuenta.getAlias());
+		dto.setSaldo(cuenta.getSaldo());
+		dto.setCliente(cuenta.getCliente().getId());
+		return dto;
+	}
+	
+	@GetMapping(value = "/{id}/movimientos")
+	public List<MovimientoDto> FindByCuenta(int cuenta) {
+		List<Movimiento> litsMovimiento = movimientoService.findByCuenta(cuenta);
+		List<MovimientoDto> dto = new ArrayList<MovimientoDto>();
+		for (Movimiento movimiento : litsMovimiento) {
+			MovimientoDto movimientodto = new MovimientoDto();
+			movimientodto.setId(movimiento.getId());
+			movimientodto.setDescripcion(movimiento.getDescripcion());
+			movimientodto.setFecha(movimiento.getFecha());
+			movimientodto.setImporte(movimiento.getImporte());
+			movimientodto.setTipo(movimiento.getTipo().getId());
+			movimientodto.setCuenta(movimiento.getCuenta().getNum_cuenta());
+			dto.add(movimientodto);
+		}
+		return dto;
+	}
 	
 	
 }

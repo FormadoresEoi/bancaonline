@@ -12,4 +12,5 @@ public interface MovimientoService {
 	
 	List<Movimiento> listMovimiento();
 	
+	List<Movimiento> findByCuenta(int cuenta); 
 }
