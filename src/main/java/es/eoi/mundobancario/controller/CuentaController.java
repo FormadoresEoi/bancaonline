@@ -2,9 +2,11 @@ package es.eoi.mundobancario.controller;
 
 import es.eoi.mundobancario.dto.CuentaDto;
 import es.eoi.mundobancario.dto.MovimientoDto;
+import es.eoi.mundobancario.dto.PrestamoDto;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.service.CuentaService;
 import es.eoi.mundobancario.service.MovimientoService;
+import es.eoi.mundobancario.service.PrestamoService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 public class CuentaController implements IController<CuentaDto, Integer> {
     private final CuentaService     cuentaService;
     private final MovimientoService movimientoService;
+    private final PrestamoService   prestamoService;
     private final ModelMapper       mapper;
 
     /**
@@ -50,6 +53,18 @@ public class CuentaController implements IController<CuentaDto, Integer> {
                                 .stream()
                                 .map(c -> mapper.map(c, MovimientoDto.class))
                                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Devuelve los préstamos de la cuenta.
+     * (incluirán las amortizaciones planificadas)
+     */
+    @GetMapping("/{id}/prestamos")
+    public List<PrestamoDto> prestamos(@PathVariable String id) {
+        return prestamoService.findAllByCuentaId(id)
+                              .stream()
+                              .map(c -> mapper.map(c, PrestamoDto.class))
+                              .collect(Collectors.toList());
     }
 
     /**

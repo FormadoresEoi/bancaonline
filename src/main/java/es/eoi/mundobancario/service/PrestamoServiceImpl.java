@@ -52,4 +52,12 @@ public class PrestamoServiceImpl implements PrestamoService {
     public void delete(Prestamo entity) {
         repository.delete(entity);
     }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public List<Prestamo> findAllByCuentaId(String id) {
+        return repository.findAllByCuentasNumCuenta(id);
+    }
 }
