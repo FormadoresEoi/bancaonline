@@ -16,4 +16,10 @@ public interface ClienteService {
 	Cliente update(Cliente cliente);
 
 	void remove(int id);
+
+	Cliente login(int id);
+
+	Cliente findCuentas(int id);
+
+	Optional<Cliente> updateEmail(int id);
 }

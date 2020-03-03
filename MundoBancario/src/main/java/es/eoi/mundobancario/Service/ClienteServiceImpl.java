@@ -38,4 +38,20 @@ public class ClienteServiceImpl implements ClienteService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public Cliente login(int id) {
+
+		return null;
+	}
+
+	public Cliente findCuentas(int id) {
+
+		return null;
+	}
+
+	@Override
+	public Optional<Cliente> updateEmail(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
