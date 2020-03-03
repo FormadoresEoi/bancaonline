@@ -46,6 +46,5 @@ public class Cuenta {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cuenta")
 	private List<Prestamo> prestamos;
-	
 
 }

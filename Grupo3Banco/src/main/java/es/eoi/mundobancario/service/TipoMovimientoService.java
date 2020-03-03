@@ -1,5 +1,10 @@
 package es.eoi.mundobancario.service;
 
-public interface TipoMovimientoService {
+import es.eoi.mundobancario.entity.TiposMovimiento;
 
+public interface TipoMovimientoService {
+	
+	//Buscar TipoMovimiento por ID
+	
+	public TiposMovimiento FindById(int id);
 }
