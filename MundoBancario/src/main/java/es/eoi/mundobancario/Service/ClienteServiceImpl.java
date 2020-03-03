@@ -10,21 +10,21 @@ import es.eoi.mundobancario.entity.Cliente;
 @Service
 public class ClienteServiceImpl implements ClienteService {
 
-	ClientesRepository clientesrepository;
+	ClientesRepository clientesRepository;
 
 	public Cliente CreateCliente(Cliente cliente) {
-		return clientesrepository.save(cliente);
+		return clientesRepository.save(cliente);
 	}
 
 	public Optional<Cliente> findClienteById(int id) {
-		return clientesrepository.findById(id);
+		return clientesRepository.findById(id);
 	}
 
 	public Cliente updateCliente(Cliente cliente) {
-		return clientesrepository.save(cliente);
+		return clientesRepository.save(cliente);
 	}
 
 	public void removeCliente(int id) {
-		clientesrepository.deleteById(id);
+		clientesRepository.deleteById(id);
 	}
 }

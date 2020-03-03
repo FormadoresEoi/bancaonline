@@ -10,22 +10,22 @@ import es.eoi.mundobancario.Repository.AmortizacionRepository;
 @Service
 public class AmortizacionServiceImpl implements AmortizacionService {
 
-	AmortizacionRepository amortizacionrepository;
+	AmortizacionRepository amortizacionRepository;
 
 	public Amortizacion CreateAmortizacion(Amortizacion amortizacion) {
-		return amortizacionrepository.save(amortizacion);
+		return amortizacionRepository.save(amortizacion);
 	}
 
 	public Optional<Amortizacion> findAmortizacionById(int id) {
-		return amortizacionrepository.findById(id);
+		return amortizacionRepository.findById(id);
 
 	}
 
 	public Amortizacion updateAmortizacion(Amortizacion amortizacion) {
-		return amortizacionrepository.save(amortizacion);
+		return amortizacionRepository.save(amortizacion);
 	}
 
 	public void removeAmortizacion(int id) {
-		amortizacionrepository.deleteById(id);
+		amortizacionRepository.deleteById(id);
 	}
 }

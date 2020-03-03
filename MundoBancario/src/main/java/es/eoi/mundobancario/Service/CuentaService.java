@@ -8,7 +8,7 @@ public interface CuentaService {
 
 	Cuenta CreateCuenta(Cuenta cuenta);
 
-	Optional<Cuenta> findCuentaByNumCuenta(int numCuenta);
+	Optional<Cuenta> findCuentaById(int numCuenta);
 
 	Cuenta updateCuenta(Cuenta cuenta);
 
