@@ -39,4 +39,10 @@ public interface PrestamoService extends IService<Prestamo, Integer> {
      * @return Prestamos of given Cuenta.
      */
     List<Prestamo> findAllByCuentaIdAmortizados(String id);
+
+    /**
+     * Funcionalidad encargada de ejecutar las amortizaciones en caso de cuya fecha coincida
+     * con la del sistema, el funcionamiento se explica en detalle en la parte superior.
+     */
+    void ejecutarAmortizacionesDiarias();
 }

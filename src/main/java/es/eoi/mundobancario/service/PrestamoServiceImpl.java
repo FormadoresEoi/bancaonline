@@ -1,10 +1,14 @@
 package es.eoi.mundobancario.service;
 
+import es.eoi.mundobancario.entity.Amortizacion;
+import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.repository.PrestamoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,9 +22,11 @@ import java.util.stream.Collectors;
  * @author Manulaiko <manulaiko@gmail.com>
  */
 @Service
+@RequiredArgsConstructor
 public class PrestamoServiceImpl implements PrestamoService {
-    @Autowired
-    private PrestamoRepository repository;
+    private final PrestamoRepository  repository;
+    private final CuentaService       cuentaService;
+    private final AmortizacionService amortizacionService;
 
     /**
      * @inheritDoc
@@ -72,6 +78,7 @@ public class PrestamoServiceImpl implements PrestamoService {
                    .filter(p -> p.getAmortizacionesById().size() < p.getPlazos())
                    .collect(Collectors.toList());
     }
+
     /**
      * @inheritDoc
      */
@@ -81,5 +88,42 @@ public class PrestamoServiceImpl implements PrestamoService {
                    .stream()
                    .filter(p -> p.getAmortizacionesById().size() >= p.getPlazos())
                    .collect(Collectors.toList());
+    }
+
+    /**
+     * Funcionalidad encargada de ejecutar las amortizaciones en caso de cuya fecha coincida
+     * con la del sistema, el funcionamiento se explica en detalle en la parte superior.
+     */
+    @Override
+    public void ejecutarAmortizacionesDiarias() {
+        if (LocalDateTime.from(Instant.now()).getDayOfMonth() != 1) {
+            return;
+        }
+
+        find().stream()
+              .filter(p -> p.getAmortizacionesById().size() < p.getPlazos())
+              .forEach(this::amortizar);
+    }
+
+    private void amortizar(Prestamo prestamo) {
+        if (
+                prestamo.getFecha()
+                        .toLocalDateTime()
+                        .getMonthValue() < LocalDateTime.from(Instant.now()).getMonthValue()
+        ) {
+            return;
+        }
+
+        double importe = prestamo.getImporte() / prestamo.getPlazos();
+
+        Cuenta cuenta = prestamo.getCuentasByCuentasNumCuenta();
+        cuenta.setSaldo(cuenta.getSaldo() - importe);
+        cuentaService.update(cuenta);
+
+        Amortizacion amortizacion = new Amortizacion();
+        amortizacion.setImporte(importe);
+        amortizacion.setPrestamosId(prestamo.getId());
+
+        amortizacionService.update(amortizacion);
     }
 }

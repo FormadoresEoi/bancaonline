@@ -135,6 +135,15 @@ public class CuentaController implements IController<CuentaDto, String> {
     }
 
     /**
+     * Funcionalidad encargada de ejecutar las amortizaciones en caso de cuya fecha coincida
+     * con la del sistema, el funcionamiento se explica en detalle en la parte superior.
+     */
+    @PostMapping("/ejecutarAmortizacionesDiarias")
+    public void ejecutarAmortizacionesDiarias() {
+        prestamoService.ejecutarAmortizacionesDiarias();
+    }
+
+    /**
      * @inheritDoc
      */
     @Override
