@@ -24,7 +24,6 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity
 @Table(name = "Cuentas")
 public class Cuenta {
@@ -32,16 +31,16 @@ public class Cuenta {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "NUMCUENTA")
-	private int NumeroCuenta;
+	private int numeroCuenta;
 
 	@Column(name = "ALIAS")
-	private String Alias;
+	private String alias;
 
 	@Column(name = "SALDO")
-	private String Saldo;
+	private String saldo;
 
 	@Column(name = "ID_CLIENTE")
-	private String IdCliente;
+	private int idCliente;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "Cuenta")
 	private List<Movimiento> movimiento;
@@ -53,15 +52,11 @@ public class Cuenta {
 	@JoinColumn(name = "ID_CLIENTE", referencedColumnName = "ID")
 	private Cliente cliente;
 
-	public Cuenta(String alias, String saldo, String idCliente, List<Movimiento> movimiento, List<Prestamo> prestamo,
-			Cliente cliente) {
+	public Cuenta(String alias, String saldo, int idCliente) {
 		super();
-		Alias = alias;
-		Saldo = saldo;
-		IdCliente = idCliente;
-		this.movimiento = movimiento;
-		this.prestamo = prestamo;
-		this.cliente = cliente;
+		this.alias = alias;
+		this.saldo = saldo;
+		this.idCliente = idCliente;
 	}
 
 }

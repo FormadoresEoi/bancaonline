@@ -1,5 +1,6 @@
 package es.eoi.mundobancario.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ public class PrestamoServiceImpl implements PrestamoService {
 	@Autowired
 	PrestamoRepository prestamoRepository;
 
-	public Prestamo Create(Prestamo prestamo) {
+	public Prestamo createPrestamo(Prestamo prestamo) {
 		return prestamoRepository.save(prestamo);
 	}
 
@@ -27,5 +28,15 @@ public class PrestamoServiceImpl implements PrestamoService {
 
 	public void remove(int id) {
 		prestamoRepository.deleteById(id);
+	}
+
+	public List<Prestamo> findAllVivos() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Prestamo> findAllAmortizados() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

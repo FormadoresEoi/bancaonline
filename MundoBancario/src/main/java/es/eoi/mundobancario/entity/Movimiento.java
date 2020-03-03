@@ -39,14 +39,11 @@ public class Movimiento {
 	@JoinColumn(name = "NUM_CUENTA", referencedColumnName = "NUM_CUENTA")
 	private Cuenta cuenta;
 
-	public Movimiento(String descripcion, Date fecha, double importe, TipoMovimiento tipoMovimiento,
-			es.eoi.mundobancario.entity.Cuenta cuenta) {
+	public Movimiento(String descripcion, Date fecha, double importe) {
 		super();
 		this.descripcion = descripcion;
 		this.fecha = fecha;
 		this.importe = importe;
-		this.tipoMovimiento = tipoMovimiento;
-		this.cuenta = cuenta;
 	}
 
 }

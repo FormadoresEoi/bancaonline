@@ -33,4 +33,9 @@ public class ClienteServiceImpl implements ClienteService {
 	public void remove(int id) {
 		clientesRepository.deleteById(id);
 	}
+
+	public Optional<Cliente> findPrestamos(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

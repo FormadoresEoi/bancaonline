@@ -1,16 +1,21 @@
 package es.eoi.mundobancario.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import es.eoi.mundobancario.entity.Prestamo;
 
 public interface PrestamoService {
+	
+	public List<Prestamo> findAllVivos();
+	
+	public List<Prestamo> findAllAmortizados();
 
-	Prestamo Create(Prestamo prestamo);
+	public Prestamo createPrestamo(Prestamo prestamo);
 
-	Optional<Prestamo> findById(int id);
+	public Optional<Prestamo> findPrestamoById(int id);
 
-	Prestamo update(Prestamo prestamo);
+	public Prestamo updatePrestamo(Prestamo prestamo);
 
-	void remove(int id);
+	public void removePrestamo(int id);
 }

@@ -42,15 +42,12 @@ public class Prestamo {
 	@JoinColumn(name = "NUM_CUENTA", referencedColumnName = "NUM_CUENTA")
 	private Cuenta cuenta;
 
-	public Prestamo(String descripcion, Date fecha, double importe, double plazo, List<Amortizacion> amortizacion,
-			Cuenta cuenta) {
+	public Prestamo(String descripcion, Date fecha, double importe, double plazo) {
 		super();
 		this.descripcion = descripcion;
 		this.fecha = fecha;
 		this.importe = importe;
 		this.plazo = plazo;
-		this.amortizacion = amortizacion;
-		this.cuenta = cuenta;
 	}
 
 }

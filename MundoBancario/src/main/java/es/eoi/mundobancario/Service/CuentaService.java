@@ -1,16 +1,37 @@
 package es.eoi.mundobancario.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import es.eoi.mundobancario.entity.Cuenta;
 
 public interface CuentaService {
 
-	Cuenta Create(Cuenta cuenta);
+	public Cuenta create(Cuenta cuenta);
 
-	Optional<Cuenta> findById(int numCuenta);
+	public Cuenta findById(int numCuenta);
 
-	Cuenta update(Cuenta cuenta);
+	public Cuenta update(Cuenta cuenta);
 
-	void remove(int numCuenta);
+	public void remove(int numCuenta);
+
+	public void ejecutarAmortizacionsDiarias();
+
+	public Cuenta createPagos(int id);
+
+	public Cuenta createPrestamos(int id);
+
+	public Cuenta createIngresos(int id);
+
+	public Cuenta findPrestamosAmortizados(int id);
+
+	public Cuenta findPrestamosVivos(int id);
+
+	public Cuenta findPresatmos(int id);
+
+	public Cuenta findMovimientos(int id);
+
+	public List<Cuenta> findAllDeudora();
+
+	public List<Cuenta> findAll();
 }

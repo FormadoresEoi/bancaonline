@@ -25,7 +25,6 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity
 @Table(name = "Amortizaciones")
 public class Amortizacion {
@@ -36,24 +35,23 @@ public class Amortizacion {
 	private int id;
 
 	@Column(name = "ID_PRESTAMO")
-	private int IdPrestamo;
+	private int idPrestamo;
 
 	@Column(name = "FECHA")
-	private Date Fecha;
+	private Date iecha;
 
 	@Column(name = "IMPORTE")
-	private double Importe;
+	private double importe;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ID", referencedColumnName = "ID")
 	private Prestamo prestamo;
 
-	public Amortizacion(int idPrestamo, Date fecha, double importe, Prestamo prestamo) {
+	public Amortizacion(int idPrestamo, Date iecha, double importe) {
 		super();
-		IdPrestamo = idPrestamo;
-		Fecha = fecha;
-		Importe = importe;
-		this.prestamo = prestamo;
+		this.idPrestamo = idPrestamo;
+		this.iecha = iecha;
+		this.importe = importe;
 	}
 
 }
