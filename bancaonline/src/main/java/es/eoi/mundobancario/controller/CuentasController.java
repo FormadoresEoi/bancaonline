@@ -17,15 +17,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import es.eoi.mundobancario.dto.ClienteBasicoDto;
-import es.eoi.mundobancario.dto.ClienteDto;
 import es.eoi.mundobancario.dto.CuentaBasicaDto;
 import es.eoi.mundobancario.dto.CuentaDto;
 import es.eoi.mundobancario.dto.NewCuentaDto;
+import es.eoi.mundobancario.dto.NewPrestamoDto;
+import es.eoi.mundobancario.dto.PrestamoDto;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
+import es.eoi.mundobancario.service.PrestamoService;
 
 @RestController
 @RequestMapping("/cuentas")
@@ -37,6 +39,10 @@ public class CuentasController {
 	@Autowired
 	private ClienteService clienteService;
 
+	@Autowired
+	private PrestamoService prestamoService;
+	
+	
 	@Autowired
 	private ModelMapper model;
 
@@ -54,6 +60,22 @@ public class CuentasController {
 
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
+	
+	
+	@PostMapping("/{id}/prestamos")
+	public ResponseEntity<String> createPrestamo(@RequestBody NewPrestamoDto dto){
+		Optional<Cuenta> cuenta = cuentaService.find(dto.getId_cuenta());
+		if(!cuenta.isPresent())
+			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+		else {
+			CuentaBasicaDto cuentaDto = model.map(cuenta.get(), CuentaBasicaDto.class);
+			PrestamoDto prestamo = model.map(dto, PrestamoDto.class);
+			prestamo.setCuentaPres(cuentaDto);
+			prestamoService.create(model.map(prestamo, Prestamo.class));
+		}
+		return new ResponseEntity<String>(HttpStatus.OK);
+		
+	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<CuentaBasicaDto> find(@PathVariable int id) {
@@ -66,7 +88,9 @@ public class CuentasController {
 
 	@GetMapping
 	public ResponseEntity<List<CuentaBasicaDto>> findAll() {
-		List<CuentaBasicaDto> cuentas = cuentaService.findAll().stream().map(c -> model.map(c, CuentaBasicaDto.class))
+		List<CuentaBasicaDto> cuentas = cuentaService.findAll()
+				.stream()
+				.map(c -> model.map(c, CuentaBasicaDto.class))
 				.collect(Collectors.toList());
 
 		return new ResponseEntity<List<CuentaBasicaDto>>(cuentas, HttpStatus.FOUND);
@@ -100,6 +124,4 @@ public class CuentasController {
 		return new ResponseEntity<CuentaDto>(cuenta, HttpStatus.OK);
 	}
 	
-	
-
 }

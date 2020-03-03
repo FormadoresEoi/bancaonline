@@ -29,4 +29,9 @@ public class MovimientoServiceImpl implements MovimientoService {
 	public List<Movimiento> findAll() {
 		return movimientoRepository.findAll();
 	}
+
+	@Override
+	public List<Movimiento> findAllByCuentasNumCuenta(int NumCuenta) {
+		return movimientoRepository.findAllByCuentasNumCuenta(NumCuenta);
+	}
 }

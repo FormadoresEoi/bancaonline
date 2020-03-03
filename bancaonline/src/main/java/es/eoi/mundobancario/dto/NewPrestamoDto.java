@@ -1,7 +1,6 @@
 package es.eoi.mundobancario.dto;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +13,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class PrestamoDto {
+public class NewPrestamoDto {
 
 	private int id;
 	
@@ -26,7 +25,6 @@ public class PrestamoDto {
 	
 	private int plazos;
 	
-	private CuentaBasicaDto cuentaPres;
+	private int id_cuenta;
 	
-	private List<AmortizacionDto> amortizaciones;
 }
