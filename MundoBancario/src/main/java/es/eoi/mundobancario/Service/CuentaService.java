@@ -8,9 +8,9 @@ public interface CuentaService {
 
 	Cuenta CreateCuenta(Cuenta cuenta);
 
-	Optional<Cuenta> findCuentaById(int id);
+	Optional<Cuenta> findCuentaByNumCuenta(int numCuenta);
 
 	Cuenta updateCuenta(Cuenta cuenta);
 
-	void removeCuenta(int id);
+	void removeCuenta(int numCuenta);
 }

@@ -16,15 +16,15 @@ public class CuentaServiceImpl implements CuentaService {
 		return cuentasrepository.save(cuenta);
 	}
 
-	public Optional<Cuenta> findCuentaById(int id) {
-		return cuentasrepository.findById(id);
+	public Optional<Cuenta> findCuentaByNumCuenta(int numCuenta) {
+		return cuentasrepository.findById(numCuenta);
 	}
 
 	public Cuenta updateCuenta(Cuenta cuenta) {
 		return cuentasrepository.save(cuenta);
 	}
 
-	public void removeCuenta(int id) {
-		cuentasrepository.deleteById(id);
+	public void removeCuenta(int numCuenta) {
+		cuentasrepository.deleteById(numCuenta);
 	}
 }
