@@ -184,10 +184,13 @@ public class CuentaController implements IController<CuentaDto, String> {
      * @inheritDoc
      */
     @Override
-    @PutMapping
-    public CuentaDto update(@RequestBody CuentaDto entity) {
+    @PutMapping("/{id}")
+    public CuentaDto update(@PathVariable String id, @RequestBody CuentaDto entity) {
+        Cuenta cuenta = mapper.map(findById(id), Cuenta.class);
+        cuenta.setAlias(entity.getAlias());
+
         return mapper.map(
-                cuentaService.update(mapper.map(entity, Cuenta.class)),
+                cuentaService.update(cuenta),
                 CuentaDto.class
         );
     }

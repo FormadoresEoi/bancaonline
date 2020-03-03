@@ -42,11 +42,12 @@ public interface IController<T, P> {
     /**
      * Updates an entity.
      *
-     * @param entity Entity to update.
+     * @param id     Entity to update.
+     * @param entity New entity values.
      *
      * @return Updated entity.
      */
-    T update(T entity);
+    T update(P id, T entity);
 
     /**
      * Deletes an entity.
