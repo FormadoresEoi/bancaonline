@@ -34,6 +34,6 @@ public class Amortizacion {
     private double importe;
 
     @ManyToOne
-    @JoinColumn(name = "prestamos_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "prestamos_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     private Prestamo prestamosByPrestamosId;
 }

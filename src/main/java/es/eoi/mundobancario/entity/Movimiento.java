@@ -43,11 +43,11 @@ public class Movimiento {
     private double importe;
 
     @ManyToOne
-    @JoinColumn(name = "cuentas_num_cuenta", referencedColumnName = "num_cuenta", nullable = false)
+    @JoinColumn(name = "cuentas_num_cuenta", referencedColumnName = "num_cuenta", nullable = false, insertable = false, updatable = false)
     private Cuenta cuentasByCuentasNumCuenta;
 
     @ManyToOne
-    @JoinColumn(name = "movimientos_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "movimientos_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     private Movimiento movimientosByMovimientosId;
 
     @OneToMany(mappedBy = "movimientosByMovimientosId")

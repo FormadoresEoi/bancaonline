@@ -5,10 +5,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import es.eoi.mundobancario.dto.ClienteDto;
 import es.eoi.mundobancario.service.ClienteService;
@@ -43,8 +40,12 @@ public class ClienteController {
 	}
 
 	@GetMapping("/clientes/{id}")
-	public ClienteDto findById(@RequestBody int id) {
-		return mapper.map(service.find(id), ClienteDto.class);
+	public ClienteDto findById(@PathVariable int id) {
+		return mapper.map(
+				service.find(id)
+					   .orElseThrow(RuntimeException::new),
+				ClienteDto.class
+		);
 	}
 
 //    @PostMapping("/clientes/login")

@@ -46,6 +46,6 @@ public class Prestamo {
     private Collection<Amortizacion> amortizacionesById;
 
     @ManyToOne
-    @JoinColumn(name = "cuentas_num_cuenta", referencedColumnName = "num_cuenta", nullable = false)
+    @JoinColumn(name = "cuentas_num_cuenta", referencedColumnName = "num_cuenta", nullable = false, insertable = false, updatable = false)
     private Cuenta cuentasByCuentasNumCuenta;
 }
