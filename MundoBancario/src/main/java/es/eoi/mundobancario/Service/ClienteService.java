@@ -1,27 +1,26 @@
 package es.eoi.mundobancario.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import es.eoi.mundobancario.entity.Cliente;
 
 public interface ClienteService {
 
-	Cliente Create(Cliente cliente);
+	public Cliente Create(Cliente cliente);
 
-	Cliente findById(int id);
+	public Cliente findById(int id);
 
-	List<Cliente> findAll();
+	public List<Cliente> findAll();
 
-	Cliente update(Cliente cliente);
+	public Cliente update(Cliente cliente);
 
-	void remove(int id);
+	public void remove(int id);
 
-	Cliente login(int id);
+	public Cliente login(int id);
 
-	Cliente findCuentas(int id);
+	public Cliente findCuentas(int id);
 
-	Cliente updateEmail(int id);
+	public Cliente updateEmail(int id);
 
-	Cliente findPrestamos(int id);
+	public Cliente findPrestamos(int id);
 }

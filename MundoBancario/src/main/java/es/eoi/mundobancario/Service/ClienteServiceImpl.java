@@ -18,8 +18,8 @@ public class ClienteServiceImpl implements ClienteService {
 		return clientesRepository.save(cliente);
 	}
 
-	public Optional<Cliente> findById(int id) {
-		return clientesRepository.findById(id);
+	public Cliente findById(int id) {
+		return clientesRepository.findById(id).get();
 	}
 
 	public List<Cliente> findAll() {
@@ -34,7 +34,7 @@ public class ClienteServiceImpl implements ClienteService {
 		clientesRepository.deleteById(id);
 	}
 
-	public Optional<Cliente> findPrestamos(int id) {
+	public Cliente findPrestamos(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -49,8 +49,7 @@ public class ClienteServiceImpl implements ClienteService {
 		return null;
 	}
 
-	@Override
-	public Optional<Cliente> updateEmail(int id) {
+	public Cliente updateEmail(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

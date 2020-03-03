@@ -28,7 +28,7 @@ public class CuentasController {
 		CuentaDto cuentaDto = modelMapper.map(cuenta, CuentaDto.class);
 		return cuentaDto;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public List<CuentaDto> findAll() {
 		List<CuentaDto> cuentas = new ArrayList<CuentaDto>();
@@ -37,7 +37,7 @@ public class CuentasController {
 		}
 		return cuentas;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/deudoras")
 	public List<CuentaDto> findAllDeudoras() {
 		List<CuentaDto> cuentas = new ArrayList<CuentaDto>();
@@ -46,35 +46,36 @@ public class CuentasController {
 		}
 		return cuentas;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public CuentaDto findById(@PathVariable int id) {
 		return toDto(service.findById(id));
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
-	public CuentaDto Create(@RequestParam("alias") String alias, @RequestParam("saldo") String saldo, @RequestParam("idCliente") int idCliente) {
+	public CuentaDto Create(@RequestParam("alias") String alias, @RequestParam("saldo") String saldo,
+			@RequestParam("idCliente") int idCliente) {
 		Cuenta cuenta = new Cuenta(alias, saldo, idCliente);
 		return toDto(service.create(cuenta));
 	}
-	
+
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	public CuentaDto updateAlias(@PathVariable int id, @RequestParam("alias") String alias) {
 		Cuenta cuenta = service.findById(id);
 		cuenta.setAlias(alias);
 		return toDto(service.update(cuenta));
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/movimientos")
 	public CuentaDto findMovimientos(@PathVariable int id) {
 		return toDto(service.findMovimientos(id));
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/prestamos")
 	public CuentaDto findPrestamos(@PathVariable int id) {
 		return toDto(service.findPresatmos(id));
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/prestamosVivos")
 	public CuentaDto findPrestamosVivos(@PathVariable int id) {
 		return toDto(service.findPrestamosVivos(id));
@@ -89,17 +90,17 @@ public class CuentasController {
 	public CuentaDto createPrestamos(@PathVariable int id) {
 		return toDto(service.createPrestamos(id));
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}/ingresos")
 	public CuentaDto createIngresos(@PathVariable int id) {
 		return toDto(service.createIngresos(id));
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}/pagos")
 	public CuentaDto createPagos(@PathVariable int id) {
 		return toDto(service.createPagos(id));
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST, value = "/ejecutarAmortizacionsDiarias")
 	public void ejecutarAmortizacionsDiarias(@PathVariable int id) {
 		service.ejecutarAmortizacionsDiarias();

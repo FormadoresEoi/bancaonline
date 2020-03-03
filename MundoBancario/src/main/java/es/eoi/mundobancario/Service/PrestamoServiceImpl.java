@@ -39,4 +39,22 @@ public class PrestamoServiceImpl implements PrestamoService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Optional<Prestamo> findPrestamoById(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Prestamo updatePrestamo(Prestamo prestamo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void removePrestamo(int id) {
+		// TODO Auto-generated method stub
+
+	}
 }
