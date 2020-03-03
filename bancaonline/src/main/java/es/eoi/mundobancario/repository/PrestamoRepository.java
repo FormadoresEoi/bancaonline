@@ -10,5 +10,5 @@ import es.eoi.mundobancario.entity.Prestamo;
 @Repository
 public interface PrestamoRepository extends JpaRepository<Prestamo, Integer> {
 
-	List<Prestamo> findAllByCuentasNumCuenta(int NumCuenta);
+	List<Prestamo> findAllById_Cuenta(int NumCuenta);
 }

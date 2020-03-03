@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import es.eoi.mundobancario.entity.Amortizacion;
 import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.repository.CuentaRepository;
 import es.eoi.mundobancario.repository.PrestamoRepository;
@@ -38,7 +37,7 @@ public class PrestamoServiceImpl implements PrestamoService{
 
 	@Override
 	public List<Prestamo> findAllByCuentaId(int id) {
-		return prestamoRepository.findAllByCuentasNumCuenta(id);
+		return prestamoRepository.findAllById_Cuenta(id);
 	}
 	
 	@Override

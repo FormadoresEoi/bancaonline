@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.CuentaBasicaDto;
 import es.eoi.mundobancario.dto.CuentaDto;
+import es.eoi.mundobancario.dto.MovimientoDto;
 import es.eoi.mundobancario.dto.NewCuentaDto;
 import es.eoi.mundobancario.dto.NewPrestamoDto;
 import es.eoi.mundobancario.dto.PrestamoDto;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
@@ -74,6 +76,13 @@ public class CuentasController {
 		return new ResponseEntity<String>(HttpStatus.OK);
 
 	}
+	
+//	@PostMapping({"/{id}/prestamos","/{id}/pagos","/{id}/ingresos"})
+//	public ResponseEntity<String> createMovimiento(@PathVariable int id, @RequestBody MovimientoDto dto){
+//		Movimiento movimiento = model.map(dto, Movimiento.class);
+//		movimiento.setCuenta(cuentaService.find(id).get());
+//		
+//	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<CuentaBasicaDto> find(@PathVariable int id) {
