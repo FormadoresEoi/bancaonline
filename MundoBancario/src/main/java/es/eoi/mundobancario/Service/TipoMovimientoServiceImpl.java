@@ -10,11 +10,10 @@ import es.eoi.mundobancario.entity.TipoMovimiento;
 
 @Service
 public class TipoMovimientoServiceImpl implements TipoMovimientoService {
-	
+
 	@Autowired
 	TipoMovimientoRepository repository;
-	
-	@Override
+
 	public Optional<TipoMovimiento> findTipoMovimientoById(int id) {
 		return repository.findById(id);
 	}

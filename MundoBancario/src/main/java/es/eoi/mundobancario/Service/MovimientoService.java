@@ -6,11 +6,11 @@ import es.eoi.mundobancario.entity.Movimiento;
 
 public interface MovimientoService {
 
-	Movimiento CreateCuenta(Movimiento movimiento);
+	Movimiento CreateMovimiento(Movimiento movimiento);
 
 	Optional<Movimiento> findByMovimientoId(int id);
 
-	Movimiento updateCuenta(Movimiento movimiento);
+	Movimiento updateMovimiento(Movimiento movimiento);
 
-	void removeCuenta(int id);
+	void removeMovimiento(int id);
 }
