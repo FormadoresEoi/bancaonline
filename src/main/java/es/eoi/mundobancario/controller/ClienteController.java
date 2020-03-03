@@ -1,6 +1,7 @@
 package es.eoi.mundobancario.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping
 @RestController
 public class ClienteController {
-
-	private final ModelMapper mapper = new ModelMapper();
-
-	private final ClienteService service = null;
+	private final ModelMapper mapper;
+	private final ClienteService service;
 
 //	@GetMapping("/clientes")
 //	public List<Cliente> findAll() {
@@ -36,8 +35,11 @@ public class ClienteController {
 //	}
 
 	@GetMapping("/clientes")
-	public ClienteDto find() {
-		return mapper.map(service.find(), ClienteDto.class);
+	public List<ClienteDto> find() {
+		return service.find()
+					  .stream()
+					  .map(c -> mapper.map(c, ClienteDto.class))
+					  .collect(Collectors.toList());
 	}
 
 	@GetMapping("/clientes/{id}")
