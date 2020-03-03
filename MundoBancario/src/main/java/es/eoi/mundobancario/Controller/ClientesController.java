@@ -40,7 +40,7 @@ public class ClientesController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ClienteDto findCliente(@PathVariable int id) {
-		return toDto(service.findById(id).get());
+		return toDto(service.findById(id));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/login")
@@ -55,7 +55,7 @@ public class ClientesController {
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	public ClienteDto updateEmail(@PathVariable int id) {
-		return toDto(service.updateEmail(id).get());
+		return toDto(service.updateEmail(id));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/clientes")

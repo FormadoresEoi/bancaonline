@@ -29,11 +29,6 @@ public class CuentaServiceImpl implements CuentaService {
 		cuentasRepository.deleteById(numCuenta);
 	}
 
-	public void ejecutarAmortizacionsDiarias() {
-		// TODO Auto-generated method stub
-		
-	}
-
 	public Cuenta createPagos(int id) {
 		// TODO Auto-generated method stub
 		return null;
@@ -77,5 +72,10 @@ public class CuentaServiceImpl implements CuentaService {
 	public List<Cuenta> findAll() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public void ejecutarAmortizacionsDiarias() {
+		// TODO Auto-generated method stub
+		
 	}
 }
