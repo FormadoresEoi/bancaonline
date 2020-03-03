@@ -70,7 +70,16 @@ public class CuentasController {
 
 		return new ResponseEntity<List<CuentaBasicaDto>>(cuentas, HttpStatus.FOUND);
 	}
+	
+	
+	@GetMapping("/deudoras")
+	public ResponseEntity<List<CuentaBasicaDto>> findAllNegative() {
+		//DOUBLE
+		List<CuentaBasicaDto> cuentas = cuentaService.findBySaldoLessThan(0.0).stream().map(c -> model.map(c, CuentaBasicaDto.class))
+				.collect(Collectors.toList());
 
+		return new ResponseEntity<List<CuentaBasicaDto>>(cuentas, HttpStatus.FOUND);
+	}
 
 
 	@PutMapping("/{num_cuenta}")

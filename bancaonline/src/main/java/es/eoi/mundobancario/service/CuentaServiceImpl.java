@@ -35,4 +35,10 @@ public class CuentaServiceImpl implements CuentaService {
 		this.repository.save(dto);
 	}
 	
+	@Override
+	public List<Cuenta> findBySaldoLessThan(double saldo){
+		
+		return repository.findBySaldoLessThan(saldo);
+	}
+	
 }
