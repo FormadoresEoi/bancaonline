@@ -14,7 +14,7 @@ import java.util.List;
  * @author Carlos Sánchez <karlos.sangar@gmail.com>
  */
 
-public interface CuentaRepository extends JpaRepository<Cuenta, Integer> {
+public interface CuentaRepository extends JpaRepository<Cuenta, String> {
     /**
      * Find and returns all Cuentas balance less than specified.
      *

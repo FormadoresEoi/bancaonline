@@ -3,6 +3,8 @@ package es.eoi.mundobancario.service;
 import java.util.List;
 import java.util.Optional;
 
+import es.eoi.mundobancario.entity.Movimiento;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,15 +19,16 @@ import es.eoi.mundobancario.repository.CuentaRepository;
  * @author Carlos Sanchez <karlos.sangar@gmail.com>
  */
 @Service
+@RequiredArgsConstructor
 public class CuentaServiceImpl implements CuentaService {
-	@Autowired
 	private CuentaRepository repository;
+	private MovimientoService movimientoService;
 
 	/**
 	 * @inheritDoc
 	 */
 	@Override
-	public Optional<Cuenta> find(Integer id) {
+	public Optional<Cuenta> find(String id) {
 		return repository.findById(id);
 	}
 
@@ -59,5 +62,25 @@ public class CuentaServiceImpl implements CuentaService {
 	@Override
 	public List<Cuenta> findDeudoras() {
 		return repository.findAllBySaldoLessThan(0);
+	}
+
+	/**
+	 * Adds a movimiento to the cuenta.
+	 *
+	 * @param id         Cuenta Id.
+	 * @param movimiento Movimiento to add.
+	 *
+	 * @return Created movimiento.
+	 */
+	@Override
+	public Movimiento movimiento(String id, Movimiento movimiento) {
+		Cuenta cuenta = find(id).orElseThrow(RuntimeException::new);
+		Movimiento mvm = movimientoService.update(movimiento);
+
+		cuenta.setSaldo(cuenta.getSaldo() + mvm.getImporte());
+
+		update(cuenta);
+
+		return mvm;
 	}
 }

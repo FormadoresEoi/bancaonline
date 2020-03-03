@@ -167,7 +167,7 @@ public class CuentaController implements IController<CuentaDto, Integer> {
         movimiento.setCuentasNumCuenta(id);
 
         return mapper.map(
-                movimientoService.update(movimiento),
+                cuentaService.movimiento(id, movimiento),
                 MovimientoDto.class
         );
     }
