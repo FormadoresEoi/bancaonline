@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import es.eoi.mundobancario.dto.ClienteDto;
 import es.eoi.mundobancario.dto.CuentaDto;
 import es.eoi.mundobancario.dto.MovimientoDto;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
+import es.eoi.mundobancario.entity.TipoMovimiento;
 import es.eoi.mundobancario.service.CuentaService;
 import es.eoi.mundobancario.service.MovimientoService;
+import es.eoi.mundobancario.service.TipoMovimientoService;
 
 @RestController
 @RequestMapping(value = "/cuentas")
@@ -30,6 +32,9 @@ public class CuentasController {
 	
 	@Autowired
 	MovimientoService movimientoService;
+	
+	@Autowired
+	TipoMovimientoService tipoMovimientoService;
 	
 	@GetMapping(value = "/{id}")
 	public CuentaDto FindById(@RequestParam(value = "id")int id) {
@@ -108,6 +113,34 @@ public class CuentasController {
 			dto.add(movimientodto);
 		}
 		return dto; 
+	}
+	
+	@PostMapping("/{id}/ingresos")
+	public String postIngreso(@PathVariable Integer id, @RequestBody MovimientoDto dto) {
+		Cuenta cuenta = cuentaService.FindById(id);
+		Movimiento movimiento = new Movimiento();
+		TipoMovimiento lol = tipoMovimientoService.FindById(1);
+		movimiento.setImporte(dto.getImporte());
+		movimiento.setTipo(lol);
+		movimiento.setDescripcion(dto.getDescripcion());
+		movimiento.setCuenta(cuenta);
+		System.out.println(cuenta.getMovimientos().toString());
+		movimientoService.createMovimiento(movimiento);
+		return "OK";
+	}
+	
+	@PostMapping("/{id}/pagos")
+	public String postPagos(@PathVariable Integer id, @RequestBody MovimientoDto dto) {
+		Cuenta cuenta = cuentaService.FindById(id);
+		Movimiento movimiento = new Movimiento();
+		TipoMovimiento lol = tipoMovimientoService.FindById(2);
+		movimiento.setImporte(dto.getImporte());
+		movimiento.setTipo(lol);
+		movimiento.setDescripcion(dto.getDescripcion());
+		movimiento.setCuenta(cuenta);
+		System.out.println(cuenta.getMovimientos().toString());
+		movimientoService.createMovimiento(movimiento);
+		return "OK";
 	}
 	
 
