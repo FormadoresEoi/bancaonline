@@ -15,12 +15,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.ClienteDTO;
+import es.eoi.mundobancario.dto.CuentaDTO;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.service.ClienteService;
+import es.eoi.mundobancario.service.CuentaService;
 
 @RestController
 @RequestMapping(value = "/cliente")
@@ -30,6 +33,9 @@ public class ClienteController {
 	private ClienteService clientserv;
 	@Autowired
 	private ModelMapper modelmapper;
+	
+	@Autowired
+	private CuentaService cuentaService;
 
 	@PostMapping
 	public ClienteDTO crearCliente(@RequestBody ClienteDTO dto) {
@@ -69,4 +75,14 @@ public class ClienteController {
 		return clientdto;
 
 	}
+    @RequestMapping(value = "/{id}/cuentas", method = RequestMethod.GET)
+    public List<CuentaDTO> findAllById_Clientes(@PathVariable(value="id") int id) {
+    	Cliente cliente= clientserv.buscarCliente(id).get();
+		Type listType = new TypeToken<List<CuentaDTO>>() {
+		}.getType();
+		List<CuentaDTO> listclidto = modelmapper.map(cuentaService.findAllById_Clientes(cliente), listType);
+		return listclidto;
+	}
+	
+	
 }

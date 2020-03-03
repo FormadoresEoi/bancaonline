@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.repository.CuentaRepository;
 
@@ -40,5 +41,11 @@ public class CuentaServiceImpl implements CuentaService {
 	@Override
 	public void removeCuenta(int id) {
 		cuentrepo.deleteById(id);
+	}
+
+	@Override
+	public List<Cuenta> findAllById_Clientes(Cliente cliente) {
+		
+		return cuentrepo.findAllByCliente(cliente);
 	}
 }
