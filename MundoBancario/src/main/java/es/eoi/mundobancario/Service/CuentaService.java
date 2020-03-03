@@ -1,7 +1,6 @@
 package es.eoi.mundobancario.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import es.eoi.mundobancario.entity.Cuenta;
 
