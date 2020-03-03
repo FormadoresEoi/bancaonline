@@ -4,6 +4,7 @@ import es.eoi.mundobancario.dto.CuentaDto;
 import es.eoi.mundobancario.dto.MovimientoDto;
 import es.eoi.mundobancario.dto.PrestamoDto;
 import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.service.CuentaService;
 import es.eoi.mundobancario.service.MovimientoService;
 import es.eoi.mundobancario.service.PrestamoService;
@@ -128,6 +129,24 @@ public class CuentaController implements IController<CuentaDto, Integer> {
         );
     }
 
+    /**
+     * Crearemos un préstamo nuevo.
+     *
+     * @param id     Cuenta Id.
+     * @param entity Entity to create.
+     *
+     * @return Created entity.
+     */
+    @PostMapping("/{id}/prestamos")
+    public PrestamoDto prestamo(@PathVariable String id, @RequestBody PrestamoDto entity) {
+        Prestamo prestamo = mapper.map(entity, Prestamo.class);
+        prestamo.setCuentasNumCuenta(id);
+
+        return mapper.map(
+                prestamoService.update(prestamo),
+                PrestamoDto.class
+        );
+    }
 
     /**
      * @inheritDoc
