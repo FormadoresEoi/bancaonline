@@ -36,7 +36,7 @@ public class Cuenta {
 	private String alias;
 
 	@Column(name = "SALDO")
-	private String saldo;
+	private double saldo;
 
 	@Column(name = "ID_CLIENTE")
 	private int idCliente;
@@ -51,7 +51,7 @@ public class Cuenta {
 	@JoinColumn(name = "ID_CLIENTE", referencedColumnName = "ID")
 	private Cliente cliente;
 
-	public Cuenta(String alias, String saldo, int idCliente) {
+	public Cuenta(String alias, double saldo, int idCliente) {
 		super();
 		this.alias = alias;
 		this.saldo = saldo;

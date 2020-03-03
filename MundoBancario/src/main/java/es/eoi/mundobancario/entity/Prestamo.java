@@ -35,14 +35,14 @@ public class Prestamo {
 	@Column(name = "IMPORTE")
 	private double importe;
 	@Column(name = "PLAZOS")
-	private double plazo;
+	private int plazo;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "prestamo")
 	private List<Amortizacion> amortizacion;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "NUM_CUENTA", referencedColumnName = "NUM_CUENTA")
 	private Cuenta cuenta;
 
-	public Prestamo(String descripcion, Date fecha, double importe, double plazo) {
+	public Prestamo(String descripcion, Date fecha, double importe, int plazo) {
 		super();
 		this.descripcion = descripcion;
 		this.fecha = fecha;

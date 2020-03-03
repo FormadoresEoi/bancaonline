@@ -1,6 +1,7 @@
 package es.eoi.mundobancario.Controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -13,7 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.Service.CuentaService;
 import es.eoi.mundobancario.dto.CuentaDto;
+import es.eoi.mundobancario.dto.CuentaDtoMovimientos;
+import es.eoi.mundobancario.dto.CuentaDtoPrestamos;
+import es.eoi.mundobancario.dto.MovimientoDto;
+import es.eoi.mundobancario.dto.PrestamoDto;
 import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.entity.Movimiento;
+import es.eoi.mundobancario.entity.Prestamo;
 
 @RestController
 @RequestMapping(value = "/cuentas")
@@ -28,6 +35,26 @@ public class CuentasController {
 		CuentaDto cuentaDto = modelMapper.map(cuenta, CuentaDto.class);
 		return cuentaDto;
 	}
+	
+	private CuentaDtoMovimientos toDtoMovimientos(Cuenta cuenta) {
+		CuentaDtoMovimientos cuentaDto = modelMapper.map(cuenta, CuentaDtoMovimientos.class);
+		return cuentaDto;
+	}
+	
+	private CuentaDtoPrestamos toDtoPrestamos(Cuenta cuenta) {
+		CuentaDtoPrestamos cuentaDto = modelMapper.map(cuenta, CuentaDtoPrestamos.class);
+		return cuentaDto;
+	}
+	
+	private MovimientoDto toMovimientoDto(Movimiento movimiento) {
+		MovimientoDto movimientoDto = modelMapper.map(movimiento, MovimientoDto.class);
+		return movimientoDto;
+	}
+	
+	private PrestamoDto toPrestamoDto(Prestamo prestamo) {
+		PrestamoDto prestamoDto = modelMapper.map(prestamo, PrestamoDto.class);
+		return prestamoDto;
+	}
 
 	@RequestMapping(method = RequestMethod.GET)
 	public List<CuentaDto> findAll() {
@@ -41,8 +68,8 @@ public class CuentasController {
 	@RequestMapping(method = RequestMethod.GET, value = "/deudoras")
 	public List<CuentaDto> findAllDeudoras() {
 		List<CuentaDto> cuentas = new ArrayList<CuentaDto>();
-		for (Cuenta cuenta : service.findAllDeudora()) {
-			cuentas.add(toDto(cuenta));
+		for (Cuenta cuenta : service.findAll()) {
+				cuentas.add(toDto(cuenta));
 		}
 		return cuentas;
 	}
@@ -53,7 +80,7 @@ public class CuentasController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public CuentaDto Create(@RequestParam("alias") String alias, @RequestParam("saldo") String saldo,
+	public CuentaDto Create(@RequestParam("alias") String alias, @RequestParam("saldo") double saldo,
 			@RequestParam("idCliente") int idCliente) {
 		Cuenta cuenta = new Cuenta(alias, saldo, idCliente);
 		return toDto(service.create(cuenta));
@@ -67,18 +94,18 @@ public class CuentasController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/movimientos")
-	public CuentaDto findMovimientos(@PathVariable int id) {
-		return toDto(service.findMovimientos(id));
+	public CuentaDtoMovimientos findMovimientos(@PathVariable int id) {
+		return toDtoMovimientos(service.findById(id));
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/prestamos")
-	public CuentaDto findPrestamos(@PathVariable int id) {
-		return toDto(service.findPresatmos(id));
+	public CuentaDtoPrestamos findPrestamos(@PathVariable int id) {
+		return toDtoPrestamos(service.findById(id));
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/prestamosVivos")
-	public CuentaDto findPrestamosVivos(@PathVariable int id) {
-		return toDto(service.findPrestamosVivos(id));
+	public CuentaDtoPrestamos findPrestamosVivos(@PathVariable int id) {
+		return toDtoPrestamos(service.findPrestamosVivos(id));
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/prestamosAmortizados")
@@ -87,18 +114,25 @@ public class CuentasController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}/prestamos")
-	public CuentaDto createPrestamos(@PathVariable int id) {
-		return toDto(service.createPrestamos(id));
+	public PrestamoDto createPrestamos(@PathVariable int id, @RequestParam("descripcion") String descripcion,
+			@RequestParam("importe") double importe, @RequestParam("plazo") int plazo) {
+		Prestamo prestamo = new Prestamo(descripcion, new Date(), importe, plazo);
+		Movimiento movimiento = new Movimiento(descripcion, new Date(), importe);
+		return toPrestamoDto(service.createPrestamos(prestamo, movimiento));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}/ingresos")
-	public CuentaDto createIngresos(@PathVariable int id) {
-		return toDto(service.createIngresos(id));
+	public MovimientoDto createIngresos(@PathVariable int id, @RequestParam("descripcion") String descripcion,
+			@RequestParam("importe") double importe) {
+		Movimiento movimiento = new Movimiento(descripcion, new Date(), importe);
+		return toMovimientoDto(service.createIngresos(movimiento));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}/pagos")
-	public CuentaDto createPagos(@PathVariable int id) {
-		return toDto(service.createPagos(id));
+	public MovimientoDto createPagos(@PathVariable int id, @RequestParam("descripcion") String descripcion,
+			@RequestParam("importe") double importe) {
+		Movimiento movimiento = new Movimiento(descripcion, new Date(), importe);
+		return toMovimientoDto(service.createPagos(movimiento));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/ejecutarAmortizacionsDiarias")
