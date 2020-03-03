@@ -60,4 +60,14 @@ public class CuentaServiceImpl implements CuentaService {
 	public List<Cuenta> findDeudoras() {
 		return repository.findAllBySaldoLessThan(0);
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+
+	@Override
+	public List<Cuenta> findCuentasCliente(){
+		return repository.findAll();
+	}
+	
 }

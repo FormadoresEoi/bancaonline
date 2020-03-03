@@ -12,6 +12,5 @@ import es.eoi.mundobancario.entity.Cliente;
  */
 public interface ClienteService extends IService<Cliente, Integer> {
 	
-	
 
 }

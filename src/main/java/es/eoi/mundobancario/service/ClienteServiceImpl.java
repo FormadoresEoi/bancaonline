@@ -10,8 +10,7 @@ import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.repository.ClienteRepository;
 
 /**
- * Cliente service
- * ===============
+ * Cliente service ===============
  * 
  * Service for the Cliente repository.
  * 

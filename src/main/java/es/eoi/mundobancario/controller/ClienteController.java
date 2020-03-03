@@ -4,16 +4,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.ClienteDto;
 import es.eoi.mundobancario.dto.CuentaDto;
+import es.eoi.mundobancario.entity.Cliente;
+import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.service.ClienteService;
+import es.eoi.mundobancario.service.CuentaService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -25,41 +29,54 @@ import lombok.RequiredArgsConstructor;
  */
 
 @RequiredArgsConstructor
-@RequestMapping
+@RequestMapping("/clientes")
 @RestController
-public class ClienteController {
-	
-	@Autowired
+public class ClienteController implements IController<ClienteDto, Integer> {
 	private final ModelMapper mapper;
-	
-	@Autowired
-	private final ClienteService service;
+	private final ClienteService clienteService;
+	private final CuentaService cuentaService;
 
-//	@GetMapping("/clientes")
-//	public List<Cliente> findAll() {
-//		return service.find();
-//	}
 
-	@GetMapping("/clientes")
-	public List<ClienteDto> find() {
-		return service.find().stream().map(c -> mapper.map(c, ClienteDto.class)).collect(Collectors.toList());
+	@GetMapping
+	@Override
+	public List<ClienteDto> findAll() {
+		return clienteService.find().stream().map(c -> mapper.map(c, ClienteDto.class)).collect(Collectors.toList());
+
 	}
 
-	@GetMapping("/clientes/{id}")
-	public ClienteDto findById(@PathVariable int id) {
-		return mapper.map(service.find(id).orElseThrow(RuntimeException::new), ClienteDto.class);
-	}
-
-	@PostMapping("/clientes/login")
-	public ClienteDto findClienteDto(@PathVariable int id, String usuario, String nombre, String email) {
-		return mapper.map(service.find(id), ClienteDto.class);
+	@GetMapping("/{id}")
+	@Override
+	public ClienteDto findById(Integer id) {
+		return mapper.map(clienteService.find(id).orElseThrow(RuntimeException::new), ClienteDto.class);
 	}
 	
-	@GetMapping("/clientes/{id}/cuentas")
-	public CuentaDto find(@PathVariable int clientesId){
-		return mapper.map(service.find(clientesId), CuentaDto.class);
+	@PostMapping("/login")
+	@Override
+	public ClienteDto 
+
+	@PutMapping("/{id}")
+	public ClienteDto update(@RequestBody ClienteDto entity, @PathVariable int id) {
+		Cliente cliente = mapper.map(findById(id), Cliente.class);
+		cliente.setEmail(entity.getEmail());
+
+		return mapper.map(clienteService.update(cliente), ClienteDto.class);
 	}
-	
-//	@RequestMapping(value = "/clientes/{id}", method = UPDATE)
+
+	@GetMapping("/{id}/cuentas")
+	public List<CuentaDto> cuentas(@PathVariable int id) {
+		return cuentaService.findCuentasCliente().stream().map(c -> mapper.map(c, CuentaDto.class))
+				.collect(Collectors.toList());
+	}
+
+	@PostMapping()
+	@Override
+    public ClienteDto create(@RequestBody ClienteDto entity) {
+        return mapper.map(
+                clienteService.update(
+                		mapper.map(entity, Cliente.class)
+        		),
+                ClienteDto.class
+        );
+    }
 
 }

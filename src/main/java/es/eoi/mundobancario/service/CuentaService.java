@@ -19,4 +19,6 @@ public interface CuentaService extends IService<Cuenta, Integer> {
      * @return Negative balanaced Cuentas.
      */
     List<Cuenta> findDeudoras();
+    
+    List<Cuenta> findCuentasCliente();
 }
