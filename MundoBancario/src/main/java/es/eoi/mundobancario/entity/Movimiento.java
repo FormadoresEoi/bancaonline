@@ -29,8 +29,8 @@ public class Movimiento {
 	private float importe;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "num_cuenta", referencedColumnName = "id")
-	private Cliente cliente;
+	@JoinColumn(name = "num_cuenta", referencedColumnName = "num_cuenta")
+	private Cuenta Cuenta;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_tipo", referencedColumnName = "id")
