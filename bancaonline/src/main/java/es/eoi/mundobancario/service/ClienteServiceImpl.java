@@ -23,10 +23,7 @@ public class ClienteServiceImpl implements ClienteService{
 
 	@Override
 	public Optional<Cliente> find(int id) {
-		Optional<Cliente> client = repository.findById(id);
-		if(client.isPresent())
-			return client;
-		return null;
+		return repository.findById(id);
 	}
 	
 	public List<Cliente> findAll(){
@@ -39,13 +36,13 @@ public class ClienteServiceImpl implements ClienteService{
 	 }
 
 	@Override
-	public Optional<Cliente> findClienteByUsuarioAndPass(String usuario, String pass) {
-		return repository.findClienteByUsuarioAndPass(usuario, pass);
+	public Optional<Cliente> findByUsuarioAndPass(String usuario, String pass) {
+		return repository.findByUsuarioAndPass(usuario, pass);
 	}
 
-	@Override
-	public List<Cuenta> findAllCuentasByIdCliente(int id) {
-		return repository.findAllCuentasByIdCliente(id);
-	}
+//	@Override
+//	public List<Cuenta> findAllCuentasByIdCliente(int id) {
+//		return repository.findAllCuentasByIdCliente(id);
+//	}
 	
 }

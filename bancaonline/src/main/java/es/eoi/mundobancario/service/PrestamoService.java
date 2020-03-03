@@ -13,7 +13,7 @@ public interface PrestamoService{
 	
 	List<Prestamo> findAll();
 	
-	List<Prestamo> findAllByIdCuenta(int IdCuenta);
+	//List<Prestamo> findAllByIdCuenta(int IdCuenta);
 	
 	
 }

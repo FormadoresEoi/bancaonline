@@ -1,7 +1,5 @@
 package es.eoi.mundobancario.dto;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +11,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class ClienteDto {
+public class ClienteBasicoDto {
 	
 	private int id;
 	
@@ -23,5 +21,4 @@ public class ClienteDto {
 	
 	private String email;
 	
-	private List<CuentaDto> cuentas;
 }

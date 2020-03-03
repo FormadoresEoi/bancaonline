@@ -12,11 +12,11 @@ public interface ClienteService {
 
 	Optional<Cliente> find(int id);
 	
-	Optional<Cliente> findClienteByUsuarioAndPass(String usuario, String pass);
+	Optional<Cliente> findByUsuarioAndPass(String usuario, String pass);
 
 	List<Cliente> findAll();
 	
-	List<Cuenta> findAllCuentasByIdCliente(int id);
+//	List<Cuenta> findAllCuentasByIdCliente(int id);
 
 	void updateCliente(Cliente cliente);
 }
