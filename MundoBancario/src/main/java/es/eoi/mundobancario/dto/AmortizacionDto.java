@@ -12,6 +12,5 @@ public class AmortizacionDto {
 	int id;
 	Date fecha;
 	float importe;
-	int prestamo;
 
 }

@@ -7,36 +7,44 @@ import org.springframework.stereotype.Service;
 
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.repository.ClienteRepository;
+
 @Service
 public class ClienteServiceImpl implements ClienteService {
 
 	@Autowired
 	ClienteRepository repository;
-	
+
 	@Override
-	public Cliente FindById(int id) {
+	public Cliente getById(Integer id) {
 		return repository.findById(id).get();
 	}
 
 	@Override
-	public Cliente createCliente(Cliente cliente) {
-		return repository.save(cliente);
+	public Cliente getByUsuarioAndPass(String usuario, String pass) {
+		return repository.findByUsuarioAndPass(usuario, pass).get();
 	}
 
 	@Override
-	public void deleteCliente(Cliente cliente) {
-		repository.delete(cliente);
-		
-	}
-
-	@Override
-	public Cliente updateCliente(Cliente cliente) {
-		return repository.save(cliente);
-	}
-
-	@Override
-	public List<Cliente> listClientes() {
+	public List<Cliente> getAll() {
 		return repository.findAll();
+	}
+
+	@Override
+	public boolean putEmail(Integer id, String email) {
+		if(!repository.existsById(id))
+			return false;
+		Cliente cliente = repository.findById(id).get();
+		cliente.setEmail(email);
+		repository.save(cliente);
+		return true;
+	}
+
+	@Override
+	public boolean post(Cliente cliente) {
+		if(repository.existsByUsuario(cliente.getUsuario()))
+			return false;
+		repository.save(cliente);
+		return true;
 	}
 
 }

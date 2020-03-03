@@ -13,7 +13,5 @@ public class MovimientoDto {
 	String descripcion;
 	Date fecha;
 	float importe;
-	int tipo;
-	int cuenta;
-
+	
 }

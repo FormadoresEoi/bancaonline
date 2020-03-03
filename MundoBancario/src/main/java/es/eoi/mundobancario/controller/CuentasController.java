@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import es.eoi.mundobancario.dto.ClienteDto;
 import es.eoi.mundobancario.dto.CuentaDto;
 import es.eoi.mundobancario.dto.MovimientoDto;
 import es.eoi.mundobancario.entity.Cuenta;
@@ -37,7 +38,7 @@ public class CuentasController {
 		dto.setNum_cuenta(cuenta.getNum_cuenta());
 		dto.setAlias(cuenta.getAlias());
 		dto.setSaldo(cuenta.getSaldo());
-		dto.setCliente(cuenta.getCliente().getId());
+		//dto.setCliente(cuenta.getCliente().getId());
 		return dto;
 	}
 	
@@ -48,7 +49,7 @@ public class CuentasController {
 		dto.setNum_cuenta(cuenta.getNum_cuenta());
 		dto.setAlias(cuenta.getAlias());
 		dto.setSaldo(cuenta.getSaldo());
-		dto.setCliente(cuenta.getCliente().getId());
+		//dto.setCliente(cuenta.getCliente().getId());
 		return dto;
 	}
 	
@@ -64,7 +65,7 @@ public class CuentasController {
 		dto.setNum_cuenta(cuenta.getNum_cuenta());
 		dto.setAlias(cuenta.getAlias());
 		dto.setSaldo(cuenta.getSaldo());
-		dto.setCliente(cuenta.getCliente().getId());
+		//dto.setCliente(cuenta.getCliente().getId());
 		return dto;
 	}
 	
@@ -77,12 +78,13 @@ public class CuentasController {
 			cuentadto.setNum_cuenta(cuenta.getNum_cuenta());
 			cuentadto.setAlias(cuenta.getAlias());
 			cuentadto.setSaldo(cuenta.getSaldo());
-			cuentadto.setCliente(cuenta.getCliente().getId());
+			//cuentadto.setCliente(cuenta.getCliente().getId());
 			dto.add(cuentadto);
 		}
 		return dto;
 	}
 	
+
 	@GetMapping(value = "/deudores")
 	public CuentaDto FindBySaldo() {
 		Cuenta cuenta = cuentaService.FindBySaldo();
@@ -90,7 +92,6 @@ public class CuentasController {
 		dto.setNum_cuenta(cuenta.getNum_cuenta());
 		dto.setAlias(cuenta.getAlias());
 		dto.setSaldo(cuenta.getSaldo());
-		dto.setCliente(cuenta.getCliente().getId());
 		return dto;
 	}
 	
@@ -104,12 +105,21 @@ public class CuentasController {
 			movimientodto.setDescripcion(movimiento.getDescripcion());
 			movimientodto.setFecha(movimiento.getFecha());
 			movimientodto.setImporte(movimiento.getImporte());
-			movimientodto.setTipo(movimiento.getTipo().getId());
-			movimientodto.setCuenta(movimiento.getCuenta().getNum_cuenta());
 			dto.add(movimientodto);
 		}
 		return dto; 
 	}
 	
+
+	public CuentaDto clienteToDto(Cuenta cuenta) {
+		CuentaDto dto = new CuentaDto();
+		dto.setNum_cuenta(cuenta.getNum_cuenta());
+		dto.setAlias(cuenta.getAlias());
+		dto.setSaldo(cuenta.getSaldo());
+		//dto.setCliente(cuenta.getCliente().getId());
+		return dto;
+	}
+
+
 	
 }
