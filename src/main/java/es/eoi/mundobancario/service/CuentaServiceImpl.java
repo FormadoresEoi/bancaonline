@@ -18,11 +18,10 @@ import es.eoi.mundobancario.repository.CuentaRepository;
  */
 @Service
 public class CuentaServiceImpl implements CuentaService {
-
 	@Autowired
 	private CuentaRepository repository;
 
-	/*
+	/**
 	 * @inheritDoc
 	 */
 	@Override
@@ -30,7 +29,7 @@ public class CuentaServiceImpl implements CuentaService {
 		return repository.findById(id);
 	}
 
-	/*
+	/**
 	 * @inheritDoc
 	 */
 	@Override
@@ -38,7 +37,7 @@ public class CuentaServiceImpl implements CuentaService {
 		return repository.findAll();
 	}
 
-	/*
+	/**
 	 * @inheritDoc
 	 */
 	@Override
@@ -46,13 +45,19 @@ public class CuentaServiceImpl implements CuentaService {
 		return repository.save(entity);
 	}
 
-	/*
+	/**
 	 * @inheritDoc
 	 */
 	@Override
 	public void delete(Cuenta entity) {
 		repository.delete(entity);
-
 	}
 
+	/**
+	 * @inheritDoc
+	 */
+	@Override
+	public List<Cuenta> findDeudoras() {
+		return repository.findAllBySaldoLessThan(0);
+	}
 }

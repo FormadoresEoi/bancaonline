@@ -52,4 +52,12 @@ public class MovimientoServiceImpl implements MovimientoService {
     public void delete(Movimiento entity) {
         repository.delete(entity);
     }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public List<Movimiento> findByCuentaId(String id) {
+        return repository.findAllByCuentasNumCuenta(id);
+    }
 }

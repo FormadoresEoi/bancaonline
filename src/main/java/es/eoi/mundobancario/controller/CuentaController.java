@@ -1,8 +1,12 @@
 package es.eoi.mundobancario.controller;
 
 import es.eoi.mundobancario.dto.CuentaDto;
+import es.eoi.mundobancario.dto.MovimientoDto;
+import es.eoi.mundobancario.dto.PrestamoDto;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.service.CuentaService;
+import es.eoi.mundobancario.service.MovimientoService;
+import es.eoi.mundobancario.service.PrestamoService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +26,46 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/cuenta")
 public class CuentaController implements IController<CuentaDto, Integer> {
-    private final CuentaService service;
-    private final ModelMapper   mapper;
+    private final CuentaService     cuentaService;
+    private final MovimientoService movimientoService;
+    private final PrestamoService   prestamoService;
+    private final ModelMapper       mapper;
+
+    /**
+     * Devuelve un listado de las cuentas con saldo negativo (Toda la
+     * información y datos del cliente).
+     */
+    @GetMapping("/deudoras")
+    public List<CuentaDto> deudoras() {
+        return cuentaService.findDeudoras()
+                            .stream()
+                            .map(c -> mapper.map(c, CuentaDto.class))
+                            .collect(Collectors.toList());
+    }
+
+    /**
+     * Devuelve los movimientos de la cuenta solicitada.
+     * (incluirá el tipo de movimiento)
+     */
+    @GetMapping("/{id}/movimientos")
+    public List<MovimientoDto> movimientos(@PathVariable String id) {
+        return movimientoService.findByCuentaId(id)
+                                .stream()
+                                .map(c -> mapper.map(c, MovimientoDto.class))
+                                .collect(Collectors.toList());
+    }
+
+    /**
+     * Devuelve los préstamos de la cuenta.
+     * (incluirán las amortizaciones planificadas)
+     */
+    @GetMapping("/{id}/prestamos")
+    public List<PrestamoDto> prestamos(@PathVariable String id) {
+        return prestamoService.findAllByCuentaId(id)
+                              .stream()
+                              .map(c -> mapper.map(c, PrestamoDto.class))
+                              .collect(Collectors.toList());
+    }
 
     /**
      * @inheritDoc
@@ -31,10 +73,10 @@ public class CuentaController implements IController<CuentaDto, Integer> {
     @Override
     @GetMapping
     public List<CuentaDto> findAll() {
-        return service.find()
-                      .stream()
-                      .map(c -> mapper.map(c, CuentaDto.class))
-                      .collect(Collectors.toList());
+        return cuentaService.find()
+                            .stream()
+                            .map(c -> mapper.map(c, CuentaDto.class))
+                            .collect(Collectors.toList());
     }
 
     /**
@@ -44,8 +86,8 @@ public class CuentaController implements IController<CuentaDto, Integer> {
     @GetMapping("/{id}")
     public CuentaDto findById(@PathVariable Integer id) {
         return mapper.map(
-                service.find(id)
-                       .orElseThrow(RuntimeException::new),
+                cuentaService.find(id)
+                             .orElseThrow(RuntimeException::new),
                 CuentaDto.class
         );
     }
@@ -57,7 +99,7 @@ public class CuentaController implements IController<CuentaDto, Integer> {
     @PostMapping
     public CuentaDto create(@RequestBody CuentaDto entity) {
         return mapper.map(
-                service.update(mapper.map(entity, Cuenta.class)),
+                cuentaService.update(mapper.map(entity, Cuenta.class)),
                 CuentaDto.class
         );
     }
@@ -70,7 +112,7 @@ public class CuentaController implements IController<CuentaDto, Integer> {
     @PutMapping
     public CuentaDto update(@RequestBody CuentaDto entity) {
         return mapper.map(
-                service.update(mapper.map(entity, Cuenta.class)),
+                cuentaService.update(mapper.map(entity, Cuenta.class)),
                 CuentaDto.class
         );
     }
@@ -81,7 +123,7 @@ public class CuentaController implements IController<CuentaDto, Integer> {
     @Override
     @DeleteMapping
     public CuentaDto delete(@RequestBody CuentaDto entity) {
-        service.delete(mapper.map(entity, Cuenta.class));
+        cuentaService.delete(mapper.map(entity, Cuenta.class));
 
         return entity;
     }
