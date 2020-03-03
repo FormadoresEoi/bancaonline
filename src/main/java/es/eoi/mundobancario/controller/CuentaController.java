@@ -80,6 +80,18 @@ public class CuentaController implements IController<CuentaDto, Integer> {
     }
 
     /**
+     * Devuelve los préstamos amortizados de la cuenta.
+     * (incluirán las amortizaciones planificadas)
+     */
+    @GetMapping("/{id}/prestamosAmortizados")
+    public List<PrestamoDto> prestamosAmortizados(@PathVariable String id) {
+        return prestamoService.findAllByCuentaIdAmortizados(id)
+                              .stream()
+                              .map(c -> mapper.map(c, PrestamoDto.class))
+                              .collect(Collectors.toList());
+    }
+
+    /**
      * @inheritDoc
      */
     @Override

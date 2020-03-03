@@ -72,4 +72,14 @@ public class PrestamoServiceImpl implements PrestamoService {
                    .filter(p -> p.getAmortizacionesById().size() < p.getPlazos())
                    .collect(Collectors.toList());
     }
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public List<Prestamo> findAllByCuentaIdAmortizados(String id) {
+        return this.findAllByCuentaId(id)
+                   .stream()
+                   .filter(p -> p.getAmortizacionesById().size() >= p.getPlazos())
+                   .collect(Collectors.toList());
+    }
 }

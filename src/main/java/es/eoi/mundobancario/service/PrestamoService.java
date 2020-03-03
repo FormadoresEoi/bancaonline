@@ -30,4 +30,13 @@ public interface PrestamoService extends IService<Prestamo, Integer> {
      * @return Prestamos of given Cuenta.
      */
     List<Prestamo> findAllByCuentaIdVivos(String id);
+
+    /**
+     * Find and returns all Prestamos amortizados by its Cuenta id.
+     *
+     * @param id Cuenta id.
+     *
+     * @return Prestamos of given Cuenta.
+     */
+    List<Prestamo> findAllByCuentaIdAmortizados(String id);
 }
