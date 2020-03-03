@@ -26,6 +26,18 @@ public class CuentaController implements IController<CuentaDto, Integer> {
     private final ModelMapper   mapper;
 
     /**
+     * Devuelve un listado de las cuentas con saldo negativo (Toda la
+     * información y datos del cliente).
+     */
+    @GetMapping("/deudoras")
+    public List<CuentaDto> deudoras() {
+        return service.findDeudoras()
+                      .stream()
+                      .map(c -> mapper.map(c, CuentaDto.class))
+                      .collect(Collectors.toList());
+    }
+
+    /**
      * @inheritDoc
      */
     @Override
