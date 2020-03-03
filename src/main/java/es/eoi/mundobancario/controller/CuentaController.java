@@ -150,47 +150,23 @@ public class CuentaController implements IController<CuentaDto, String> {
     }
 
     /**
-     * Crearemos un ingreso nuevo.
+     * Crearemos un pago/ingreso nuevo.
      *
-     * @param id Cuenta Id.
+     * @param id     Cuenta Id.
      * @param entity Entity to create.
      *
      * @return Created entity.
      */
-    @PostMapping("/{id}/ingresos")
-    public MovimientoDto ingresos(@PathVariable String id, @RequestBody MovimientoDto entity) {
-        if (entity.getImporte() < 0) {
-            return pagos(id, entity);
-        }
-
+    @PostMapping({
+            "/{id}/pagos",
+            "/{id}/ingresos"
+    })
+    public MovimientoDto movimiento(@PathVariable String id, @RequestBody MovimientoDto entity) {
         Movimiento movimiento = mapper.map(entity, Movimiento.class);
         movimiento.setCuentasNumCuenta(id);
 
         return mapper.map(
                 cuentaService.movimiento(id, movimiento),
-                MovimientoDto.class
-        );
-    }
-
-    /**
-     * Crearemos un pago nuevo.
-     *
-     * @param id Cuenta Id.
-     * @param entity Entity to create.
-     *
-     * @return Created entity.
-     */
-    @PostMapping("/{id}/pagos")
-    public MovimientoDto pagos(@PathVariable String id, @RequestBody MovimientoDto entity) {
-        if (entity.getImporte() >= 0) {
-            return ingresos(id, entity);
-        }
-
-        Movimiento movimiento = mapper.map(entity, Movimiento.class);
-        movimiento.setCuentasNumCuenta(id);
-
-        return mapper.map(
-                movimientoService.update(movimiento),
                 MovimientoDto.class
         );
     }
