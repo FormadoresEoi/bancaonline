@@ -54,10 +54,10 @@ public class CuentasController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<CuentaBasicaDto> find(@PathVariable int id) {
-		CuentaBasicaDto cuenta = model.map(cuentaService.find(id), CuentaBasicaDto.class);
-		if(cuenta == null)
+		Optional<Cuenta> cuenta = cuentaService.find(id);
+		if(!cuenta.isPresent())
 			return new ResponseEntity<CuentaBasicaDto>(HttpStatus.NOT_FOUND);
-		CuentaBasicaDto dto = model.map(cuenta, CuentaBasicaDto.class);
+		CuentaBasicaDto dto = model.map(cuenta.get(), CuentaBasicaDto.class);
 		return new ResponseEntity<CuentaBasicaDto>(dto, HttpStatus.OK);
 	}
 	

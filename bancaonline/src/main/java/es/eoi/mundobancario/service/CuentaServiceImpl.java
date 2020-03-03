@@ -17,15 +17,12 @@ public class CuentaServiceImpl implements CuentaService {
 	
 	@Override
 	public void create(Cuenta dto) {
-		Cuenta cuenta = new Cuenta();
-		cuenta.setCliente(dto.getCliente());
-		cuenta.setSaldo(dto.getSaldo());
-		repository.save(cuenta);
+		repository.save(dto);
 	}
 
 	@Override
-	public Optional<Cuenta> find(int id) {
-		return repository.findById(Integer.valueOf(id));
+	public Optional<Cuenta> find(int numCuenta) {
+		return repository.findById(numCuenta);
 	}
 	
 	@Override
