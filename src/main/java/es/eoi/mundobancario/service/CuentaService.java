@@ -1,6 +1,7 @@
 package es.eoi.mundobancario.service;
 
 import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.entity.Movimiento;
 
 import java.util.List;
 
@@ -19,8 +20,6 @@ public interface CuentaService extends IService<Cuenta, String> {
      * @return Negative balanaced Cuentas.
      */
     List<Cuenta> findDeudoras();
-    
-    List<Cuenta> findCuentasCliente();
 
     /**
      * Adds a movimiento to the cuenta.
