@@ -27,6 +27,6 @@ public class Amortizacion {
 	private float importe;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_prestamo", referencedColumnName = "id")
+	@JoinColumn(name = "id_prestamo", referencedColumnName = "num_cuenta")
 	private Prestamo prestamo;
 }
