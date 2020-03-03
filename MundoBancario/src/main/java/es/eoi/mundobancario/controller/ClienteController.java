@@ -20,7 +20,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.ClienteDTO;
+
 import es.eoi.mundobancario.dto.CuentaDTO;
+
+import es.eoi.mundobancario.dto.ClienteDTOCPass;
+
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
@@ -38,7 +42,7 @@ public class ClienteController {
 	private CuentaService cuentaService;
 
 	@PostMapping
-	public ClienteDTO crearCliente(@RequestBody ClienteDTO dto) {
+	public ClienteDTO crearCliente(@RequestBody ClienteDTOCPass dto) {
 		Cliente cliente = modelmapper.map(dto, Cliente.class);
 		return modelmapper.map(clientserv.InsertarCliente(cliente), ClienteDTO.class);
 	}
@@ -59,10 +63,11 @@ public class ClienteController {
 		return listbancdto;
 	}
 
-	@PutMapping(value = "/update")
+	@PutMapping(value = "/update/{id}",params= {"email"})
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public ClienteDTO updateCliente(@RequestBody ClienteDTO clientdto) {
-		Cliente cliente = modelmapper.map(clientdto, Cliente.class);
+	public ClienteDTO updateCliente(@PathVariable (value="id") int id, @RequestParam (value="email")String email) {
+		Cliente cliente = modelmapper.map(selectClienteAux(id), Cliente.class);
+		cliente.setEmail(email);
 		return modelmapper.map(clientserv.updateCliente(cliente), ClienteDTO.class);
 
 	}
@@ -70,11 +75,10 @@ public class ClienteController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ClienteDTO selectCliente(@PathVariable(value = "id") int id) {
 		ClienteDTO clientdto = modelmapper.map(clientserv.buscarCliente(id).get(), ClienteDTO.class);
-		// BeanUtils.copyProperties(bancdto,bncserv.buscarBanco(nombre)); OTRA FORMA DE
-		// PASAR EL DTO
 		return clientdto;
 
 	}
+
     @RequestMapping(value = "/{id}/cuentas", method = RequestMethod.GET)
     public List<CuentaDTO> findAllById_Clientes(@PathVariable(value="id") int id) {
     	Cliente cliente= clientserv.buscarCliente(id).get();
@@ -85,4 +89,11 @@ public class ClienteController {
 	}
 	
 	
+
+	
+	public Cliente selectClienteAux(int id) {
+		return clientserv.buscarCliente(id).get();
+
+	}
+
 }

@@ -9,8 +9,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CuentaDTO {
 
-	private int num_cuenta;
 	private String alias;
 	private float saldo;
+	private int id_cliente;
 
 }
