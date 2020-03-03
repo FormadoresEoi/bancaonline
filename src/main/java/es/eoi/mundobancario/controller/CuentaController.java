@@ -4,6 +4,7 @@ import es.eoi.mundobancario.dto.CuentaDto;
 import es.eoi.mundobancario.dto.MovimientoDto;
 import es.eoi.mundobancario.dto.PrestamoDto;
 import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.service.CuentaService;
 import es.eoi.mundobancario.service.MovimientoService;
@@ -145,6 +146,52 @@ public class CuentaController implements IController<CuentaDto, Integer> {
         return mapper.map(
                 prestamoService.update(prestamo),
                 PrestamoDto.class
+        );
+    }
+
+    /**
+     * Crearemos un ingreso nuevo.
+     *
+     * @param id Cuenta Id.
+     * @param entity Entity to create.
+     *
+     * @return Created entity.
+     */
+    @PostMapping("/{id}/ingresos")
+    public MovimientoDto ingresos(@PathVariable String id, @RequestBody MovimientoDto entity) {
+        if (entity.getImporte() < 0) {
+            return pagos(id, entity);
+        }
+
+        Movimiento movimiento = mapper.map(entity, Movimiento.class);
+        movimiento.setCuentasNumCuenta(id);
+
+        return mapper.map(
+                movimientoService.update(movimiento),
+                MovimientoDto.class
+        );
+    }
+
+    /**
+     * Crearemos un pago nuevo.
+     *
+     * @param id Cuenta Id.
+     * @param entity Entity to create.
+     *
+     * @return Created entity.
+     */
+    @PostMapping("/{id}/pagos")
+    public MovimientoDto pagos(@PathVariable String id, @RequestBody MovimientoDto entity) {
+        if (entity.getImporte() >= 0) {
+            return ingresos(id, entity);
+        }
+
+        Movimiento movimiento = mapper.map(entity, Movimiento.class);
+        movimiento.setCuentasNumCuenta(id);
+
+        return mapper.map(
+                movimientoService.update(movimiento),
+                MovimientoDto.class
         );
     }
 
