@@ -10,6 +10,5 @@ public class CuentaDto {
 	int num_cuenta;
 	String alias;
 	float saldo;
-	int cliente;
 
 }
