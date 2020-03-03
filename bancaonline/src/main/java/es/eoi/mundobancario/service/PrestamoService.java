@@ -9,11 +9,15 @@ public interface PrestamoService{
 
 	void create(Prestamo prestamo);
 	
-	Optional<Prestamo> findById(int id);
+	Optional<Prestamo> findByCuentaId(int id);
 	
 	List<Prestamo> findAll();
 	
-	//List<Prestamo> findAllByIdCuenta(int IdCuenta);
+	List<Prestamo> findAllByCuentaId(int id);
+	
+	List<Prestamo> findAllByCuentaIdAmortizados(int id);
+	
+	void ejecutarAmortizacionesDiarias(Prestamo prestamo);
 	
 	
 }

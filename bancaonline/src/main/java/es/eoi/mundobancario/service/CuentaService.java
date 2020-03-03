@@ -15,5 +15,7 @@ public interface CuentaService {
 	List<Cuenta> findAll();
 
 	void update(Cuenta dto);
+	
+	List<Cuenta> findBySaldoLessThan(double saldo);
 
 }

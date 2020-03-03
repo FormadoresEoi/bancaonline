@@ -21,5 +21,5 @@ public class AmortizacionDto {
 	
 	private double importe;
 	
-	private PrestamoDto prestamo;
+	private int id_prestamo;
 }

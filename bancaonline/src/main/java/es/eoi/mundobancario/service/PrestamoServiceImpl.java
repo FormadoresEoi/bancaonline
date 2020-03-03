@@ -2,10 +2,12 @@ package es.eoi.mundobancario.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import es.eoi.mundobancario.entity.Amortizacion;
 import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.repository.CuentaRepository;
 import es.eoi.mundobancario.repository.PrestamoRepository;
@@ -25,7 +27,7 @@ public class PrestamoServiceImpl implements PrestamoService{
 	}
 
 	@Override
-	public Optional<Prestamo> findById(int id) {
+	public Optional<Prestamo> findByCuentaId(int id) {
 		return prestamoRepository.findById(id);
 	}
 
@@ -34,9 +36,23 @@ public class PrestamoServiceImpl implements PrestamoService{
 		return prestamoRepository.findAll();
 	}
 
-//	@Override
-//	public List<Prestamo> findAllByIdCuenta(int IdCuenta) {
-//		return prestamoRepository.findAllByIdCuenta(IdCuenta);
-//	}
+	@Override
+	public List<Prestamo> findAllByCuentaId(int id) {
+		return prestamoRepository.findAllByCuentasNumCuenta(id);
+	}
+	
+	@Override
+	public List<Prestamo> findAllByCuentaIdAmortizados(int id) {
+		return this.findAllByCuentaId(id)
+				.stream()
+				.filter(p -> p.getAmortizaciones().size() >= p.getPlazos())
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public void ejecutarAmortizacionesDiarias(Prestamo prestamo) {
+		
+	}
+
 
 }
