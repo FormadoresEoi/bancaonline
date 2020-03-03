@@ -22,7 +22,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "TIPOS_MOVIMIENTO")
-public class TipoMovimiento {
+public class TiposMovimiento {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

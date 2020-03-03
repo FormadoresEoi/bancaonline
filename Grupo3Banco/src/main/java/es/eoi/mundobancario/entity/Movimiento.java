@@ -45,6 +45,6 @@ public class Movimiento {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "IDMOVIMIENTO", referencedColumnName = "ID")
-	private TipoMovimiento tipomovimiento;
+	private TiposMovimiento tipomovimiento;
 
 }

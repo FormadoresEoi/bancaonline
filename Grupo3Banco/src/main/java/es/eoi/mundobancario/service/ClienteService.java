@@ -9,17 +9,17 @@ public interface ClienteService {
 	
 	//Encontrar todos los Clientes
 	
-	List<Cliente> findAll();
+	public List<Cliente> findAll();
 	
 	//Encontrar Cliente por ID
 	
-	Cliente findById (int id);
+	public Cliente findById (int id);
 	
 	//Crear Cliente
 	
-	void createClient(Cliente cliente);
+	public void createClient(Cliente cliente);
 	
 	//Update Cliente
 	
-	void updateClient(Cliente cliente);
+	public void updateClient(Cliente cliente, String email);
 }
