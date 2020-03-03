@@ -33,7 +33,7 @@ public class Movimiento {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "num_cuenta", referencedColumnName = "num_cuenta")
-	private Cuenta Cuenta;
+	private Cuenta cuenta;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_tipo", referencedColumnName = "id")

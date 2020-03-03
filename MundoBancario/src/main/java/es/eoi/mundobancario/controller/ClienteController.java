@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.ClienteDTO;
+import es.eoi.mundobancario.dto.ClienteDTOCPass;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.service.ClienteService;
 
@@ -33,7 +34,7 @@ public class ClienteController {
 	private ModelMapper modelmapper;
 
 	@PostMapping
-	public ClienteDTO crearCliente(@RequestBody ClienteDTO dto) {
+	public ClienteDTO crearCliente(@RequestBody ClienteDTOCPass dto) {
 		Cliente cliente = modelmapper.map(dto, Cliente.class);
 		return modelmapper.map(clientserv.InsertarCliente(cliente), ClienteDTO.class);
 	}

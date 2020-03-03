@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.CuentaDTO;
+import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
 
 @RestController
@@ -27,14 +29,19 @@ public class CuentaController {
 
 	@Autowired
 	CuentaService cuentaserv;
+	@Autowired
+	ClienteService clientserv;
 
 	@Autowired
 	private ModelMapper modelmapper;
 
 	@PostMapping
-	public Cuenta crearCuenta(@RequestBody Cuenta cuenta) {
-		 
-		 return cuentaserv.InsertarCuenta(cuenta);
+	public CuentaDTO crearCuenta(@RequestBody CuentaDTO dto) {
+		Cuenta cuenta = modelmapper.map(dto, Cuenta.class);
+		cuenta.setCliente(modelmapper.map(clientserv.buscarCliente(dto.getId_cliente()).get(),Cliente.class));
+		CuentaDTO resp = modelmapper.map(cuentaserv.InsertarCuenta(cuenta), CuentaDTO.class);
+		resp.setId_cliente(cuenta.getCliente().getId());
+		return resp;
 		}
 
 	@DeleteMapping(value = "/{id}")
