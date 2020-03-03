@@ -108,7 +108,7 @@ public class CuentasController {
 			movimientodto.setCuenta(movimiento.getCuenta().getNum_cuenta());
 			dto.add(movimientodto);
 		}
-		return dto;
+		return dto; 
 	}
 	
 	
