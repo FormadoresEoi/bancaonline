@@ -29,9 +29,11 @@ public class Prestamo {
 	private Date fecha;
 	@Column(name = "importe")
 	private float importe;
+	@Column(name="plazos")
+	private int plazos;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id", referencedColumnName = "id")
+	@JoinColumn(name = "id_cuenta", referencedColumnName = "id")
 	private Cuenta Cuenta;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "prestamo")
