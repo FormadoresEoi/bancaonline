@@ -14,19 +14,19 @@ public class MovimientoServiceImpl implements MovimientoService {
 	@Autowired
 	MovimientoRepository repository;
 
-	public Movimiento CreateMovimiento(Movimiento movimiento) {
+	public Movimiento Create(Movimiento movimiento) {
 		return repository.save(movimiento);
 	}
 
-	public Optional<Movimiento> findByMovimientoId(int id) {
+	public Optional<Movimiento> findById(int id) {
 		return null;
 	}
 
-	public Movimiento updateMovimiento(Movimiento movimiento) {
+	public Movimiento update(Movimiento movimiento) {
 		return repository.save(movimiento);
 	}
 
-	public void removeMovimiento(int id) {
+	public void remove(int id) {
 		repository.deleteById(id);
 	}
 }

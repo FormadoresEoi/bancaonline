@@ -6,11 +6,11 @@ import es.eoi.mundobancario.entity.Cuenta;
 
 public interface CuentaService {
 
-	Cuenta CreateCuenta(Cuenta cuenta);
+	Cuenta Create(Cuenta cuenta);
 
-	Optional<Cuenta> findCuentaById(int numCuenta);
+	Optional<Cuenta> findById(int numCuenta);
 
-	Cuenta updateCuenta(Cuenta cuenta);
+	Cuenta update(Cuenta cuenta);
 
-	void removeCuenta(int numCuenta);
+	void remove(int numCuenta);
 }

@@ -1,5 +1,6 @@
 package es.eoi.mundobancario.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,19 +14,23 @@ public class ClienteServiceImpl implements ClienteService {
 	@Autowired
 	ClientesRepository clientesRepository;
 
-	public Cliente CreateCliente(Cliente cliente) {
+	public Cliente Create(Cliente cliente) {
 		return clientesRepository.save(cliente);
 	}
 
-	public Optional<Cliente> findClienteById(int id) {
+	public Optional<Cliente> findById(int id) {
 		return clientesRepository.findById(id);
 	}
 
-	public Cliente updateCliente(Cliente cliente) {
+	public List<Cliente> findAll() {
+		return clientesRepository.findAll();
+	}
+
+	public Cliente update(Cliente cliente) {
 		return clientesRepository.save(cliente);
 	}
 
-	public void removeCliente(int id) {
+	public void remove(int id) {
 		clientesRepository.deleteById(id);
 	}
 }

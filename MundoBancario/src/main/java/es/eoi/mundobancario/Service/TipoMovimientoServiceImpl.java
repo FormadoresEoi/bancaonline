@@ -14,7 +14,7 @@ public class TipoMovimientoServiceImpl implements TipoMovimientoService {
 	@Autowired
 	TipoMovimientoRepository repository;
 
-	public Optional<TipoMovimiento> findTipoMovimientoById(int id) {
+	public Optional<TipoMovimiento> findById(int id) {
 		return repository.findById(id);
 	}
 

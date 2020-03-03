@@ -13,19 +13,19 @@ public class PrestamoServiceImpl implements PrestamoService {
 	@Autowired
 	PrestamoRepository prestamoRepository;
 
-	public Prestamo CreatePrestamo(Prestamo prestamo) {
+	public Prestamo Create(Prestamo prestamo) {
 		return prestamoRepository.save(prestamo);
 	}
 
-	public Optional<Prestamo> findPrestamoById(int id) {
+	public Optional<Prestamo> findById(int id) {
 		return prestamoRepository.findById(id);
 	}
 
-	public Prestamo updatePrestamo(Prestamo prestamo) {
+	public Prestamo update(Prestamo prestamo) {
 		return prestamoRepository.save(prestamo);
 	}
 
-	public void removePrestamo(int id) {
+	public void remove(int id) {
 		prestamoRepository.deleteById(id);
 	}
 }

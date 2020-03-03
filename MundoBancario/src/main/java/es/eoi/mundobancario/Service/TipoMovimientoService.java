@@ -6,6 +6,6 @@ import es.eoi.mundobancario.entity.TipoMovimiento;
 
 public interface TipoMovimientoService {
 
-	Optional<TipoMovimiento> findTipoMovimientoById(int id);
-	
+	Optional<TipoMovimiento> findById(int id);
+
 }

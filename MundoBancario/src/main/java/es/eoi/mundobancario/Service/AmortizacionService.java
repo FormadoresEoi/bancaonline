@@ -6,11 +6,11 @@ import es.eoi.mundobancario.entity.Amortizacion;
 
 public interface AmortizacionService {
 
-	Amortizacion CreateAmortizacion(Amortizacion amortizacion);
+	Amortizacion Create(Amortizacion amortizacion);
 
-	Optional<Amortizacion> findAmortizacionById(int id);
+	Optional<Amortizacion> findById(int id);
 
-	Amortizacion updateAmortizacion(Amortizacion amortizacion);
+	Amortizacion update(Amortizacion amortizacion);
 
-	void removeAmortizacion(int id);
+	void remove(int id);
 }

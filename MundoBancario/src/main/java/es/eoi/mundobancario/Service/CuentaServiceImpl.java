@@ -13,19 +13,19 @@ public class CuentaServiceImpl implements CuentaService {
 	@Autowired
 	CuentasRepository cuentasRepository;
 
-	public Cuenta CreateCuenta(Cuenta cuenta) {
+	public Cuenta Create(Cuenta cuenta) {
 		return cuentasRepository.save(cuenta);
 	}
 
-	public Optional<Cuenta> findCuentaById(int numCuenta) {
+	public Optional<Cuenta> findById(int numCuenta) {
 		return cuentasRepository.findById(numCuenta);
 	}
 
-	public Cuenta updateCuenta(Cuenta cuenta) {
+	public Cuenta update(Cuenta cuenta) {
 		return cuentasRepository.save(cuenta);
 	}
 
-	public void removeCuenta(int numCuenta) {
+	public void remove(int numCuenta) {
 		cuentasRepository.deleteById(numCuenta);
 	}
 }

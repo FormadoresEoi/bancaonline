@@ -13,20 +13,20 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 	@Autowired
 	AmortizacionRepository amortizacionRepository;
 
-	public Amortizacion CreateAmortizacion(Amortizacion amortizacion) {
+	public Amortizacion Create(Amortizacion amortizacion) {
 		return amortizacionRepository.save(amortizacion);
 	}
 
-	public Optional<Amortizacion> findAmortizacionById(int id) {
+	public Optional<Amortizacion> findById(int id) {
 		return amortizacionRepository.findById(id);
 
 	}
 
-	public Amortizacion updateAmortizacion(Amortizacion amortizacion) {
+	public Amortizacion update(Amortizacion amortizacion) {
 		return amortizacionRepository.save(amortizacion);
 	}
 
-	public void removeAmortizacion(int id) {
+	public void remove(int id) {
 		amortizacionRepository.deleteById(id);
 	}
 }

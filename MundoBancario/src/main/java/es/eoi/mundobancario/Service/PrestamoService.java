@@ -6,11 +6,11 @@ import es.eoi.mundobancario.entity.Prestamo;
 
 public interface PrestamoService {
 
-	Prestamo CreatePrestamo(Prestamo prestamo);
+	Prestamo Create(Prestamo prestamo);
 
-	Optional<Prestamo> findPrestamoById(int id);
+	Optional<Prestamo> findById(int id);
 
-	Prestamo updatePrestamo(Prestamo prestamo);
+	Prestamo update(Prestamo prestamo);
 
-	void removePrestamo(int id);
+	void remove(int id);
 }
