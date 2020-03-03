@@ -15,13 +15,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity
 @Table(name = "Clientes")
 public class Cliente {
@@ -32,27 +30,26 @@ public class Cliente {
 	private int id;
 
 	@Column(name = "USUARIO")
-	private String Usuario;
+	private String usuario;
 
 	@Column(name = "PASS")
-	private String Pass;
+	private String pass;
 
 	@Column(name = "NOMBRE")
-	private String Nombre;
+	private String nombre;
 
 	@Column(name = "EMAIL")
-	private String Email;
+	private String email;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "Cliente")
 	private List<Cuenta> cuenta;
 
-	public Cliente(String usuario, String pass, String nombre, String email, List<Cuenta> cuenta) {
+	public Cliente(String usuario, String pass, String nombre, String email) {
 		super();
-		Usuario = usuario;
-		Pass = pass;
-		Nombre = nombre;
-		Email = email;
-		this.cuenta = cuenta;
+		this.usuario = usuario;
+		this.pass = pass;
+		this.nombre = nombre;
+		this.email = email;
 	}
 
 }
