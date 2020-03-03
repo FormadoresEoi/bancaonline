@@ -31,6 +31,15 @@ public interface IController<T, P> {
     T findById(P id);
 
     /**
+     * Creates an entity.
+     *
+     * @param entity Entity to create.
+     *
+     * @return Created entity.
+     */
+    T create(T entity);
+
+    /**
      * Updates an entity.
      *
      * @param entity Entity to update.
