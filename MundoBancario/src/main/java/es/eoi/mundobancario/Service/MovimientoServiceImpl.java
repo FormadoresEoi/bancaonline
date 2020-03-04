@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import es.eoi.mundobancario.Repository.MovimientoRepository;
 import es.eoi.mundobancario.entity.Movimiento;
+import es.eoi.mundobancario.enums.TiposMovimiento;
 
 @Service
 public class MovimientoServiceImpl implements MovimientoService {

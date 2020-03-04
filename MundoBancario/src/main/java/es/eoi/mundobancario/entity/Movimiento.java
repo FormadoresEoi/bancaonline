@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import es.eoi.mundobancario.enums.TiposMovimiento;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -47,6 +48,11 @@ public class Movimiento {
 		this.descripcion = descripcion;
 		this.fecha = fecha;
 		this.importe = importe;
+	}
+
+	public void setTipoMovimiento(TiposMovimiento prestamo) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -15,6 +15,7 @@ import es.eoi.mundobancario.entity.Amortizacion;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.enums.TiposMovimiento;
 
 @Service
 public class CuentaServiceImpl implements CuentaService {
@@ -24,6 +25,9 @@ public class CuentaServiceImpl implements CuentaService {
 	MovimientoRepository movimientoRepository;
 	@Autowired
 	PrestamoRepository prestamoRepository;
+	
+	TiposMovimiento tipo;
+	
 	//TODO añadir excepcion
 	private Cuenta checkNull(Optional<Cuenta> cuenta) {
 		if(cuenta.isPresent()) {
@@ -68,7 +72,7 @@ public class CuentaServiceImpl implements CuentaService {
 		}
 		prestamo.setAmortizacion(amortizaciones);
 		if(prestamoRepository.save(prestamo) != null) {
-			movimientoRepository.save(movimiento).setTipoMovimiento("PRESTAMO");
+			movimientoRepository.save(movimiento).setTipoMovimiento(tipo.PRESTAMO);
 			Cuenta cuenta = checkNull(cuentasRepository.findById(id));
 			cuenta.getPrestamo().add(prestamo);
 			cuenta.getMovimiento().add(movimiento);
