@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import es.eoi.mundobancario.entity.TipoMovimiento;
 
 @Repository
-public interface TipoMovimientoRepository extends JpaRepository<TipoMovimiento, Integer>{
-
+public interface TipoMovimientoRepository extends JpaRepository<TipoMovimiento, Integer> {
+	public TipoMovimiento findByTipo(String tipo);
 }

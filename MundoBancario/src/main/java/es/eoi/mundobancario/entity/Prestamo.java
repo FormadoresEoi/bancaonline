@@ -30,7 +30,6 @@ public class Prestamo {
 	String descrpicon;
 
 	@Column
-	@CreatedDate
 	Date fecha;
 
 	@Column

@@ -31,7 +31,7 @@ public class ClienteServiceImpl implements ClienteService {
 
 	@Override
 	public boolean putEmail(Integer id, String email) {
-		if(!repository.existsById(id))
+		if (!repository.existsById(id))
 			return false;
 		Cliente cliente = repository.findById(id).get();
 		cliente.setEmail(email);
@@ -41,7 +41,7 @@ public class ClienteServiceImpl implements ClienteService {
 
 	@Override
 	public boolean post(Cliente cliente) {
-		if(repository.existsByUsuario(cliente.getUsuario()))
+		if (repository.existsByUsuario(cliente.getUsuario()))
 			return false;
 		repository.save(cliente);
 		return true;

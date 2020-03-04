@@ -4,6 +4,7 @@ import es.eoi.mundobancario.entity.TipoMovimiento;
 
 public interface TipoMovimientoService {
 
-	TipoMovimiento FindById(int id);
-	
+	public TipoMovimiento getById(Integer id);
+
+	public TipoMovimiento getByTipo(String tipo);
 }

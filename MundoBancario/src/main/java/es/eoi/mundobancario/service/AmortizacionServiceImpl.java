@@ -13,19 +13,21 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 
 	@Autowired
 	AmortizacionRepository repository;
-	
-	public Amortizacion FindById(int id) {
+
+	@Override
+	public Amortizacion getById(Integer id) {
 		return repository.findById(id).get();
 	}
 
 	@Override
-	public Amortizacion createAmortizacion(Amortizacion amortizacion) {
-		return repository.save(amortizacion);
+	public List<Amortizacion> getAll() {
+		return repository.findAll();
 	}
 
 	@Override
-	public List<Amortizacion> listAmortizaciones() {
-		return repository.findAll();
+	public boolean post(Amortizacion amortizacion) {
+		repository.save(amortizacion);
+		return true;
 	}
-	
+
 }

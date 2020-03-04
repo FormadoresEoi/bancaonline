@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.repository.MovimientoRepository;
 
@@ -13,26 +14,26 @@ public class MovimientoServiceImpl implements MovimientoService {
 
 	@Autowired
 	MovimientoRepository repository;
-	
-	
+
 	@Override
-	public Movimiento FindById(int id) {
+	public Movimiento getById(Integer id) {
 		return repository.findById(id).get();
 	}
 
 	@Override
-	public Movimiento createMovimiento(Movimiento movimiento) {
-		return repository.save(movimiento);
-	}
-
-	@Override
-	public List<Movimiento> listMovimiento() {
+	public List<Movimiento> getAll() {
 		return repository.findAll();
 	}
 
 	@Override
-	public List<Movimiento> findByCuenta(int cuenta) {
+	public List<Movimiento> getByCuenta(Cuenta cuenta) {
 		return repository.findByCuenta(cuenta);
+	}
+
+	@Override
+	public boolean post(Movimiento movimiento) {
+		repository.save(movimiento);
+		return true;
 	}
 
 }

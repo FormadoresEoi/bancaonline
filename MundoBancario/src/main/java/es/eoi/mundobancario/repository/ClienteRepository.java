@@ -8,10 +8,10 @@ import org.springframework.stereotype.Repository;
 import es.eoi.mundobancario.entity.Cliente;
 
 @Repository
-public interface ClienteRepository extends JpaRepository<Cliente, Integer>{
+public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
 	public Optional<Cliente> findByUsuarioAndPass(String usuario, String pass);
-	
+
 	public boolean existsByUsuario(String usuario);
-	
+
 }

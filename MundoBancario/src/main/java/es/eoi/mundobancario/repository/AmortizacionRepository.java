@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import es.eoi.mundobancario.entity.Amortizacion;
 
 @Repository
-public interface AmortizacionRepository extends JpaRepository<Amortizacion, Integer>{
+public interface AmortizacionRepository extends JpaRepository<Amortizacion, Integer> {
 
 }

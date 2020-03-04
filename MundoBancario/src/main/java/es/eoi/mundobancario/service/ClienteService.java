@@ -5,15 +5,15 @@ import java.util.List;
 import es.eoi.mundobancario.entity.Cliente;
 
 public interface ClienteService {
-	
+
 	public Cliente getById(Integer id);
-	
+
 	public Cliente getByUsuarioAndPass(String usuario, String pass);
-	
+
 	public List<Cliente> getAll();
-			
-	public boolean putEmail(Integer id, String email);
-	
+
 	public boolean post(Cliente cliente);
-	
+
+	public boolean putEmail(Integer id, String email);
+
 }

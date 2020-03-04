@@ -25,7 +25,6 @@ public class Amortizacion {
 	int id;
 
 	@Column
-	@CreatedDate
 	Date fecha;
 
 	@Column

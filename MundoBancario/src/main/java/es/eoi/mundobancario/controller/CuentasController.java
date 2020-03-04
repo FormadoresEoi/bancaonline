@@ -1,10 +1,17 @@
 package es.eoi.mundobancario.controller;
 
-import java.util.ArrayList;
+import static es.eoi.mundobancario.utils.DtoConverter.fromCuentaNuevaDto;
+import static es.eoi.mundobancario.utils.DtoConverter.fromMovimientoNuevoDto;
+import static es.eoi.mundobancario.utils.DtoConverter.toCuentaConClienteDto;
+import static es.eoi.mundobancario.utils.DtoConverter.toCuentaConClienteDtoList;
+import static es.eoi.mundobancario.utils.DtoConverter.toMovimientoDtoList;
+import static es.eoi.mundobancario.utils.DtoConverter.toPrestamoDtoList;
+
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,19 +21,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import es.eoi.mundobancario.dto.CuentaBasicaDto;
+import es.eoi.mundobancario.dto.CuentaConClienteDto;
+import es.eoi.mundobancario.dto.CuentaNuevaDto;
 import es.eoi.mundobancario.dto.MovimientoDto;
+import es.eoi.mundobancario.dto.MovimientoNuevoDto;
 import es.eoi.mundobancario.dto.PrestamoDto;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
-import es.eoi.mundobancario.entity.TipoMovimiento;
-import es.eoi.mundobancario.service.CuentaService;
-import es.eoi.mundobancario.service.MovimientoService;
-import es.eoi.mundobancario.service.TipoMovimientoService;
-import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
 import es.eoi.mundobancario.service.MovimientoService;
 import es.eoi.mundobancario.service.PrestamoService;
+import es.eoi.mundobancario.service.TipoMovimientoService;
 
 @RestController
 @RequestMapping(value = "/cuentas")
@@ -34,157 +40,77 @@ public class CuentasController {
 
 	@Autowired
 	CuentaService cuentaService;
-	
+
 	@Autowired
 	MovimientoService movimientoService;
-	
+
 	@Autowired
 	TipoMovimientoService tipoMovimientoService;
+
+	@Autowired
 	PrestamoService prestamoService;
+	
+	@Autowired
+	ClienteService clienteService;
 
-	
-	@GetMapping(value = "/{id}")
-	public CuentaBasicaDto FindById(@RequestParam(value = "id")int id) {
-		Cuenta cuenta = cuentaService.FindById(id);
-		CuentaBasicaDto dto = new CuentaBasicaDto();
-		dto.setNum_cuenta(cuenta.getNum_cuenta());
-		dto.setAlias(cuenta.getAlias());
-		dto.setSaldo(cuenta.getSaldo());
-		//dto.setCliente(cuenta.getCliente().getId());
-		return dto;
-	}
-	
-	@PostMapping
-	public CuentaBasicaDto createCuenta(@RequestBody Cuenta cuenta) {;
-		cuentaService.createCuenta(cuenta);
-		CuentaBasicaDto dto = new CuentaBasicaDto(); 
-		dto.setNum_cuenta(cuenta.getNum_cuenta());
-		dto.setAlias(cuenta.getAlias());
-		dto.setSaldo(cuenta.getSaldo());
-		//dto.setCliente(cuenta.getCliente().getId());
-		return dto;
-	}
-	
-	@DeleteMapping
-	public void deleteCuenta(@RequestBody Cuenta cuenta) {
-		cuentaService.deleteCuenta(cuenta);
-	}
-	
-	@PutMapping
-	public CuentaBasicaDto updateCuenta(@RequestBody Cuenta cuenta) {
-		cuentaService.updateCuenta(cuenta);
-		CuentaBasicaDto dto = new CuentaBasicaDto();
-		dto.setNum_cuenta(cuenta.getNum_cuenta());
-		dto.setAlias(cuenta.getAlias());
-		dto.setSaldo(cuenta.getSaldo());
-		//dto.setCliente(cuenta.getCliente().getId());
-		return dto;
-	}
-	
 	@GetMapping
-	public List<CuentaBasicaDto> listCuentas() {
-		List<Cuenta> listCuentas = cuentaService.listCuentas();
-		List<CuentaBasicaDto> dto = new ArrayList<CuentaBasicaDto>();
-		for (Cuenta cuenta : listCuentas) {
-			CuentaBasicaDto cuentadto = new CuentaBasicaDto();
-			cuentadto.setNum_cuenta(cuenta.getNum_cuenta());
-			cuentadto.setAlias(cuenta.getAlias());
-			cuentadto.setSaldo(cuenta.getSaldo());
-			//cuentadto.setCliente(cuenta.getCliente().getId());
-			dto.add(cuentadto);
-		}
-		return dto;
+	public List<CuentaConClienteDto> getAll() {
+		return toCuentaConClienteDtoList(cuentaService.getAll());
 	}
 
-	@GetMapping(value = "/deudores")
-	public CuentaBasicaDto FindBySaldo() {
-		Cuenta cuenta = cuentaService.FindBySaldo();
-		CuentaBasicaDto dto = new CuentaBasicaDto();
-		dto.setNum_cuenta(cuenta.getNum_cuenta());
-		dto.setAlias(cuenta.getAlias());
-		dto.setSaldo(cuenta.getSaldo());
-		return dto;
+	@GetMapping("/deudoras")
+	public List<CuentaConClienteDto> getBySaldo() {
+		return toCuentaConClienteDtoList(cuentaService.getDeudoras());
 	}
-	
+
+	@GetMapping("/{id}")
+	public CuentaConClienteDto getById(@PathVariable Integer id) {
+		return toCuentaConClienteDto(cuentaService.getById(id));
+	}
+
+	@PostMapping
+	public boolean post(@RequestBody CuentaNuevaDto dto, @RequestParam Integer idcliente) {
+		Cuenta cuenta = fromCuentaNuevaDto(dto);
+		cuenta.setCliente(clienteService.getById(idcliente));
+		return cuentaService.post(cuenta);
+	}
+
+	@PutMapping("/{id}")
+	public boolean updateCuenta(@PathVariable Integer id, @RequestParam String alias) {
+		return cuentaService.putAlias(id, alias);
+	}
+
 	@GetMapping(value = "/{id}/movimientos")
-	public List<MovimientoDto> FindByCuenta(int cuenta) {
-		List<Movimiento> litsMovimiento = movimientoService.findByCuenta(cuenta);
-		List<MovimientoDto> dto = new ArrayList<MovimientoDto>();
-		for (Movimiento movimiento : litsMovimiento) {
-			MovimientoDto movimientodto = new MovimientoDto();
-			movimientodto.setId(movimiento.getId());
-			movimientodto.setDescripcion(movimiento.getDescripcion());
-			movimientodto.setFecha(movimiento.getFecha());
-			movimientodto.setImporte(movimiento.getImporte());
-			dto.add(movimientodto);
-		}
-		return dto; 
+	public List<MovimientoDto> getMovimientosByCuenta(@PathVariable Integer id) {
+		return toMovimientoDtoList(movimientoService.getByCuenta(cuentaService.getById(id)));
 	}
+
 	@GetMapping(value = "/{id}/prestamos")
-	public List<PrestamoDto> findByCuenta(int cuenta) {
-		List<Prestamo> listPrestamos = prestamoService.FindByCuenta(cuenta);
-		List<PrestamoDto> dto = new ArrayList<PrestamoDto>();
-		for (Prestamo prestamo : listPrestamos) {
-			PrestamoDto prestamodto = new PrestamoDto();
-			prestamodto.setId(prestamo.getId());
-			prestamodto.setDescrpicon(prestamo.getDescrpicon());
-			prestamodto.setFecha(prestamo.getFecha());
-			prestamodto.setImporte(prestamo.getImporte());
-			prestamodto.setPlazos(prestamo.getPlazos());
-			dto.add(prestamodto);
-		}
-		return dto;
+	public List<PrestamoDto> findByCuenta(@PathVariable Integer id) {
+		return toPrestamoDtoList(prestamoService.getByCuenta(cuentaService.getById(id)));
 	}
-	
+
 	@PostMapping("/{id}/ingresos")
-	public String postIngreso(@PathVariable Integer id, @RequestBody MovimientoDto dto) {
-		Cuenta cuenta = cuentaService.FindById(id);
-		Movimiento movimiento = new Movimiento();
-		TipoMovimiento lol = tipoMovimientoService.FindById(1);
-		movimiento.setImporte(dto.getImporte());
-		movimiento.setTipo(lol);
-		movimiento.setDescripcion(dto.getDescripcion());
-		movimiento.setCuenta(cuenta);
-		System.out.println(cuenta.getMovimientos().toString());
-		movimientoService.createMovimiento(movimiento);
-		return "OK";
+	public boolean postIngreso(@PathVariable Integer id, @RequestBody MovimientoNuevoDto dto) {
+		Movimiento movimiento = fromMovimientoNuevoDto(dto);
+		movimiento.setCuenta(cuentaService.getById(id));
+		movimiento.setFecha(new Timestamp((new Date()).getTime()));
+		movimiento.setTipo(tipoMovimientoService.getByTipo("INGRESO"));
+		return movimientoService.post(movimiento);
 	}
-	
+
 	@PostMapping("/{id}/pagos")
-	public String postPagos(@PathVariable Integer id, @RequestBody MovimientoDto dto) {
-		Cuenta cuenta = cuentaService.FindById(id);
-		Movimiento movimiento = new Movimiento();
-		TipoMovimiento lol = tipoMovimientoService.FindById(2);
-		movimiento.setImporte(dto.getImporte());
-		movimiento.setTipo(lol);
-		movimiento.setDescripcion(dto.getDescripcion());
-		movimiento.setCuenta(cuenta);
-		System.out.println(cuenta.getMovimientos().toString());
-		movimientoService.createMovimiento(movimiento);
-		return "OK";
+	public boolean postPagos(@PathVariable Integer id, @RequestBody MovimientoNuevoDto dto) {
+		Movimiento movimiento = fromMovimientoNuevoDto(dto);
+		movimiento.setCuenta(cuentaService.getById(id));
+		movimiento.setFecha(new Timestamp((new Date()).getTime()));
+		movimiento.setTipo(tipoMovimientoService.getByTipo("PAGO"));
+		return movimientoService.post(movimiento);
 	}
 
 	@GetMapping(value = "/{id}/prestamosVivo")
 	public PrestamoDto FindByPrestamoVivo() {
-		Prestamo prestamo = prestamoService.FindByPrestamoVivo();
-		PrestamoDto dto = new PrestamoDto();
-		dto.setId(prestamo.getId());
-		dto.setDescrpicon(prestamo.getDescrpicon());
-		dto.setFecha(prestamo.getFecha());
-		dto.setImporte(prestamo.getImporte());
-		dto.setPlazos(prestamo.getPlazos());
-		return dto;
+		return null;
 	}
 
-	public CuentaBasicaDto clienteToDto(Cuenta cuenta) {
-		CuentaBasicaDto dto = new CuentaBasicaDto();
-		dto.setNum_cuenta(cuenta.getNum_cuenta());
-		dto.setAlias(cuenta.getAlias());
-		dto.setSaldo(cuenta.getSaldo());
-		//dto.setCliente(cuenta.getCliente().getId());
-		return dto;
-	}
-
-
-	
 }

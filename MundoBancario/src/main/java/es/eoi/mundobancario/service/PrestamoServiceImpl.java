@@ -5,37 +5,40 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.repository.PrestamoRepository;
+
 @Service
 public class PrestamoServiceImpl implements PrestamoService {
 
 	@Autowired
 	PrestamoRepository repository;
-	
+
 	@Override
-	public Prestamo FindById(int id) {
+	public Prestamo getById(Integer id) {
 		return repository.findById(id).get();
 	}
 
 	@Override
-	public Prestamo createPrestamo(Prestamo prestamo) {
-		return repository.save(prestamo);
+	public boolean post(Prestamo prestamo) {
+		repository.save(prestamo);
+		return true;
 	}
 
 	@Override
-	public List<Prestamo> listPrestamos() {
+	public List<Prestamo> getAll() {
 		return repository.findAll();
 	}
 
 	@Override
-	public List<Prestamo> FindByCuenta(int cuenta) {
-		return repository.FindByCuenta(cuenta);
+	public List<Prestamo> getByCuenta(Cuenta cuenta) {
+		return repository.findByCuenta(cuenta);
 	}
 
 	@Override
-	public Prestamo FindByPrestamoVivo() {
-		return repository.FindByPrestamoVivo();
+	public List<Prestamo> getPrestamosVivos() {
+		return repository.findByPrestamoVivo();
 	}
-	
+
 }

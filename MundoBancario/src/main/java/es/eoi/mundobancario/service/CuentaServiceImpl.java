@@ -1,4 +1,4 @@
-	package es.eoi.mundobancario.service;
+package es.eoi.mundobancario.service;
 
 import java.util.List;
 
@@ -13,36 +13,34 @@ public class CuentaServiceImpl implements CuentaService {
 
 	@Autowired
 	CuentaRepository repository;
-	
+
 	@Override
-	public Cuenta FindById(int id) {
+	public Cuenta getById(Integer id) {
 		return repository.findById(id).get();
 	}
 
 	@Override
-	public Cuenta createCuenta(Cuenta cuenta) {
-		return repository.save(cuenta);
-	}
-
-	@Override
-	public void deleteCuenta(Cuenta cuenta) {
-		repository.delete(cuenta);
-		
-	}
-
-	@Override
-	public Cuenta updateCuenta(Cuenta cuenta) {
-		return repository.save(cuenta);
-	}
-
-	@Override
-	public List<Cuenta> listCuentas() {
+	public List<Cuenta> getAll() {
 		return repository.findAll();
 	}
 
 	@Override
-	public Cuenta FindBySaldo() {
-		return repository.FindBySaldo();
+	public List<Cuenta> getDeudoras() {
+		return repository.findByDeudas();
+	}
+
+	@Override
+	public boolean post(Cuenta cuenta) {
+		repository.save(cuenta);
+		return true;
+	}
+
+	@Override
+	public boolean putAlias(Integer id, String alias) {
+		Cuenta cuenta = repository.findById(id).get();
+		cuenta.setAlias(alias);
+		repository.save(cuenta);
+		return true;
 	}
 
 }

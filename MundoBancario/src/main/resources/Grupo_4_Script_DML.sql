@@ -1,5 +1,5 @@
-INSERT INTO tipo_movimiento (tipo) VALUES
-("IGRESO"),
+INSERT INTO tipos_movimiento (tipo) VALUES
+("INGRESO"),
 ("PRÉSTAMO"),
 ("PAGO"),
 ("AMORTIZACIÓN"),

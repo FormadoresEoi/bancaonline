@@ -11,10 +11,14 @@ public class TipoMovimientoServiceImpl implements TipoMovimientoService {
 
 	@Autowired
 	TipoMovimientoRepository repository;
-	
+
 	@Override
-	public TipoMovimiento FindById(int id) {
+	public TipoMovimiento getById(Integer id) {
 		return repository.findById(id).get();
+	}
+
+	public TipoMovimiento getByTipo(String tipo) {
+		return repository.findByTipo(tipo);
 	}
 
 }

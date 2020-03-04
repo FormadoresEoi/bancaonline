@@ -40,5 +40,5 @@ public class Cuenta {
 
 	@OneToMany(mappedBy = "cuenta")
 	List<Prestamo> prestamos;
-	
+
 }

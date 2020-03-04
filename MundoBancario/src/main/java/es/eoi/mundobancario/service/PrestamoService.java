@@ -2,18 +2,19 @@ package es.eoi.mundobancario.service;
 
 import java.util.List;
 
+import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Prestamo;
 
 public interface PrestamoService {
 
-	Prestamo FindById(int id);
-	
-	Prestamo createPrestamo(Prestamo prestamo);
-	
-	List<Prestamo> listPrestamos();
-	
-	List<Prestamo> FindByCuenta(int cuenta);
-	
-	Prestamo FindByPrestamoVivo();
-	
+	public Prestamo getById(Integer id);
+
+	public List<Prestamo> getAll();
+
+	public List<Prestamo> getByCuenta(Cuenta cuenta);
+
+	public List<Prestamo> getPrestamosVivos();
+
+	public boolean post(Prestamo prestamo);
+
 }
