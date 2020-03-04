@@ -60,8 +60,8 @@ public class ClientesController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/clientes")
-	public ClienteDto create(@PathVariable Cliente cliente) {
-		return toDto(service.Create(cliente));
+	public ClienteDto create(@PathVariable String usuario, String nombre, String pass, String email) {
+		return toDto(service.Create(usuario, nombre, pass, email));
 
 	}
 }
