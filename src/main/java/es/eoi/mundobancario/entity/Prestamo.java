@@ -1,10 +1,11 @@
 package es.eoi.mundobancario.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * Amortización entity.
@@ -20,6 +21,7 @@ import java.util.Collection;
 public class Prestamo {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Basic
@@ -31,8 +33,10 @@ public class Prestamo {
     private String descripcion;
 
     @Basic
-    @Column(name = "fecha", nullable = false)
-    private Timestamp fecha;
+    @Column(name = "fecha", nullable = false, insertable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    private Date fecha;
 
     @Basic
     @Column(name = "importe", nullable = false, precision = 2)

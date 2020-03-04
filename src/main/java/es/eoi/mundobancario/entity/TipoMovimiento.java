@@ -16,6 +16,14 @@ import javax.persistence.*;
 @Entity
 @Table(name = "tipos_movimiento", schema = "mundobancario")
 public class TipoMovimiento {
+    public static enum Tipo {
+        INGRESO,
+        PRESTAMO,
+        PAGO,
+        AMORTIZACION,
+        INTERES
+    }
+
     @Id
     @Column(name = "id", nullable = false)
     private int id;
