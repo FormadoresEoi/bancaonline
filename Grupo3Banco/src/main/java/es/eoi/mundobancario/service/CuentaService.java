@@ -25,4 +25,7 @@ public interface CuentaService {
 	//Listado de Cuentas
 	
 	public List<Cuenta> listCuentas();
+	
+	
+	public List<Cuenta> listDeudoras();
 }

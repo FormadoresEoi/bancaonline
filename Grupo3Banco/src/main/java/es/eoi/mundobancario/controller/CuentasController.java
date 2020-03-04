@@ -8,13 +8,16 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.ClienteDTO;
 import es.eoi.mundobancario.dto.CuentaDTO;
+import es.eoi.mundobancario.dto.MovimientoDTO;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
@@ -28,7 +31,7 @@ public class CuentasController {
 	private final CuentaService service;
 	private final ModelMapper mapper;
 	
-	// Devuelve todas las cuentas
+	// Devuelve todas las cuentas.
 	@GetMapping
 	public List<CuentaDTO> getCuentas(){
 		return mapper.map(service.listCuentas(),new TypeToken<List<CuentaDTO>>() {
@@ -39,16 +42,35 @@ public class CuentasController {
 	public CuentaDTO getCuenta(@PathVariable int id) {
 		return mapper.map(service.findById(id),CuentaDTO.class);
 	}
-	
+	// Devuelve las cuentas con saldo negativo.
+	@GetMapping("/deudoras")
+	public List<CuentaDTO> getCuentasDeudoras(){
+		return mapper.map(service.listDeudoras(),new TypeToken<List<CuentaDTO>>() {
+			}.getType());
+	}
+	// Crear una nueva cuenta - TO-DO; Pedir id cliente unicamente, en caso de que cliente no exista mostrar mensaje.
+	@PostMapping
+	public void post(@RequestBody CuentaDTO cuenta) {
+        service.createCuenta(mapper.map(cuenta,es.eoi.mundobancario.entity.Cuenta.class));
+         
+    }
+	//Modifica campo alias de la cuenta solicitada.
+	@PutMapping("{id}")
+	public void put(@PathVariable int id, String alias) {
+		service.updateCuenta(service.findById(id), alias);
+	}
+	//Devuelve los movimientos de la cuenta solicitada.
+	@GetMapping("{id}/movimientos")
+	public List<MovimientoDTO> getMovimientos(@PathVariable int id){
+		return mapper.map(service.findById(id).getMovimientos(), new TypeToken<List<MovimientoDTO>>(){
+		}.getType());
+	}
 //	@DeleteMapping
 //	public void deleteCuenta(@RequestBody Cuenta cuenta) {
 //		service.deleteCuenta(cuenta);
 //	}
 
-	//@PutMapping("{id}")
-	//public void put(@PathVariable int id, String alias) {
-	//	service.updateCuenta(service.findById(id), alias);
-	//}
+
 
 	//@GetMapping
 	//public List<CuentaDTO> listCuentas() {
