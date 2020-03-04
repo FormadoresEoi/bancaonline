@@ -21,6 +21,7 @@ import es.eoi.mundobancario.dto.CuentaBasicaDto;
 import es.eoi.mundobancario.dto.CuentaDto;
 import es.eoi.mundobancario.dto.MovimientoDto;
 import es.eoi.mundobancario.dto.NewCuentaDto;
+import es.eoi.mundobancario.dto.NewMovimientoDto;
 import es.eoi.mundobancario.dto.NewPrestamoDto;
 import es.eoi.mundobancario.dto.PrestamoDto;
 import es.eoi.mundobancario.entity.Cliente;
@@ -29,6 +30,7 @@ import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
+import es.eoi.mundobancario.service.MovimientoService;
 import es.eoi.mundobancario.service.PrestamoService;
 
 @RestController
@@ -43,6 +45,9 @@ public class CuentasController {
 
 	@Autowired
 	private PrestamoService prestamoService;
+	
+	@Autowired
+	private MovimientoService movimientoService;
 
 	@Autowired
 	private ModelMapper model;
@@ -76,6 +81,8 @@ public class CuentasController {
 		return new ResponseEntity<String>(HttpStatus.OK);
 
 	}
+	
+
 	
 //	@PostMapping({"/{id}/prestamos","/{id}/pagos","/{id}/ingresos"})
 //	public ResponseEntity<String> createMovimiento(@PathVariable int id, @RequestBody MovimientoDto dto){
@@ -122,11 +129,31 @@ public class CuentasController {
 		return new ResponseEntity<CuentaBasicaDto>(modifyCuenta, HttpStatus.OK);
 	}
 
-	@GetMapping("/{num_cuenta}/movimientos")
-	public ResponseEntity<CuentaDto> findAllMovimientosById(@PathVariable int num_cuenta) {
-		CuentaDto cuenta = model.map(cuentaService.find(num_cuenta).get(), CuentaDto.class);
+//	@GetMapping("/{num_cuenta}/movimientos")
+//	public ResponseEntity<CuentaDto> findAllMovimientosById(@PathVariable int num_cuenta) {
+//		CuentaDto cuenta = model.map(cuentaService.find(num_cuenta).get(), CuentaDto.class);
+//		//List<Movimiento>
+//		return new ResponseEntity<CuentaDto>(cuenta, HttpStatus.OK);
+//	}
+	
+	@GetMapping("/{id}/movimientos")
+	public ResponseEntity<List<NewMovimientoDto>> findAllMovimientosById(@PathVariable int id) {
+		List<NewMovimientoDto> movimientos =  movimientoService.findAllByCuentaId(id) 
+				.stream()
+                .map(c -> model.map(c, NewMovimientoDto.class))
+                .collect(Collectors.toList());
+		
+		return new ResponseEntity<List<NewMovimientoDto>>(movimientos, HttpStatus.FOUND);
+	}
+	
+	@GetMapping("/{id}/prestamos")
+	public ResponseEntity<List<NewPrestamoDto>> findPrestamos(@PathVariable int id) {		
+		List<NewPrestamoDto> prestamos = prestamoService.findAllByCuenta(id)
+				.stream()
+                .map(c -> model.map(c, NewPrestamoDto.class))
+                .collect(Collectors.toList());
 
-		return new ResponseEntity<CuentaDto>(cuenta, HttpStatus.OK);
+		return new ResponseEntity<List<NewPrestamoDto>>(prestamos, HttpStatus.OK);
 	}
 
 }

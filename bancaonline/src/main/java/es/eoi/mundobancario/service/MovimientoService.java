@@ -13,6 +13,6 @@ public interface MovimientoService {
 
 	List<Movimiento> findAll();
 	
-	List<Movimiento> findAllByCuenta(int id_cuenta);
+	List<Movimiento> findAllByCuentaId(int id_cuenta);
 
 }

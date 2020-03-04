@@ -37,8 +37,9 @@ public class PrestamoServiceImpl implements PrestamoService{
 
 	@Override
 	public List<Prestamo> findAllByCuenta(int id) {
-		return prestamoRepository.findAllByCuenta(id);
+		return prestamoRepository.findAllByCuentaNumCuenta(id);
 	}
+	
 	
 	@Override
 	public List<Prestamo> findAllByCuentaIdAmortizados(int id) {

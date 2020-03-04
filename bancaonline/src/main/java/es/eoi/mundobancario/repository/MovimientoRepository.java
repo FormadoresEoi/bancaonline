@@ -10,5 +10,5 @@ import es.eoi.mundobancario.entity.Movimiento;
 @Repository
 public interface MovimientoRepository extends JpaRepository<Movimiento, Integer> {
 	
-	List<Movimiento> findAllByCuenta(int Id_Cuenta);
+	List<Movimiento> findAllByCuentaNumCuenta(int NumCuenta);
 }

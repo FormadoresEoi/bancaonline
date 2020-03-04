@@ -31,7 +31,7 @@ public class MovimientoServiceImpl implements MovimientoService {
 	}
 
 	@Override
-	public List<Movimiento> findAllByCuenta(int id_cuenta) {
-		return movimientoRepository.findAllByCuenta(id_cuenta);
+	public List<Movimiento> findAllByCuentaId(int id_cuenta) {
+		return movimientoRepository.findAllByCuentaNumCuenta(id_cuenta);
 	}
 }
