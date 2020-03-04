@@ -16,12 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.CuentaDto;
 import es.eoi.mundobancario.dto.MovimientoDto;
+import es.eoi.mundobancario.dto.PrestamoDto;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.TipoMovimiento;
 import es.eoi.mundobancario.service.CuentaService;
 import es.eoi.mundobancario.service.MovimientoService;
 import es.eoi.mundobancario.service.TipoMovimientoService;
+import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.service.CuentaService;
+import es.eoi.mundobancario.service.MovimientoService;
+import es.eoi.mundobancario.service.PrestamoService;
 
 @RestController
 @RequestMapping(value = "/cuentas")
@@ -35,6 +40,8 @@ public class CuentasController {
 	
 	@Autowired
 	TipoMovimientoService tipoMovimientoService;
+	PrestamoService prestamoService;
+
 	
 	@GetMapping(value = "/{id}")
 	public CuentaDto FindById(@RequestParam(value = "id")int id) {
@@ -88,7 +95,6 @@ public class CuentasController {
 		}
 		return dto;
 	}
-	
 
 	@GetMapping(value = "/deudores")
 	public CuentaDto FindBySaldo() {
@@ -113,6 +119,21 @@ public class CuentasController {
 			dto.add(movimientodto);
 		}
 		return dto; 
+	}
+	@GetMapping(value = "/{id}/prestamos")
+	public List<PrestamoDto> findByCuenta(int cuenta) {
+		List<Prestamo> listPrestamos = prestamoService.FindByCuenta(cuenta);
+		List<PrestamoDto> dto = new ArrayList<PrestamoDto>();
+		for (Prestamo prestamo : listPrestamos) {
+			PrestamoDto prestamodto = new PrestamoDto();
+			prestamodto.setId(prestamo.getId());
+			prestamodto.setDescrpicon(prestamo.getDescrpicon());
+			prestamodto.setFecha(prestamo.getFecha());
+			prestamodto.setImporte(prestamo.getImporte());
+			prestamodto.setPlazos(prestamo.getPlazos());
+			dto.add(prestamodto);
+		}
+		return dto;
 	}
 	
 	@PostMapping("/{id}/ingresos")
@@ -142,7 +163,18 @@ public class CuentasController {
 		movimientoService.createMovimiento(movimiento);
 		return "OK";
 	}
-	
+
+	@GetMapping(value = "/{id}/prestamosVivo")
+	public PrestamoDto FindByPrestamoVivo() {
+		Prestamo prestamo = prestamoService.FindByPrestamoVivo();
+		PrestamoDto dto = new PrestamoDto();
+		dto.setId(prestamo.getId());
+		dto.setDescrpicon(prestamo.getDescrpicon());
+		dto.setFecha(prestamo.getFecha());
+		dto.setImporte(prestamo.getImporte());
+		dto.setPlazos(prestamo.getPlazos());
+		return dto;
+	}
 
 	public CuentaDto clienteToDto(Cuenta cuenta) {
 		CuentaDto dto = new CuentaDto();
