@@ -163,10 +163,26 @@ public class CuentasController {
 		movimientoService.createMovimiento(movimiento);
 		return "OK";
 	}
+	
+	@PostMapping("/{id}/prestamos")
+	public String createPrestamo(@RequestParam(value = "importe") float importe, @RequestParam(value = "plazos") int plazos) {
+		Movimiento movimiento = movimientoService.createIngreso(importe, plazos);
+		TipoMovimiento lol = tipoMovimientoService.FindById(2);
+		Cuenta cuenta = cuentaService.FindById(4);
+		MovimientoDto dto = new MovimientoDto();
+		movimiento.setImporte(dto.getImporte());
+		movimiento.setTipo(lol);
+		movimiento.setDescripcion(dto.getDescripcion());
+		movimiento.setFecha(dto.getFecha());
+		movimiento.setCuenta(cuenta);
+		movimientoService.createMovimiento(movimiento);
+		return "ok";
+	}
+	
 
 	@GetMapping(value = "/{id}/prestamosVivo")
-	public PrestamoDto FindByPrestamoVivo() {
-		Prestamo prestamo = prestamoService.FindByPrestamoVivo();
+	public PrestamoDto FindByPrestamoVivo(int cuenta) {
+		Prestamo prestamo = prestamoService.FindByPrestamoVivo(cuenta);
 		PrestamoDto dto = new PrestamoDto();
 		dto.setId(prestamo.getId());
 		dto.setDescrpicon(prestamo.getDescrpicon());

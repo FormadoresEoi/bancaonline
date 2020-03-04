@@ -6,4 +6,6 @@ public interface TipoMovimientoService {
 
 	TipoMovimiento FindById(int id);
 	
+	
+	
 }

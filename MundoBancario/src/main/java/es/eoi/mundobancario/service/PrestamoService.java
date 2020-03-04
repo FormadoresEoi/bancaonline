@@ -14,6 +14,6 @@ public interface PrestamoService {
 	
 	List<Prestamo> FindByCuenta(int cuenta);
 	
-	Prestamo FindByPrestamoVivo();
+	Prestamo FindByPrestamoVivo(int cuenta);
 	
 }

@@ -10,6 +10,8 @@ public interface MovimientoService {
 	
 	Movimiento createMovimiento(Movimiento movimiento);
 	
+	Movimiento createIngreso(float importe, int plazos);
+	
 	List<Movimiento> listMovimiento();
 	
 	List<Movimiento> findByCuenta(int cuenta); 
