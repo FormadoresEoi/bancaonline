@@ -1,5 +1,6 @@
 package es.eoi.mundobancario.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -41,5 +42,19 @@ public class CuentaServiceImpl implements CuentaService {
 	@Override
 	public List<Cuenta> listCuentas() {
 		return repository.findAll();
+	}
+	
+	@Override
+	public List<Cuenta> listDeudoras() {
+		List<Cuenta> cuentas = repository.findAll();
+		List<Cuenta> cuentasD = new ArrayList<Cuenta>();
+		for (int i = 0; i < cuentas.size();i++)
+		{
+			if(cuentas.get(i).getSaldo() < 0)
+			{
+				cuentasD.add(cuentas.get(i));
+			}
+		}
+		return cuentasD;
 	}
 }
