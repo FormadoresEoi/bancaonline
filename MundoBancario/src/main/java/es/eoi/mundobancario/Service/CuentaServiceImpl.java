@@ -16,6 +16,7 @@ import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.enums.TiposMovimiento;
+import es.eoi.mundobancario.excepcion.NotMoneyEnoughtException;
 
 @Service
 public class CuentaServiceImpl implements CuentaService {
@@ -53,11 +54,28 @@ public class CuentaServiceImpl implements CuentaService {
 		cuentasRepository.deleteById(numCuenta);
 	}
 
-	public Movimiento createPagos(Movimiento movimiento) {
+	public Movimiento createPagos(Movimiento movimiento, int id) {
+		try {
+		Cuenta cuenta = checkNull(cuentasRepository.findById(id));
+		double saldo = cuenta.getSaldo();
+		if(saldo <= movimiento.getImporte())
+			throw new NotMoneyEnoughtException();
+		cuenta.setSaldo(saldo - movimiento.getImporte());
+		movimiento.setTipoMovimiento(tipo.PAGO);
+		update(cuenta);
 		return movimientoRepository.save(movimiento);
+		}catch(Exception e) {
+			e.getMessage();
+			return null;
+		}
 	}
 
-	public Movimiento createIngresos(Movimiento movimiento) {
+	public Movimiento createIngresos(Movimiento movimiento, int id) {
+		Cuenta cuenta = checkNull(cuentasRepository.findById(id));
+		double saldo = cuenta.getSaldo();
+		cuenta.setSaldo(saldo + movimiento.getImporte());
+		movimiento.setTipoMovimiento(tipo.INGRESO);
+		update(cuenta);
 		return movimientoRepository.save(movimiento);
 	}
 

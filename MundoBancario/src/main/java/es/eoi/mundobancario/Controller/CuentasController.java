@@ -106,14 +106,14 @@ public class CuentasController {
 	public MovimientoDto createIngresos(@PathVariable int id, @RequestParam("descripcion") String descripcion,
 			@RequestParam("importe") double importe) {
 		Movimiento movimiento = new Movimiento(descripcion, new Date(), importe);
-		return dtoConstructor.toMovimientoDto(service.createIngresos(movimiento));
+		return dtoConstructor.toMovimientoDto(service.createIngresos(movimiento, id));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}/pagos")
 	public MovimientoDto createPagos(@PathVariable int id, @RequestParam("descripcion") String descripcion,
 			@RequestParam("importe") double importe) {
 		Movimiento movimiento = new Movimiento(descripcion, new Date(), importe);
-		return dtoConstructor.toMovimientoDto(service.createPagos(movimiento));
+		return dtoConstructor.toMovimientoDto(service.createPagos(movimiento, id));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/ejecutarAmortizacionsDiarias")
