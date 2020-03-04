@@ -61,21 +61,31 @@ public class CuentaServiceImpl implements CuentaService {
 		return movimientoRepository.save(movimiento);
 	}
 
-	// TODO añadir las amortizaciones
+	// TODO arreglar
 	public Prestamo createPrestamos(Prestamo prestamo, Movimiento movimiento, int id) {
 		Date fecha = new Date();
 		int mes = fecha.getMonth();
+		Cuenta cuenta = checkNull(cuentasRepository.findById(id));
 		List<Amortizacion> amortizaciones = new ArrayList<Amortizacion>();
+		List<Prestamo> prestamos = cuenta.getPrestamo();
+		List<Movimiento> movimientos = cuenta.getMovimiento();
+		double saldo = cuenta.getSaldo();
 		for (int i = 0; i < prestamo.getPlazo(); i++) {
 			fecha.setMonth(mes + i);
 			amortizaciones.add(new Amortizacion(fecha, (prestamo.getImporte() / 4)));
 		}
 		prestamo.setAmortizacion(amortizaciones);
 		if (prestamoRepository.save(prestamo) != null) {
-			movimientoRepository.save(movimiento).setTipoMovimiento(tipo.PRESTAMO);
-			Cuenta cuenta = checkNull(cuentasRepository.findById(id));
-			cuenta.getPrestamo().add(prestamo);
-			cuenta.getMovimiento().add(movimiento);
+			movimiento.setTipoMovimiento(tipo.PRESTAMO);
+			movimientoRepository.save(movimiento);
+			
+			prestamos.add(prestamo);
+			movimientos.add(movimiento);
+			
+			cuenta.setMovimiento(movimientos);
+			cuenta.setPrestamo(prestamos);
+			cuenta.setSaldo(saldo + prestamo.getImporte());
+			
 			update(cuenta);
 			return prestamo;
 		} else
@@ -107,13 +117,6 @@ public class CuentaServiceImpl implements CuentaService {
 	}
 
 	public List<Cuenta> findAllDeudora() {
-
-//		List<Cuenta> cuentas = new ArrayList<Cuenta>();
-//		for (Cuenta cuenta : cuentasRepository.findAll()) {
-//			if(cuenta.getSaldo() < 0)
-//				cuentas.add(cuenta);
-//		}
-//		return cuentas;
 		return cuentasRepository.findAllBySaldoLessThan(0);
 	}
 
