@@ -3,7 +3,6 @@ package es.eoi.mundobancario.Controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +13,8 @@ import es.eoi.mundobancario.Service.ClienteService;
 import es.eoi.mundobancario.Service.PrestamoService;
 import es.eoi.mundobancario.dto.ClienteDto;
 import es.eoi.mundobancario.dto.PrestamoDto;
-import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.util.DtoConstructor;
 
 @RestController
 @RequestMapping(value="/reports")
@@ -26,21 +25,11 @@ public class ReportsController {
 	@Autowired
 	PrestamoService prestamoService;
 	@Autowired
-	ModelMapper modelMapper;
-	
-	private ClienteDto toClienteDto(Cliente cliente) {
-		ClienteDto clienteDto = modelMapper.map(cliente, ClienteDto.class);
-		return clienteDto;
-	}
-	
-	private PrestamoDto toPrestamoDto(Prestamo prestamo) {
-		PrestamoDto prestamoDto = modelMapper.map(prestamo, PrestamoDto.class);
-		return prestamoDto;
-	}
+	DtoConstructor dtoConfigurator;
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/clientes/{id}")
 	public ClienteDto findClientes(@PathVariable int id) {
-		return toClienteDto(clienteService.findById(id));
+		return dtoConfigurator.toClienteDto(clienteService.findById(id));
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/clientes/{id}")
@@ -50,7 +39,7 @@ public class ReportsController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/prestamos/{id}")
 	public ClienteDto findPrestamos(@PathVariable int id) {
-		return toClienteDto(clienteService.findPrestamos(id));
+		return dtoConfigurator.toClienteDto(clienteService.findPrestamos(id));
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/prestamos/{id}")
@@ -62,7 +51,7 @@ public class ReportsController {
 	public List<PrestamoDto> findPrestamosVivos(@PathVariable int id) {
 		List<PrestamoDto> prestamos = new ArrayList<PrestamoDto>();
 		for (Prestamo prestamo : prestamoService.findAllVivos()) {
-			prestamos.add(toPrestamoDto(prestamo));
+			prestamos.add(dtoConfigurator.toPrestamoDto(prestamo));
 		}
 		return prestamos;
 	}
@@ -71,7 +60,7 @@ public class ReportsController {
 	public List<PrestamoDto> findPrestamosAmortizados(@PathVariable int id) {
 		List<PrestamoDto> prestamos = new ArrayList<PrestamoDto>();
 		for (Prestamo prestamo : prestamoService.findAllAmortizados()) {
-			prestamos.add(toPrestamoDto(prestamo));
+			prestamos.add(dtoConfigurator.toPrestamoDto(prestamo));
 		}
 		return prestamos;
 	}
