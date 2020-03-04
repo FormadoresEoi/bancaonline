@@ -1,12 +1,15 @@
 package es.eoi.mundobancario.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
+import es.eoi.mundobancario.entity.TipoMovimiento;
 import es.eoi.mundobancario.repository.MovimientoRepository;
 
 @Service
@@ -14,6 +17,9 @@ public class MovimientoServiceImpl implements MovimientoService {
 
 	@Autowired
 	MovimientoRepository movimientoRepository;
+	
+	@Autowired
+	CuentaService cuentaService;
 	
 	@Override
 	public void create(Movimiento movimiento) {
@@ -33,5 +39,15 @@ public class MovimientoServiceImpl implements MovimientoService {
 	@Override
 	public List<Movimiento> findAllByCuenta(int id_cuenta) {
 		return movimientoRepository.findAllByCuenta(id_cuenta);
+	}
+	
+	@Override
+	public void RealizarMovimiento(double importe, Cuenta cuenta, Timestamp fecha, String descripcion, TipoMovimiento.Tipos tipo) {
+		Movimiento movimiento = new Movimiento();
+		movimiento.setDescripcion(descripcion);
+		movimiento.setFecha(fecha);
+		movimiento.setImporte(importe);
+		movimiento.setTipo(tipo);
+		this.create(movimiento);
 	}
 }

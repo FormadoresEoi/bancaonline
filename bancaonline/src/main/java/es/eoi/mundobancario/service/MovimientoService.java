@@ -1,9 +1,12 @@
 package es.eoi.mundobancario.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
+import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
+import es.eoi.mundobancario.entity.TipoMovimiento;
 
 public interface MovimientoService {
 
@@ -15,4 +18,9 @@ public interface MovimientoService {
 	
 	List<Movimiento> findAllByCuenta(int id_cuenta);
 
+	void RealizarMovimiento(double importe, 
+							Cuenta cuenta, 
+							Timestamp fecha, 
+							String descripcion, 
+							TipoMovimiento.Tipos tipo);
 }

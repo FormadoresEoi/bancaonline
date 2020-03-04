@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.eoi.mundobancario.entity.Prestamo;
-import es.eoi.mundobancario.repository.CuentaRepository;
 import es.eoi.mundobancario.repository.PrestamoRepository;
 
 @Service
@@ -18,7 +17,10 @@ public class PrestamoServiceImpl implements PrestamoService{
 	PrestamoRepository prestamoRepository;
 	
 	@Autowired
-	CuentaRepository cuentaRepository;
+	CuentaService cuentaService;
+	
+	@Autowired
+	AmortizacionService amortizacionService;
 	
 	@Override
 	public void create(Prestamo prestamo) {
@@ -47,11 +49,5 @@ public class PrestamoServiceImpl implements PrestamoService{
 				.filter(p -> p.getAmortizaciones().size() >= p.getPlazos())
 				.collect(Collectors.toList());
 	}
-
-	@Override
-	public void ejecutarAmortizacionesDiarias(Prestamo prestamo) {
-		
-	}
-
-
+	
 }
