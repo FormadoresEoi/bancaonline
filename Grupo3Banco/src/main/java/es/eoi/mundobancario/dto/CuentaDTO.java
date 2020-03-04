@@ -10,9 +10,9 @@ public class CuentaDTO {
 	private double saldo;
 	private ClienteDTO cliente;
 	
+
 	//public CuentaDTO(int numcuenta) {
 	//	super();
 	//	this.numcuenta = numcuenta;
 	//}
-
 }
