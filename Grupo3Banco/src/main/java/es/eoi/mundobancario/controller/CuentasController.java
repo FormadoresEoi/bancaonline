@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import es.eoi.mundobancario.dto.CuentaDTO;
 
 import es.eoi.mundobancario.dto.MovimientoDTO;
+import es.eoi.mundobancario.dto.TiposMovimientoDTO;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.service.ClienteService;
 
@@ -65,6 +66,7 @@ public class CuentasController {
 		return mapper.map(service.findById(id).getMovimientos(), new TypeToken<List<MovimientoDTO>>(){
 		}.getType());
 	}
+	//Devuelve los prestamos de la cuenta.(Incluyen las amortizaciones planicifcas)
 //	@DeleteMapping
 //	public void deleteCuenta(@RequestBody Cuenta cuenta) {
 //		service.deleteCuenta(cuenta);
