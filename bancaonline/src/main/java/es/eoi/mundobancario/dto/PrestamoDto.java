@@ -1,6 +1,5 @@
 package es.eoi.mundobancario.dto;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -20,7 +19,7 @@ public class PrestamoDto {
 	
 	private String descripcion;
 	
-	private Timestamp fecha;
+	private String fecha;
 	
 	private double importe;
 	

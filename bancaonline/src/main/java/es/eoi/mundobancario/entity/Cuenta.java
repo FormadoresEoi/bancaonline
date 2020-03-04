@@ -46,7 +46,7 @@ public class Cuenta {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cuenta")
 	private List<Movimiento> movimientos;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cuentaPres")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cuenta")
 	private List<Prestamo> prestamos;
 	
 }

@@ -1,7 +1,5 @@
 package es.eoi.mundobancario.dto;
 
-import java.sql.Timestamp;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +17,7 @@ public class MovimientoDto {
 	
 	private String descripcion;
 	
-	private Timestamp fecha;
+	private String fecha;
 	
 	private double importe;
 	
