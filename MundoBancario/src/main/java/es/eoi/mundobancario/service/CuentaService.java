@@ -17,6 +17,9 @@ public interface CuentaService {
 	Cuenta updateCuenta(Cuenta cuenta);
 
 	void removeCuenta(int id);
-	public List<Cuenta> findAllById_Clientes(Cliente cliente);
+	
+	List<Cuenta> findAllById_Clientes(Cliente cliente);
+	
+	List<Cuenta> buscarCuentasDeudoras(float zero);
 
 }

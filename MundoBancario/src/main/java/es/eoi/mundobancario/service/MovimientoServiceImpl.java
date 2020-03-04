@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.repository.MovimientoRepository;
 
@@ -40,6 +41,11 @@ public class MovimientoServiceImpl implements MovimientoService {
 	public void removeMovimiento(int id) {
 		movirepo.deleteById(id);
 		
+	}
+
+	@Override
+	public List<Movimiento> buscarMovimientosbyCuenta(Cuenta cuenta) {
+		return movirepo.findAllByCuenta(cuenta);
 	}
 
 }

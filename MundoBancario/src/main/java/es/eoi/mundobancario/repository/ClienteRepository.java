@@ -1,5 +1,4 @@
 package es.eoi.mundobancario.repository;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -7,8 +6,8 @@ import es.eoi.mundobancario.entity.Cliente;
 
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
-	
-	//@Query("SELECT cli FROM Cliente WHERE cli.usuario = :usuario")
-        public Cliente findByUsuarioAndPass( String usuario,String pass);
+
+	// @Query("SELECT cli FROM Cliente WHERE cli.usuario = :usuario")
+	public Cliente findByUsuarioAndPass(String usuario, String pass);
 
 }

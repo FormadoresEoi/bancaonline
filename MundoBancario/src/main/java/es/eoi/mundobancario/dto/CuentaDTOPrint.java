@@ -7,8 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CuentaDTO {
+public class CuentaDTOPrint {
 
+	private int num_cuenta;
 	private String alias;
 	private float saldo;
 	private int id_cliente;

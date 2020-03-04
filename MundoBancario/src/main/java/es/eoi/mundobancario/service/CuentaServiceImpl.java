@@ -48,4 +48,10 @@ public class CuentaServiceImpl implements CuentaService {
 		
 		return cuentrepo.findAllByCliente(cliente);
 	}
+
+	@Override
+	public List<Cuenta> buscarCuentasDeudoras(float zero) {
+		return cuentrepo.findAllBySaldoLessThan(zero);
+	}
+	
 }

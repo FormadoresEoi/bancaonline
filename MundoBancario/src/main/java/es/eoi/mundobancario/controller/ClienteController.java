@@ -1,8 +1,6 @@
 package es.eoi.mundobancario.controller;
-
 import java.lang.reflect.Type;
 import java.util.List;
-
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 import es.eoi.mundobancario.dto.ClienteDTOCreate;
 import es.eoi.mundobancario.dto.ClienteDTOLogin;
 import es.eoi.mundobancario.dto.ClienteDTOPrint;
-import es.eoi.mundobancario.dto.CuentaDTO;
+import es.eoi.mundobancario.dto.CuentaDTOCreate;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
 
 @RestController
-@RequestMapping(value = "/cliente")
+@RequestMapping(value = "/clientes")
 public class ClienteController {
 
 	@Autowired
@@ -61,7 +59,7 @@ public class ClienteController {
 	@PutMapping(value = "/update/{id}", params = { "email" })
 	public ClienteDTOPrint updateCliente(@PathVariable(value = "id") int id,
 			@RequestParam(value = "email") String email) {
-		Cliente cliente = modelmapper.map(selectClienteAux(id), Cliente.class);
+		Cliente cliente = modelmapper.map(clientserv.buscarCliente(id).get(), Cliente.class);
 		cliente.setEmail(email);
 		return modelmapper.map(clientserv.updateCliente(cliente), ClienteDTOPrint.class);
 
@@ -75,11 +73,11 @@ public class ClienteController {
 	}
 
 	@RequestMapping(value = "/{id}/cuentas", method = RequestMethod.GET)
-	public List<CuentaDTO> findAllById_Clientes(@PathVariable(value = "id") int id) {
+	public List<CuentaDTOCreate> findAllById_Clientes(@PathVariable(value = "id") int id) {
 		Cliente cliente = clientserv.buscarCliente(id).get();
-		Type listType = new TypeToken<List<CuentaDTO>>() {
+		Type listType = new TypeToken<List<CuentaDTOCreate>>() {
 		}.getType();
-		List<CuentaDTO> listclidto = modelmapper.map(cuentaService.findAllById_Clientes(cliente), listType);
+		List<CuentaDTOCreate> listclidto = modelmapper.map(cuentaService.findAllById_Clientes(cliente), listType);
 		return listclidto;
 	}
 
@@ -87,11 +85,6 @@ public class ClienteController {
 	public ClienteDTOPrint findByUsuarioAndPass(@RequestBody ClienteDTOLogin login) {
 		Cliente cliente = clientserv.findByUsuarioAndPass(login.getUsuario(), login.getPass());
 		return modelmapper.map(cliente, ClienteDTOPrint.class);
-
-	}
-
-	public Cliente selectClienteAux(int id) {
-		return clientserv.buscarCliente(id).get();
 
 	}
 
