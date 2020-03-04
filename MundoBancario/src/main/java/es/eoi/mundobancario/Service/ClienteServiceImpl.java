@@ -14,7 +14,7 @@ public class ClienteServiceImpl implements ClienteService {
 	ClientesRepository clientesRepository;
 
 	public Cliente Create(String usuario, String nombre, String pass, String email) {
-		return clientesRepository.save(usuario, nombre, pass, email);
+		return clientesRepository.save(new Cliente(usuario, pass, nombre, email));
 	}
 
 	public Cliente findById(int id) {
