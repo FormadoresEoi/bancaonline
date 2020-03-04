@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.ClienteDTO;
+import es.eoi.mundobancario.dto.ClienteLoginDTO;
 import es.eoi.mundobancario.dto.CuentaDTO;
 import es.eoi.mundobancario.service.ClienteService;
 import lombok.RequiredArgsConstructor;
@@ -56,9 +57,9 @@ public class ClientesController {
     } 
 	//Devuelve el cliente solicitado con el login
 	@PostMapping("/login/{usuario}/{pass}")
-	public ClienteDTO post(@PathVariable String usuario, String pass) {
-		List<ClienteDTO> clientes = new ArrayList<ClienteDTO>();
-		ClienteDTO c = null;
+	public ClienteLoginDTO post(@PathVariable String usuario, String pass) {
+		List<Cliente> clientes = service.findAll();
+		Cliente c = null;
 		int id = 0;
 		for(int i = 0; i < clientes.size(); i++)
 		{
@@ -69,7 +70,7 @@ public class ClientesController {
 			}
 			
 		}
-		return mapper.map(service.findById(id),ClienteDTO.class);
+		return mapper.map(service.findById(id),ClienteLoginDTO.class);
 		
 		
 	}
