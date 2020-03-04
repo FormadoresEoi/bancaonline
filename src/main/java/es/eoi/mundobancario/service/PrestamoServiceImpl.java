@@ -106,11 +106,9 @@ public class PrestamoServiceImpl implements PrestamoService {
     }
 
     private void amortizar(Prestamo prestamo) {
-        if (
-                prestamo.getFecha()
-                        .toLocalDateTime()
-                        .getMonthValue() < LocalDateTime.from(Instant.now()).getMonthValue()
-        ) {
+        LocalDateTime d = prestamo.getFecha().toLocalDateTime();
+        LocalDateTime n = LocalDateTime.from(Instant.now());
+        if (d.getMonth() == n.getMonth() && d.getYear() == n.getYear()) {
             return;
         }
 
