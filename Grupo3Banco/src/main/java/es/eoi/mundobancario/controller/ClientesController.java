@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.ClienteDTO;
 import es.eoi.mundobancario.dto.CuentaDTO;
-import es.eoi.mundobancario.entity.Cliente;
-import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.service.ClienteService;
 import lombok.RequiredArgsConstructor;
 
