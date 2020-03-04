@@ -3,6 +3,8 @@ package es.eoi.mundobancario.service;
 import java.util.List;
 import java.util.Optional;
 
+import es.eoi.mundobancario.entity.Cliente;
+
 /**
  * Service interface.
  * ==================
@@ -46,4 +48,6 @@ public interface IService<T, P> {
      * @param entity Entity to delete.
      */
     void delete(T entity);
+
+	T create(T entity);
 }

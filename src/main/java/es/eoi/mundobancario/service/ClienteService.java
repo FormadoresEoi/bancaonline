@@ -1,9 +1,6 @@
 package es.eoi.mundobancario.service;
 
-import java.util.List;
-
 import es.eoi.mundobancario.entity.Cliente;
-import es.eoi.mundobancario.entity.Cuenta;
 
 /**
  * Cliente service
@@ -14,4 +11,8 @@ import es.eoi.mundobancario.entity.Cuenta;
  * @author Carlos Sanchez <karlos.sangar@gmail.com>
  */
 public interface ClienteService extends IService<Cliente, Integer> {
+
+//	ClienteDto showLogin(int id, String nombre, String email, String usuario);
+
+
 }

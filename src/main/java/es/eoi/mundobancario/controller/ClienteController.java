@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.ClienteDto;
 import es.eoi.mundobancario.dto.CuentaDto;
-import es.eoi.mundobancario.dto.MovimientoDto;
 import es.eoi.mundobancario.entity.Cliente;
-import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +35,6 @@ public class ClienteController implements IController<ClienteDto, Integer> {
 	private final ClienteService clienteService;
 	private final CuentaService cuentaService;
 
-
 	@GetMapping
 	@Override
 	public List<ClienteDto> findAll() {
@@ -50,38 +47,31 @@ public class ClienteController implements IController<ClienteDto, Integer> {
 	public ClienteDto findById(Integer id) {
 		return mapper.map(clienteService.find(id).orElseThrow(RuntimeException::new), ClienteDto.class);
 	}
-	
-//	@PostMapping("/login")
-//	@Override
-//	public ClienteDto 
-	
+
+//	@GetMapping("/login")
+//	public ClienteDto login(@PathVariable int id, String nombre, String email, String usuario) {
+//		Cliente cli = mapper.map(findById(id), Cliente.class);
+//		return clienteService.showLogin(cli.getId(), cli.getNombre(), cli.getEmail(), cli.getUsuario());
+//
+//	}
 
 	@PutMapping("/{id}")
 	@Override
 	public ClienteDto update(@PathVariable Integer id, @RequestBody ClienteDto entity) {
 		Cliente cliente = mapper.map(findById(id), Cliente.class);
-		cliente.setEmail(entity.getEmail());
-
 		return mapper.map(clienteService.update(cliente), ClienteDto.class);
 	}
 
 	@GetMapping("/{id}/cuentas")
-	public List<CuentaDto> listCuentas(@RequestBody String numCuenta, @PathVariable int id) {
+	public List<CuentaDto> listCuentas(@PathVariable int id) {
 
-		return cuentaService.findAllByClientesId(id)
-							.stream()
-							.map(c -> mapper.map(c, CuentaDto.class))
-							.collect(Collectors.toList());
+		return cuentaService.findAllByClientesId(id).stream().map(c -> mapper.map(c, CuentaDto.class))
+				.collect(Collectors.toList());
 	}
 
 	@PostMapping()
 	@Override
-    public ClienteDto create(@RequestBody ClienteDto entity) {
-        return mapper.map(
-                clienteService.update(
-                		mapper.map(entity, Cliente.class)
-        		),
-                ClienteDto.class
-        );
+	public ClienteDto create(@RequestBody ClienteDto entity ) {
+		return mapper.map(clienteService.create(mapper.map(entity, Cliente.class)), ClienteDto.class);
 	}
 }

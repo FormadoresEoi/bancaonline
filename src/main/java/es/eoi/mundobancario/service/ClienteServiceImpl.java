@@ -6,9 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import es.eoi.mundobancario.dto.ClienteDto;
 import es.eoi.mundobancario.entity.Cliente;
-import es.eoi.mundobancario.entity.Cuenta;
-import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.repository.ClienteRepository;
 
 /**
@@ -24,7 +23,7 @@ public class ClienteServiceImpl implements ClienteService {
 	@Autowired
 	private ClienteRepository repository;
 
-	/*
+	/**
 	 * @inheritDoc
 	 */
 	@Override
@@ -32,7 +31,7 @@ public class ClienteServiceImpl implements ClienteService {
 		return repository.findById(id);
 	}
 
-	/*
+	/**
 	 * @inheritDoc
 	 */
 	@Override
@@ -40,7 +39,7 @@ public class ClienteServiceImpl implements ClienteService {
 		return repository.findAll();
 	}
 
-	/*
+	/**
 	 * @inheritDoc
 	 */
 	@Override
@@ -48,11 +47,23 @@ public class ClienteServiceImpl implements ClienteService {
 		return repository.save(entity);
 	}
 
-	/*
+	/**
 	 * @inheritDoc
 	 */
 	@Override
 	public void delete(Cliente entity) {
 		repository.delete(entity);
 	}
+	/**
+	 * @inheritDoc
+	 */
+	@Override
+	public Cliente create(Cliente entity) {
+		return repository.save(entity);
+	}
+
+//	@Override
+//	public Optional<Cliente> showLogin(int id, String nombre, String email, String usuario) {
+//		return repository.findById(id);
+//	}
 }
