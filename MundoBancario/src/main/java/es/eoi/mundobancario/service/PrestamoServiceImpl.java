@@ -37,8 +37,8 @@ public class PrestamoServiceImpl implements PrestamoService {
 	}
 
 	@Override
-	public List<Prestamo> getPrestamosVivos() {
-		return null;
+	public List<Prestamo> getPrestamosVivos(Integer idcuenta) {
+		return repository.findByPrestamoVivo(idcuenta);
 	}
 
 }

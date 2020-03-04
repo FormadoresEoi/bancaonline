@@ -148,17 +148,9 @@ public class CuentasController {
 	}
 	
 
-	@GetMapping(value = "/{id}/prestamosVivo")
-	public PrestamoDto FindByPrestamoVivo(int cuenta) {
-//		List<Prestamo> prestamo = prestamoService.getPrestamosVivos(cuenta);
-//		PrestamoDto dto = new PrestamoDto();
-//		dto.setId(prestamo.getId());
-//		dto.setDescrpicon(prestamo.getDescrpicon());
-//		dto.setFecha(prestamo.getFecha());
-//		dto.setImporte(prestamo.getImporte());
-//		dto.setPlazos(prestamo.getPlazos());
-//		return dto;
-		return null;
+	@GetMapping(value = "/{id}/prestamosVivos")
+	public List<PrestamoDto> FindByPrestamoVivo(@PathVariable Integer id) {
+		return toPrestamoDtoList(prestamoService.getPrestamosVivos(id));
 	}
 
 }
