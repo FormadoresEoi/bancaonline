@@ -8,7 +8,7 @@ public interface CuentaService {
 
 	//Buscar cuenta por ID
 	
-	 Cuenta FindById(int id);
+	public Cuenta findById(int id);
 	
 	//Crear Cuneta
 	
