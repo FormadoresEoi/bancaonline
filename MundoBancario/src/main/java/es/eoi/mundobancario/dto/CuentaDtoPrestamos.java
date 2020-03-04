@@ -8,8 +8,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
+
 public class CuentaDtoPrestamos {
-	
+
 	private int numeroCuenta;
 	private String alias;
 	private double saldo;
