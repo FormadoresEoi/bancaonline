@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import es.eoi.mundobancario.Repository.AmortizacionRepository;
 import es.eoi.mundobancario.Repository.CuentasRepository;
 import es.eoi.mundobancario.Repository.MovimientoRepository;
 import es.eoi.mundobancario.Repository.PrestamoRepository;
@@ -26,6 +27,8 @@ public class CuentaServiceImpl implements CuentaService {
 	MovimientoRepository movimientoRepository;
 	@Autowired
 	PrestamoRepository prestamoRepository;
+	@Autowired
+	AmortizacionRepository amortizacionRepository;
 
 	TiposMovimiento tipo;
 
@@ -143,6 +146,17 @@ public class CuentaServiceImpl implements CuentaService {
 	}
 
 	public void ejecutarAmortizacionsDiarias() {
-		// TODO Auto-generated method stub
+		List<Amortizacion> amortizaciones = amortizacionRepository.findAllByFechaEquals(new Date());
+		for (Amortizacion amortizacion : amortizaciones) {
+			Cuenta cuenta = checkNull(cuentasRepository.findById(amortizacion.getPrestamo().getCuenta().getNumeroCuenta()));
+			double saldo = cuenta.getSaldo();
+			Movimiento movimiento = new Movimiento("pago de amortizacion", new Date(), amortizacion.getImporte());
+			movimiento.setTipoMovimiento(tipo.AMORTIZACION);
+			movimientoRepository.save(movimiento);
+			Movimiento interes = new Movimiento("pago de intereses", new Date(), (amortizacion.getImporte()*0.2));
+			movimiento.setTipoMovimiento(tipo.INTERES);
+			movimientoRepository.save(movimiento);
+			cuenta.setSaldo(saldo - amortizacion.getImporte() - (amortizacion.getImporte()*0.2));
+		}
 	}
 }
