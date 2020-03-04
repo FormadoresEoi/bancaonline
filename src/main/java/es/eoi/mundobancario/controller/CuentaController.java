@@ -1,8 +1,6 @@
 package es.eoi.mundobancario.controller;
 
-import es.eoi.mundobancario.dto.CuentaDto;
-import es.eoi.mundobancario.dto.MovimientoDto;
-import es.eoi.mundobancario.dto.PrestamoDto;
+import es.eoi.mundobancario.dto.*;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
@@ -27,7 +25,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/cuenta")
-public class CuentaController implements IController<CuentaDto, String> {
+public class CuentaController implements IController<FullCuentaDto, String> {
     private final CuentaService     cuentaService;
     private final MovimientoService movimientoService;
     private final PrestamoService   prestamoService;
@@ -38,10 +36,10 @@ public class CuentaController implements IController<CuentaDto, String> {
      * información y datos del cliente).
      */
     @GetMapping("/deudoras")
-    public List<CuentaDto> deudoras() {
+    public List<FullCuentaDto> deudoras() {
         return cuentaService.findDeudoras()
                             .stream()
-                            .map(c -> mapper.map(c, CuentaDto.class))
+                            .map(c -> mapper.map(c, FullCuentaDto.class))
                             .collect(Collectors.toList());
     }
 
@@ -50,10 +48,10 @@ public class CuentaController implements IController<CuentaDto, String> {
      * (incluirá el tipo de movimiento)
      */
     @GetMapping("/{id}/movimientos")
-    public List<MovimientoDto> movimientos(@PathVariable String id) {
+    public List<FullMovimientoDto> movimientos(@PathVariable String id) {
         return movimientoService.findByCuentaId(id)
                                 .stream()
-                                .map(c -> mapper.map(c, MovimientoDto.class))
+                                .map(c -> mapper.map(c, FullMovimientoDto.class))
                                 .collect(Collectors.toList());
     }
 
@@ -62,10 +60,10 @@ public class CuentaController implements IController<CuentaDto, String> {
      * (incluirán las amortizaciones planificadas)
      */
     @GetMapping("/{id}/prestamos")
-    public List<PrestamoDto> prestamos(@PathVariable String id) {
+    public List<FullPrestamoDto> prestamos(@PathVariable String id) {
         return prestamoService.findAllByCuentaId(id)
                               .stream()
-                              .map(c -> mapper.map(c, PrestamoDto.class))
+                              .map(c -> mapper.map(c, FullPrestamoDto.class))
                               .collect(Collectors.toList());
     }
 
@@ -74,10 +72,10 @@ public class CuentaController implements IController<CuentaDto, String> {
      * (incluirán las amortizaciones planificadas)
      */
     @GetMapping("/{id}/prestamosVivos")
-    public List<PrestamoDto> prestamosVivos(@PathVariable String id) {
+    public List<FullPrestamoDto> prestamosVivos(@PathVariable String id) {
         return prestamoService.findAllByCuentaIdVivos(id)
                               .stream()
-                              .map(c -> mapper.map(c, PrestamoDto.class))
+                              .map(c -> mapper.map(c, FullPrestamoDto.class))
                               .collect(Collectors.toList());
     }
 
@@ -86,10 +84,10 @@ public class CuentaController implements IController<CuentaDto, String> {
      * (incluirán las amortizaciones planificadas)
      */
     @GetMapping("/{id}/prestamosAmortizados")
-    public List<PrestamoDto> prestamosAmortizados(@PathVariable String id) {
+    public List<FullPrestamoDto> prestamosAmortizados(@PathVariable String id) {
         return prestamoService.findAllByCuentaIdAmortizados(id)
                               .stream()
-                              .map(c -> mapper.map(c, PrestamoDto.class))
+                              .map(c -> mapper.map(c, FullPrestamoDto.class))
                               .collect(Collectors.toList());
     }
 
@@ -102,13 +100,13 @@ public class CuentaController implements IController<CuentaDto, String> {
      * @return Created entity.
      */
     @PostMapping("/{id}/prestamos")
-    public PrestamoDto prestamo(@PathVariable String id, @RequestBody PrestamoDto entity) {
+    public FullPrestamoDto prestamo(@PathVariable String id, @RequestBody PrestamoDto entity) {
         Prestamo prestamo = mapper.map(entity, Prestamo.class);
         prestamo.setCuentasNumCuenta(id);
 
         return mapper.map(
                 prestamoService.update(prestamo),
-                PrestamoDto.class
+                FullPrestamoDto.class
         );
     }
 
@@ -124,13 +122,13 @@ public class CuentaController implements IController<CuentaDto, String> {
             "/{id}/pagos",
             "/{id}/ingresos"
     })
-    public MovimientoDto movimiento(@PathVariable String id, @RequestBody MovimientoDto entity) {
+    public FullMovimientoDto movimiento(@PathVariable String id, @RequestBody MovimientoDto entity) {
         Movimiento movimiento = mapper.map(entity, Movimiento.class);
         movimiento.setCuentasNumCuenta(id);
 
         return mapper.map(
                 cuentaService.movimiento(id, movimiento),
-                MovimientoDto.class
+                FullMovimientoDto.class
         );
     }
 
@@ -148,10 +146,10 @@ public class CuentaController implements IController<CuentaDto, String> {
      */
     @Override
     @GetMapping
-    public List<CuentaDto> findAll() {
+    public List<FullCuentaDto> findAll() {
         return cuentaService.find()
                             .stream()
-                            .map(c -> mapper.map(c, CuentaDto.class))
+                            .map(c -> mapper.map(c, FullCuentaDto.class))
                             .collect(Collectors.toList());
     }
 
@@ -160,11 +158,11 @@ public class CuentaController implements IController<CuentaDto, String> {
      */
     @Override
     @GetMapping("/{id}")
-    public CuentaDto findById(@PathVariable String id) {
+    public FullCuentaDto findById(@PathVariable String id) {
         return mapper.map(
                 cuentaService.find(id)
                              .orElseThrow(RuntimeException::new),
-                CuentaDto.class
+                FullCuentaDto.class
         );
     }
 
@@ -173,10 +171,10 @@ public class CuentaController implements IController<CuentaDto, String> {
      */
     @Override
     @PostMapping
-    public CuentaDto create(@RequestBody CuentaDto entity) {
+    public FullCuentaDto create(@RequestBody FullCuentaDto entity) {
         return mapper.map(
                 cuentaService.update(mapper.map(entity, Cuenta.class)),
-                CuentaDto.class
+                FullCuentaDto.class
         );
     }
 
@@ -185,24 +183,13 @@ public class CuentaController implements IController<CuentaDto, String> {
      */
     @Override
     @PutMapping("/{id}")
-    public CuentaDto update(@PathVariable String id, @RequestBody CuentaDto entity) {
+    public FullCuentaDto update(@PathVariable String id, @RequestBody FullCuentaDto entity) {
         Cuenta cuenta = mapper.map(findById(id), Cuenta.class);
         cuenta.setAlias(entity.getAlias());
 
         return mapper.map(
                 cuentaService.update(cuenta),
-                CuentaDto.class
+                FullCuentaDto.class
         );
-    }
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    @DeleteMapping
-    public CuentaDto delete(@RequestBody CuentaDto entity) {
-        cuentaService.delete(mapper.map(entity, Cuenta.class));
-
-        return entity;
     }
 }

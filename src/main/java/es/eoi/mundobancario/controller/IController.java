@@ -48,13 +48,4 @@ public interface IController<T, P> {
      * @return Updated entity.
      */
     T update(P id, T entity);
-
-    /**
-     * Deletes an entity.
-     *
-     * @param entity Entity to delete.
-     *
-     * @return Deleted entity.
-     */
-    T delete(T entity);
 }
