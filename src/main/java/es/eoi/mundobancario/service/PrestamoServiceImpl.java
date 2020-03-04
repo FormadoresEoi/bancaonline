@@ -99,9 +99,7 @@ public class PrestamoServiceImpl implements PrestamoService {
             return;
         }
 
-        find().stream()
-              .filter(p -> p.getAmortizacionesById().size() < p.getPlazos())
-              .forEach(this::filtrarAmortizaciones);
+        find().forEach(this::filtrarAmortizaciones);
     }
 
     /**
@@ -110,9 +108,12 @@ public class PrestamoServiceImpl implements PrestamoService {
     @Override
     public Prestamo create(Prestamo prestamo) {
         prestamo = update(prestamo);
-        ingresa(prestamo.getImporte(), cuentaService.find(prestamo.getCuentasNumCuenta()).orElseThrow(RuntimeException::new));
+        ingresa(
+                prestamo.getImporte(),
+                cuentaService.find(prestamo.getCuentasNumCuenta()).orElseThrow(RuntimeException::new)
+        );
 
-        double importe = prestamo.getImporte() / prestamo.getPlazos();
+        double             importe        = prestamo.getImporte() / prestamo.getPlazos();
         List<Amortizacion> amortizaciones = new ArrayList<>(prestamo.getPlazos());
         for (int i = 0; i < prestamo.getPlazos(); i++) {
             Calendar now = Calendar.getInstance();
@@ -126,7 +127,12 @@ public class PrestamoServiceImpl implements PrestamoService {
             amortizaciones.add(amortizacionService.update(amortizacion));
         }
 
-        createMovimiento(prestamo.getImporte(), prestamo.getCuentasNumCuenta(), TipoMovimiento.Tipo.PRESTAMO, prestamo.getDescripcion());
+        createMovimiento(
+                prestamo.getImporte(),
+                prestamo.getCuentasNumCuenta(),
+                TipoMovimiento.Tipo.PRESTAMO,
+                prestamo.getDescripcion()
+        );
         prestamo.setAmortizacionesById(amortizaciones);
 
         return prestamo;
@@ -142,9 +148,19 @@ public class PrestamoServiceImpl implements PrestamoService {
     }
 
     private void amortizar(Prestamo prestamo, Amortizacion a) {
-        ingresa(-prestamo.getImporte() * 1.02, prestamo.getCuentasByCuentasNumCuenta());
-        createMovimiento(-a.getImporte(), prestamo.getCuentasNumCuenta(), TipoMovimiento.Tipo.AMORTIZACION, prestamo.getDescripcion());
-        createMovimiento(-a.getImporte() * 0.02, prestamo.getCuentasNumCuenta(), TipoMovimiento.Tipo.INTERES, prestamo.getDescripcion());
+        ingresa(-(prestamo.getImporte() * 1.02), prestamo.getCuentasByCuentasNumCuenta());
+        createMovimiento(
+                -a.getImporte(),
+                prestamo.getCuentasNumCuenta(),
+                TipoMovimiento.Tipo.AMORTIZACION,
+                prestamo.getDescripcion()
+        );
+        createMovimiento(
+                -(a.getImporte() * 0.02),
+                prestamo.getCuentasNumCuenta(),
+                TipoMovimiento.Tipo.INTERES,
+                prestamo.getDescripcion()
+        );
     }
 
     private void ingresa(double importe, Cuenta cuenta) {
@@ -153,7 +169,9 @@ public class PrestamoServiceImpl implements PrestamoService {
         cuentaService.update(cuenta);
     }
 
-    private void createMovimiento(double importe, String cuentasNumCuenta, TipoMovimiento.Tipo tipo, String descripcion) {
+    private void createMovimiento(
+            double importe, String cuentasNumCuenta, TipoMovimiento.Tipo tipo, String descripcion
+    ) {
         Movimiento movimiento = new Movimiento();
         movimiento.setImporte(importe);
         movimiento.setMovimientosId(tipo.ordinal());
