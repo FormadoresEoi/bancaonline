@@ -11,7 +11,7 @@ import es.eoi.mundobancario.entity.Cliente;
 public interface ClientesRepository extends JpaRepository<Cliente, Integer> {
 
 	@Query("select * from clientes where clientes.nombre = :nombre and clientes.pass = :pass ")
-	Cliente login(
+	Cliente findByUserPass(
 	@Param("usuario") String usuario,
 	@Param("pass") String pass);
 
