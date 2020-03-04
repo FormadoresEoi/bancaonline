@@ -3,7 +3,7 @@ package es.eoi.mundobancario.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Amortización entity.
@@ -19,6 +19,7 @@ import java.sql.Timestamp;
 public class Amortizacion {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Basic
@@ -27,7 +28,8 @@ public class Amortizacion {
 
     @Basic
     @Column(name = "fecha", nullable = false)
-    private Timestamp fecha;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fecha;
 
     @Basic
     @Column(name = "importe", nullable = false, precision = 2)

@@ -105,7 +105,7 @@ public class CuentaController implements IController<FullCuentaDto, String> {
         prestamo.setCuentasNumCuenta(id);
 
         return mapper.map(
-                prestamoService.update(prestamo),
+                prestamoService.create(prestamo),
                 FullPrestamoDto.class
         );
     }

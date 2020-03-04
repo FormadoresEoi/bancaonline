@@ -19,6 +19,7 @@ import java.util.Collection;
 public class Cuenta {
     @Id
     @Column(name = "num_cuenta", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String numCuenta;
 
     @Basic

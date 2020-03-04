@@ -19,6 +19,7 @@ import java.util.Collection;
 public class Cliente {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Basic

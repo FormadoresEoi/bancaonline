@@ -45,4 +45,13 @@ public interface PrestamoService extends IService<Prestamo, Integer> {
      * con la del sistema, el funcionamiento se explica en detalle en la parte superior.
      */
     void ejecutarAmortizacionesDiarias();
+
+    /**
+     * Creates a prestamo and its amortizaciones.
+     *
+     * @param prestamo Prestamo to create.
+     *
+     * @return Created prestamo.
+     */
+    Prestamo create(Prestamo prestamo);
 }
