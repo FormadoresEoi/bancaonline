@@ -41,7 +41,7 @@ public class Cliente {
 	@Column(name = "EMAIL")
 	private String email;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "Cliente")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
 	private List<Cuenta> cuenta;
 
 	public Cliente(String usuario, String pass, String nombre, String email) {

@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import es.eoi.mundobancario.entity.Prestamo;
 
@@ -34,23 +36,20 @@ public class Amortizacion {
 	@Column(name = "ID")
 	private int id;
 
-	@Column(name = "ID_PRESTAMO")
-	private int idPrestamo;
-
+	@Temporal(TemporalType.DATE)
 	@Column(name = "FECHA")
-	private Date iecha;
+	private Date fecha;
 
 	@Column(name = "IMPORTE")
 	private double importe;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID", referencedColumnName = "ID")
+	@JoinColumn(name = "ID_PRESTAMO", referencedColumnName = "ID")
 	private Prestamo prestamo;
 
-	public Amortizacion(int idPrestamo, Date iecha, double importe) {
+	public Amortizacion(Date fecha, double importe) {
 		super();
-		this.idPrestamo = idPrestamo;
-		this.iecha = iecha;
+		this.fecha = fecha;
 		this.importe = importe;
 	}
 

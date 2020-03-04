@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import es.eoi.mundobancario.Service.ClienteService;
 import es.eoi.mundobancario.Service.CuentaService;
 import es.eoi.mundobancario.dto.CuentaDto;
 import es.eoi.mundobancario.dto.CuentaDtoMovimientos;
@@ -28,6 +29,8 @@ public class CuentasController {
 
 	@Autowired
 	CuentaService service;
+	@Autowired
+	ClienteService clienteService;
 	@Autowired
 	ModelMapper modelMapper;
 
@@ -82,7 +85,8 @@ public class CuentasController {
 	@RequestMapping(method = RequestMethod.POST)
 	public CuentaDto Create(@RequestParam("alias") String alias, @RequestParam("saldo") double saldo,
 			@RequestParam("idCliente") int idCliente) {
-		Cuenta cuenta = new Cuenta(alias, saldo, idCliente);
+		Cuenta cuenta = new Cuenta(alias, saldo);
+		cuenta.setCliente(clienteService.findById(idCliente));
 		return toDto(service.create(cuenta));
 	}
 

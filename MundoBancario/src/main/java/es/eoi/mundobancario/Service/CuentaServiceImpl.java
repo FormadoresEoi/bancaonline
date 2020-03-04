@@ -1,5 +1,6 @@
 package es.eoi.mundobancario.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 import es.eoi.mundobancario.Repository.CuentasRepository;
 import es.eoi.mundobancario.Repository.MovimientoRepository;
 import es.eoi.mundobancario.Repository.PrestamoRepository;
-import es.eoi.mundobancario.dto.CuentaDto;
+import es.eoi.mundobancario.entity.Amortizacion;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
@@ -61,17 +62,18 @@ public class CuentaServiceImpl implements CuentaService {
 	}
 	//TODO arreglar
 	public Cuenta findPrestamosAmortizados(int id) {
+		boolean amortizado = false;
 		Cuenta cuenta = checkNull(cuentasRepository.findById(id));
-		for (Prestamo prestamo : cuenta.getPrestamo()) {
-			if(prestamo.getAmortizacion().size() == prestamo.getPlazo());
-		}
+		//for (Amortizacion amortizacion : cuenta.getPrestamo().getAmortizacion()) {
+			
+	//	}
 		return cuenta;
 	}
 	//TODO arreglar
 	public Cuenta findPrestamosVivos(int id) {
 		Cuenta cuenta = checkNull(cuentasRepository.findById(id));
 		for (Prestamo prestamo : cuenta.getPrestamo()) {
-			if(prestamo.getAmortizacion().size() == prestamo.getPlazo());
+			//if(prestamo.getAmortizacion().date() < new SimpleDateFormat("yyyy-MM-dd"));
 		}
 		return cuenta;
 	}

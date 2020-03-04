@@ -29,7 +29,7 @@ public class Cuenta {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "NUMCUENTA")
+	@Column(name = "NUM_CUENTA")
 	private int numeroCuenta;
 
 	@Column(name = "ALIAS")
@@ -38,24 +38,20 @@ public class Cuenta {
 	@Column(name = "SALDO")
 	private double saldo;
 
-	@Column(name = "ID_CLIENTE")
-	private int idCliente;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "Cuenta")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cuenta")
 	private List<Movimiento> movimiento;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "Cuenta")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cuenta")
 	private List<Prestamo> prestamo;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ID_CLIENTE", referencedColumnName = "ID")
 	private Cliente cliente;
 
-	public Cuenta(String alias, double saldo, int idCliente) {
+	public Cuenta(String alias, double saldo) {
 		super();
 		this.alias = alias;
 		this.saldo = saldo;
-		this.idCliente = idCliente;
 	}
 
 }

@@ -7,5 +7,6 @@ import es.eoi.mundobancario.entity.Amortizacion;
 @Repository
 public interface AmortizacionRepository extends JpaRepository<Amortizacion, Integer> {
 
+	//public Amortizacion findFirstByOrderByDateDesc();
 	
 }

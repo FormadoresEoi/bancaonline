@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +32,7 @@ public class Prestamo {
 	private int id;
 	@Column(name = "DESCRIPCION")
 	private String descripcion;
+	@Temporal(TemporalType.DATE)
 	@Column(name = "FECHA")
 	private Date fecha;
 	@Column(name = "IMPORTE")
