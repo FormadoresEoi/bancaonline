@@ -48,10 +48,9 @@ public class ClienteController {
 	}
 
 	@DeleteMapping(value = "/{id}")
-	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void removeCliente(@PathVariable(value = "id") int id) {
+	public String removeCliente(@PathVariable(value = "id") int id) {
 
-		clientserv.removeCliente(id);
+		return clientserv.removeCliente(id);
 
 	}
 
@@ -64,7 +63,6 @@ public class ClienteController {
 	}
 
 	@PutMapping(value = "/update/{id}",params= {"email"})
-	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public ClienteDTO updateCliente(@PathVariable (value="id") int id, @RequestParam (value="email")String email) {
 		Cliente cliente = modelmapper.map(selectClienteAux(id), Cliente.class);
 		cliente.setEmail(email);

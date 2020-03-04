@@ -16,7 +16,7 @@ public interface ClienteService {
 
 	Cliente updateCliente(Cliente cliente);
 
-	void removeCliente(int id);
+	String removeCliente(int id);
 	
 //	public List<Cuenta> findListCuentasById(int id);
 	

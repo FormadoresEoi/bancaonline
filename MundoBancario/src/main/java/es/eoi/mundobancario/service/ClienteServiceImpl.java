@@ -39,8 +39,15 @@ public class ClienteServiceImpl implements ClienteService {
 	}
 
 	@Override
-	public void removeCliente(int id) {
-		clientrepo.deleteById(id);
+	public String removeCliente(int id) {
+		try{
+			clientrepo.deleteById(id);
+			return "Cliente borrado";
+		}catch(Exception s) {
+			s.printStackTrace();
+			return "Error borrando el cliente";
+		}
+		
 	}
 
 //	@Override
