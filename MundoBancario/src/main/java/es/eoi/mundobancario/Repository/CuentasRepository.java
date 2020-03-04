@@ -7,4 +7,5 @@ import es.eoi.mundobancario.entity.Cuenta;
 @Repository
 public interface CuentasRepository extends JpaRepository<Cuenta, Integer> {
 
+	
 }
