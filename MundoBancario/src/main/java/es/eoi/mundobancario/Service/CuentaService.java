@@ -20,7 +20,7 @@ public interface CuentaService {
 
 	public Movimiento createPagos(Movimiento movimiento);
 
-	public Prestamo createPrestamos(Prestamo prestamo, Movimiento movimiento);
+	public Prestamo createPrestamos(Prestamo prestamo, Movimiento movimiento, int id);
 
 	public Movimiento createIngresos(Movimiento movimiento);
 

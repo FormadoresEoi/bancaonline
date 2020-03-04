@@ -23,9 +23,4 @@ public class TipoMovimiento {
 	private int id;
 	@Column(name = "TIPO")
 	private String tipo;
-
-	public TipoMovimiento(String tipo) {
-		super();
-		this.tipo = tipo;
-	}
 }
