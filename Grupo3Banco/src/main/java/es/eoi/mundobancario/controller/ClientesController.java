@@ -56,8 +56,8 @@ public class ClientesController {
         service.updateClient(service.findById(id), email);
     } 
 	//Devuelve el cliente solicitado con el login
-	@PostMapping("/login/{usuario}/{pass}")
-	public ClienteLoginDTO post(@PathVariable String usuario, String pass) {
+	@PostMapping("/login")
+	public ClienteLoginDTO post(@RequestBody String usuario,String pass) {
 		List<Cliente> clientes = service.findAll();
 		Cliente c = null;
 		int id = 0;
@@ -71,7 +71,5 @@ public class ClientesController {
 			
 		}
 		return mapper.map(service.findById(id),ClienteLoginDTO.class);
-		
-		
 	}
 }
