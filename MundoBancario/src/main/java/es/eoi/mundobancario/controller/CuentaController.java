@@ -18,10 +18,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.CuentaDTO;
+import es.eoi.mundobancario.dto.PrestamoDTO;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
+import es.eoi.mundobancario.service.PrestamoService;
 
 @RestController
 @RequestMapping(value = "/cuenta")
@@ -31,6 +34,8 @@ public class CuentaController {
 	CuentaService cuentaserv;
 	@Autowired
 	ClienteService clientserv;
+	@Autowired 
+	PrestamoService prestamoserv;
 
 	@Autowired
 	private ModelMapper modelmapper;
@@ -66,5 +71,16 @@ public class CuentaController {
 		CuentaDTO cuentadto = modelmapper.map(cuentaserv.buscarCuenta(id).get(),CuentaDTO.class);
 		
 		return cuentadto;
+	}
+	
+	@PostMapping (value = "/{id}/prestamos")
+	public PrestamoDTO CrearPrestamo(@PathVariable int id, @RequestBody PrestamoDTO dto) {
+	Cuenta cuenta=	cuentaserv.buscarCuenta(id).get();
+	Prestamo prestamo= modelmapper.map(dto, Prestamo.class);
+	prestamo.setCuenta(cuenta);
+	Prestamo prestamofinal= prestamoserv.CrearPrestamo(prestamo);
+	return modelmapper.map(prestamofinal, PrestamoDTO.class);
+	
+		
 	}
 }
