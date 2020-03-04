@@ -15,10 +15,10 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class ClienteDTOCPass {
+public class ClienteDTOPrint {
 	
+	private int id;
 	private String usuario;
 	private String nombre;
 	private String email;
-	private String pass;
 }

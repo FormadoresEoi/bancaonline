@@ -40,19 +40,20 @@ public class ClienteServiceImpl implements ClienteService {
 
 	@Override
 	public String removeCliente(int id) {
-		try{
+		try {
 			clientrepo.deleteById(id);
 			return "Cliente borrado";
-		}catch(Exception s) {
+		} catch (Exception s) {
 			s.printStackTrace();
 			return "Error borrando el cliente";
 		}
-		
+
 	}
 
-//	@Override
-//	public List<Cuenta> findListCuentasById(int id) {
-//
-//		return clientrepo.findListCuentasById(id);
-//	}
+	@Override
+	public Cliente findByUsuarioAndPass(String usuario, String pass) {
+
+		return clientrepo.findByUsuarioAndPass(usuario, pass);
+	}
+
 }

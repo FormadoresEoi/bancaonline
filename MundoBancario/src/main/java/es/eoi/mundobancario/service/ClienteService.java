@@ -18,7 +18,9 @@ public interface ClienteService {
 
 	String removeCliente(int id);
 	
-//	public List<Cuenta> findListCuentasById(int id);
+	public Cliente findByUsuarioAndPass( String usuario,String pass);
+	
+
 	
 
 }
