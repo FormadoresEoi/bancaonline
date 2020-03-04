@@ -17,7 +17,4 @@ public interface PrestamoService{
 	
 	List<Prestamo> findAllByCuentaIdAmortizados(int id);
 	
-	void ejecutarAmortizacionesDiarias(Prestamo prestamo);
-	
-	
 }

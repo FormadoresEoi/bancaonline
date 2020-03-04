@@ -11,9 +11,18 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class TipoMovimientoDto {
+public class NewMovimientoDto {
 
 	private int id;
 	
+	private String descripcion;
+	
+	private String fecha;
+	
+	private double importe;
+	
+	private String cuenta;
+	
 	private String tipo;
+	
 }

@@ -25,6 +25,15 @@ import lombok.ToString;
 @Entity
 @Table(name = "Tipos_movimiento")
 public class TipoMovimiento {
+	
+	public enum Tipos {
+		Ingreso,
+		Prestamo,
+		Pago,
+		Amortizacion,
+		Interes
+	}
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +41,7 @@ public class TipoMovimiento {
 	private int id;
 	
 	@Column(name = "tipo")
-	private String tipo;
+	private Tipos tipo;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tipo")
 	private List<Movimiento> movimientos;
