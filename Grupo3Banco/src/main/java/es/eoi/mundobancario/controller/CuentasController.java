@@ -21,7 +21,7 @@ public class CuentasController {
 	
 	@Autowired
 	CuentaService service;
-
+	
 	@GetMapping(value = "{id}")
 	public CuentaDTO FindById(@RequestParam(value = "id") int id) {
 		Cuenta cuenta = service.FindById(id);
