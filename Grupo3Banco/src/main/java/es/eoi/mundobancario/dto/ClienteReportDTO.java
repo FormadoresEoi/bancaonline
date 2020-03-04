@@ -1,5 +1,7 @@
 package es.eoi.mundobancario.dto;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -9,6 +11,6 @@ public class ClienteReportDTO {
 	private String usuario;
 	private String email;
 	private String nombre;
-	private CuentaDTO cuentas;
+	private List<CuentaDTO> cuentas;
 	
 }
