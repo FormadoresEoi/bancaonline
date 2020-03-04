@@ -140,7 +140,7 @@ public class DtoConverter {
 	static public PrestamoDto toPrestamoDto(Prestamo prestamo) {
 		PrestamoDto dto = new PrestamoDto();
 		dto.setId(prestamo.getId());
-		dto.setDescrpicon(prestamo.getDescrpicon());
+		dto.setDescripcion(prestamo.getDescripcion());
 		dto.setFecha(prestamo.getFecha());
 		dto.setImporte(prestamo.getImporte());
 		dto.setPlazos(prestamo.getPlazos());

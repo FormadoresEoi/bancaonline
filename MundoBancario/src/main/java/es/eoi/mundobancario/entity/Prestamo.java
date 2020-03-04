@@ -1,5 +1,6 @@
 package es.eoi.mundobancario.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,8 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import org.springframework.data.annotation.CreatedDate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -27,7 +26,7 @@ public class Prestamo {
 	int id;
 
 	@Column
-	String descrpicon;
+	String descripcion;
 
 	@Column
 	Date fecha;
@@ -44,5 +43,12 @@ public class Prestamo {
 
 	@OneToMany(mappedBy = "prestamo")
 	List<Amortizacion> amortizaciones;
+	
+	public Prestamo() {
+		amortizaciones = new ArrayList<Amortizacion>();
+	}
 
+	public void addAmortizacion(Amortizacion amortizacion) {
+		amortizaciones.add(amortizacion);
+	}
 }

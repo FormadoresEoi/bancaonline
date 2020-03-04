@@ -26,8 +26,12 @@ import es.eoi.mundobancario.dto.CuentaNuevaDto;
 import es.eoi.mundobancario.dto.MovimientoDto;
 import es.eoi.mundobancario.dto.MovimientoNuevoDto;
 import es.eoi.mundobancario.dto.PrestamoDto;
+import es.eoi.mundobancario.dto.PrestamoNuevoDto;
+import es.eoi.mundobancario.entity.Amortizacion;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
+import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.service.AmortizacionService;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
 import es.eoi.mundobancario.service.MovimientoService;
@@ -52,6 +56,9 @@ public class CuentasController {
 	
 	@Autowired
 	ClienteService clienteService;
+	
+	@Autowired
+	AmortizacionService amortizacionService;
 
 	@GetMapping
 	public List<CuentaConClienteDto> getAll() {
@@ -108,19 +115,36 @@ public class CuentasController {
 		return movimientoService.post(movimiento);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@PostMapping("/{id}/prestamos")
-	public String createPrestamo(@RequestParam(value = "importe") float importe, @RequestParam(value = "plazos") int plazos) {
-//		Movimiento movimiento = movimientoService.post(importe, plazos);
-//		TipoMovimiento lol = tipoMovimientoService.FindById(2);
-//		Cuenta cuenta = cuentaService.FindById(4);
-//		MovimientoDto dto = new MovimientoDto();
-//		movimiento.setImporte(dto.getImporte());
-//		movimiento.setTipo(lol);
-//		movimiento.setDescripcion(dto.getDescripcion());
-//		movimiento.setFecha(dto.getFecha());
-//		movimiento.setCuenta(cuenta);
-//		movimientoService.post(movimiento);
-		return "ok";
+	public boolean postPrestamo(@PathVariable Integer id, @RequestBody PrestamoNuevoDto dto) {
+		Movimiento movimiento = new Movimiento();
+		movimiento.setCuenta(cuentaService.getById(id));
+		movimiento.setTipo(tipoMovimientoService.getByTipo("PRÉSTAMO"));
+		movimiento.setDescripcion("Prestamo: " + dto.getDescripcion());
+		movimiento.setFecha(new Timestamp((new Date()).getTime()));
+		movimiento.setImporte(dto.getImporte());
+		movimientoService.post(movimiento);
+		Prestamo prestamo = new Prestamo();
+		prestamo.setDescripcion(dto.getDescripcion());
+		prestamo.setFecha(new Timestamp((new Date()).getTime()));
+		prestamo.setImporte(dto.getImporte());
+		prestamo.setPlazos(dto.getPlazos());
+		prestamo.setCuenta(cuentaService.getById(id));
+		
+		prestamoService.post(prestamo);
+		
+		for(int i = 0; i<dto.getPlazos(); i++) {
+			Amortizacion amortizacion = new Amortizacion();
+			amortizacion.setImporte(dto.getImporte()/dto.getPlazos());
+			Timestamp fecha = new Timestamp((new Date()).getTime());
+			fecha.setMonth(fecha.getMonth()+i);
+			amortizacion.setFecha(fecha);
+			amortizacion.setPrestamo(prestamo);
+			prestamo.addAmortizacion(amortizacion);
+			amortizacionService.post(amortizacion);
+		}
+		return true;
 	}
 	
 
