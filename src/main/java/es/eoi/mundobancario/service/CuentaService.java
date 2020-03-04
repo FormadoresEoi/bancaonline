@@ -1,9 +1,11 @@
 package es.eoi.mundobancario.service;
 
+import java.util.Collection;
+import java.util.List;
+
+import es.eoi.mundobancario.dto.ClienteDto;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
-
-import java.util.List;
 
 /**
  * Cuenta service
@@ -30,4 +32,6 @@ public interface CuentaService extends IService<Cuenta, String> {
      * @return Created movimiento.
      */
     Movimiento movimiento(String id, Movimiento movimiento);
+
+
 }

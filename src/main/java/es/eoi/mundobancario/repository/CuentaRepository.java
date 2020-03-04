@@ -23,4 +23,6 @@ public interface CuentaRepository extends JpaRepository<Cuenta, String> {
      * @return Filtered balanaced Cuentas.
      */
     List<Cuenta> findAllBySaldoLessThan(double max);
+    
+    List<Cuenta> findCuentas(String numCuenta);
 }

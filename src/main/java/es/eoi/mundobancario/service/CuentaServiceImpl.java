@@ -1,13 +1,14 @@
 package es.eoi.mundobancario.service;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.repository.CuentaRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Cliente service ===============
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class CuentaServiceImpl implements CuentaService {
     private final CuentaRepository  repository;
     private final MovimientoService movimientoService;
+    private final CuentaService cuentaService;
 
     /**
      * @inheritDoc
@@ -81,4 +83,6 @@ public class CuentaServiceImpl implements CuentaService {
 
         return mvm;
     }
+
+    
 }
