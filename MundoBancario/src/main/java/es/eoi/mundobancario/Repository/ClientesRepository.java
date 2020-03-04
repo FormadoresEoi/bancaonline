@@ -11,4 +11,6 @@ import es.eoi.mundobancario.entity.Cliente;
 public interface ClientesRepository extends JpaRepository<Cliente, Integer> {
 
 	public Optional<Cliente> findOneByUsuarioAndPass(String user, String pass);
+
+	public Cliente save(String usuario, String nombre, String pass, String email);
 }
