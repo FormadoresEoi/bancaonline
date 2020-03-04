@@ -2,9 +2,12 @@ package es.eoi.mundobancario.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -113,28 +116,34 @@ public class CuentaServiceImpl implements CuentaService {
 			return null;
 	}
 
-	// TODO arreglar
 	public Cuenta findPrestamosAmortizados(int id) {
 		Cuenta cuenta = checkNull(cuentasRepository.findById(id));
+		Set<Prestamo> prestamos = new HashSet<Prestamo>();
 		for (Prestamo prestamo : cuenta.getPrestamo()) {
 			for (Amortizacion amortizacion : prestamo.getAmortizacion()) {
 				if (amortizacion.getFecha().compareTo(new Date()) <= 0)
-					return cuenta;
+					prestamos.add(prestamo);
 			}
 		}
-		return null;
+		List<Prestamo> listaPrestamos = null;
+		listaPrestamos.addAll(prestamos);
+		cuenta.setPrestamo(listaPrestamos);
+		return cuenta;
 	}
 
-	// TODO arreglar
 	public Cuenta findPrestamosVivos(int id) {
 		Cuenta cuenta = checkNull(cuentasRepository.findById(id));
+		Set<Prestamo> prestamos = new HashSet<Prestamo>();
 		for (Prestamo prestamo : cuenta.getPrestamo()) {
 			for (Amortizacion amortizacion : prestamo.getAmortizacion()) {
 				if (amortizacion.getFecha().compareTo(new Date()) > 0)
-					return cuenta;
+					prestamos.add(prestamo);
 			}
 		}
-		return null;
+		List<Prestamo> listaPrestamos = null;
+		listaPrestamos.addAll(prestamos);
+		cuenta.setPrestamo(listaPrestamos);
+		return cuenta;
 	}
 
 	public List<Cuenta> findAllDeudora() {
