@@ -14,8 +14,7 @@ public interface PrestamoRepository extends JpaRepository<Prestamo, Integer>{
 	@Query(value = "select p from prestamos p where p.cuenta.id = :cuenta")
 	List<Prestamo> FindByCuenta(int cuenta);
 	
-	@Query(value = "select distinct p from prestamos p\r\n" + 
-			" inner join amortizaciones a on p.id = a.prestamo where a.fecha > current_date()")
+	@Query(value = "select distinct p from prestamos p inner join p.amortizaciones a on p.id = a.prestamo where a.fecha.id > current_date()") 
 	Prestamo FindByPrestamoVivo();
 	
 }
