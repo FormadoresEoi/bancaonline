@@ -10,6 +10,7 @@ import lombok.Setter;
 
 public class ClienteDtoCuentas {
 
+	private int idcliente;
 	private String usuario;
 	private String nombre;
 	private String email;

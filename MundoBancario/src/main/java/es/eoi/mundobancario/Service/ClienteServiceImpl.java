@@ -43,12 +43,11 @@ public class ClienteServiceImpl implements ClienteService {
 	}
 
 	public Cliente findCuentas(int id) {
-
+		
 		return null;
 	}
 
 	public Cliente updateEmail(int id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

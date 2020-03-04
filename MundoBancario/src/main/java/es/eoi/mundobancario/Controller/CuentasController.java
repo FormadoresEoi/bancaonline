@@ -34,8 +34,6 @@ public class CuentasController {
 	@Autowired
 	DtoConstructor dtoConstructor;
 
-	
-
 	@RequestMapping(method = RequestMethod.GET)
 	public List<CuentaDto> findAll() {
 		List<CuentaDto> cuentas = new ArrayList<CuentaDto>();
@@ -49,7 +47,7 @@ public class CuentasController {
 	public List<CuentaDto> findAllDeudoras() {
 		List<CuentaDto> cuentas = new ArrayList<CuentaDto>();
 		for (Cuenta cuenta : service.findAll()) {
-				cuentas.add(dtoConstructor.toCuentaDto(cuenta));
+			cuentas.add(dtoConstructor.toCuentaDto(cuenta));
 		}
 		return cuentas;
 	}

@@ -12,4 +12,5 @@ public class CuentaDtoCliente {
 	private String alias;
 	private double saldo;
 	private ClienteDto cliente;
+
 }
