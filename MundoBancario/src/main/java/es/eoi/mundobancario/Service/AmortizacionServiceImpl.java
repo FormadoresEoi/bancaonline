@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import es.eoi.mundobancario.entity.Amortizacion;
 import es.eoi.mundobancario.Repository.AmortizacionRepository;
+import es.eoi.mundobancario.entity.Amortizacion;
 
 @Service
 public class AmortizacionServiceImpl implements AmortizacionService {

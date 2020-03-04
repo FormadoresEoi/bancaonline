@@ -38,9 +38,8 @@ public class ClienteServiceImpl implements ClienteService {
 		return null;
 	}
 
-	public Cliente login(int id) {
-
-		return null;
+	public Cliente login(String user, String pass) {
+		return clientesRepository.findOneByUsuarioAndPass(user, pass).get();
 	}
 
 	public Cliente findCuentas(int id) {
@@ -52,4 +51,5 @@ public class ClienteServiceImpl implements ClienteService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

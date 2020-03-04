@@ -16,7 +16,7 @@ public interface ClienteService {
 
 	public void remove(int id);
 
-	public Cliente login(int id);
+	public Cliente login(String user, String pass);
 
 	public Cliente findCuentas(int id);
 

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.Service.ClienteService;
@@ -30,7 +31,7 @@ public class ClientesController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/clientes")
-	public List<ClienteDto> findAll(@PathVariable int id) {
+	public List<ClienteDto> findAll() {
 		List<ClienteDto> clientes = new ArrayList<ClienteDto>();
 		for (Cliente cliente : service.findAll()) {
 			clientes.add(toDto(cliente));
@@ -44,8 +45,8 @@ public class ClientesController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/login")
-	public ClienteDto login(@PathVariable int id) {
-		return toDto(service.login(id));
+	public ClienteDto login(@RequestParam String user, @RequestParam String pass) {
+		return toDto(service.login(user, pass));
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/cuentas")
