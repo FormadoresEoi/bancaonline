@@ -2,6 +2,7 @@ package es.eoi.mundobancario.util;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import es.eoi.mundobancario.dto.CuentaDto;
 import es.eoi.mundobancario.dto.CuentaDtoMovimientos;
@@ -12,6 +13,7 @@ import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
 
+@Component
 public class DtoConstructor {
 	
 	@Autowired

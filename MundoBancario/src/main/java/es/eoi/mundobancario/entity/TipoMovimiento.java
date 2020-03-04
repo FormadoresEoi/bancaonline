@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import es.eoi.mundobancario.enums.TiposMovimiento;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,5 +23,12 @@ public class TipoMovimiento {
 	@Column(name = "ID")
 	private int id;
 	@Column(name = "TIPO")
-	private String tipo;
+	private TiposMovimiento tipo;
+	
+	public TipoMovimiento(TiposMovimiento tipo) {
+		super();
+		this.tipo = tipo;
+	}
+	
+	
 }
