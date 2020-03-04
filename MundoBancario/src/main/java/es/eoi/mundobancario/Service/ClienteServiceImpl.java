@@ -13,8 +13,8 @@ public class ClienteServiceImpl implements ClienteService {
 	@Autowired
 	ClientesRepository clientesRepository;
 
-	public Cliente Create(Cliente cliente) {
-		return clientesRepository.save(cliente);
+	public Cliente Create(String usuario, String nombre, String pass, String email) {
+		return clientesRepository.save(usuario, nombre, pass, email);
 	}
 
 	public Cliente findById(int id) {

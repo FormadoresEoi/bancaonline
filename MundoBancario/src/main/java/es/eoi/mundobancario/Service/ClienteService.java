@@ -6,7 +6,7 @@ import es.eoi.mundobancario.entity.Cliente;
 
 public interface ClienteService {
 
-	public Cliente Create(Cliente cliente);
+	public Cliente Create(String usuario, String nombre, String pass, String email);
 
 	public Cliente findById(int id);
 
