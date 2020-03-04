@@ -1,20 +1,18 @@
 package es.eoi.mundobancario.dto;
 
-import es.eoi.mundobancario.entity.Cliente;
 import lombok.Data;
 
 @Data
-
 public class CuentaDTO {
 
 	private int numcuenta;
 	private String alias;
 	private double saldo;
-	Cliente cliente;
+	private ClienteDTO cliente;
 	
-//	public CuentaDTO(int numcuenta) {
-//		super();
-//		this.numcuenta = numcuenta;
-//	}
 
+	//public CuentaDTO(int numcuenta) {
+	//	super();
+	//	this.numcuenta = numcuenta;
+	//}
 }
