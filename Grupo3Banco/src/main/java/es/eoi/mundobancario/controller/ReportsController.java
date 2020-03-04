@@ -23,8 +23,14 @@ public class ReportsController {
 	private final ModelMapper mapper;
 	
 	@GetMapping("clientes/{id}")
-	public List<ClienteReportDTO> getCuentas(@PathVariable int id) {
-        return mapper.map(service.findById(id).getCuentas(), new TypeToken<List<CuentaDTO>>() {
+	public List<ClienteReportDTO> getClientes(@PathVariable int id) {
+        return mapper.map(service.findById(id).getCuentas(), new TypeToken<List<ClienteReportDTO>>() {
         }.getType());
     }
+	
+//	@GetMapping("prestamos/{id}")
+//	public List<ClienteReportDTO> getPrestamos(@PathVariable int id) {
+//        return mapper.map(service.findById(id).getCuentas(), new TypeToken<List<CuentaReportDTO>>() {
+//        }.getType());
+//    }
 }
