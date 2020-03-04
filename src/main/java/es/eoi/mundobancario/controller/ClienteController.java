@@ -73,15 +73,6 @@ public class ClienteController implements IController<ClienteDto, Integer> {
 							.map(c -> mapper.map(c, CuentaDto.class))
 							.collect(Collectors.toList());
 	}
-	
-	@GetMapping("/{id}/cuentas")
-	public List<CuentaDto> listarCuentas(@PathVariable int id, @RequestBody CuentaDto entity) {
-		Cliente cliente = mapper.map(findById(id), Cliente.class);
-		return null;
-//		Cuenta cuenta = mapper.map(findCuentasCliente(), Cuenta.class));
-//		return cuenta.getClientesByClientesId();
-	}
-	
 
 	@PostMapping()
 	@Override

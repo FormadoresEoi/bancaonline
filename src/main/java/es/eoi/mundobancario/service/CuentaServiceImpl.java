@@ -22,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 public class CuentaServiceImpl implements CuentaService {
     private final CuentaRepository  repository;
     private final MovimientoService movimientoService;
-    private final CuentaService cuentaService;
 
     /**
      * @inheritDoc
