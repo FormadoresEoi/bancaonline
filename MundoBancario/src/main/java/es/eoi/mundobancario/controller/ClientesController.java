@@ -1,7 +1,7 @@
 package es.eoi.mundobancario.controller;
 
-import static es.eoi.mundobancario.utils.DtoUtils.fromDto;
-import static es.eoi.mundobancario.utils.DtoUtils.toDto;
+import static es.eoi.mundobancario.utils.DtoConverter.fromDto;
+import static es.eoi.mundobancario.utils.DtoConverter.toDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.ClienteDto;
-import es.eoi.mundobancario.dto.CuentaDto;
+import es.eoi.mundobancario.dto.ClienteNuevoDto;
+import es.eoi.mundobancario.dto.CuentaBasicaDto;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.service.ClienteService;
@@ -31,10 +32,10 @@ public class ClientesController {
 
 	@GetMapping
 	public List<ClienteDto> getAll() {
-		List<ClienteDto> dtoList = new ArrayList<ClienteDto>();
+		List<ClienteDto> dtolist = new ArrayList<ClienteDto>();
 		for (Cliente cliente : clienteService.getAll())
-			dtoList.add(toDto(cliente));
-		return dtoList;
+			dtolist.add(toDto(cliente));
+		return dtolist;
 	}
 
 	@GetMapping("/{id}")
@@ -48,8 +49,8 @@ public class ClientesController {
 	}
 
 	@GetMapping("/{id}/cuentas")
-	public List<CuentaDto> getAllCuentas(@PathVariable Integer id) {
-		List<CuentaDto> dtolist = new ArrayList<CuentaDto>();
+	public List<CuentaBasicaDto> getAllCuentas(@PathVariable Integer id) {
+		List<CuentaBasicaDto> dtolist = new ArrayList<CuentaBasicaDto>();
 		for (Cuenta cuenta : clienteService.getById(id).getCuentas())
 			dtolist.add(toDto(cuenta));
 		return dtolist;
@@ -61,10 +62,8 @@ public class ClientesController {
 	}
 
 	@PostMapping
-	public boolean postCliente(@RequestBody ClienteDto dto, @RequestParam String pass) {
-		Cliente cliente = fromDto(dto);
-		cliente.setPass(pass);
-		return clienteService.post(cliente);
+	public boolean postCliente(@RequestBody ClienteNuevoDto dto) {
+		return clienteService.post(fromDto(dto));
 	}
 
 }

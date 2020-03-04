@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CuentaDto {
+public class CuentaBasicaDto {
 
 	int num_cuenta;
 	String alias;

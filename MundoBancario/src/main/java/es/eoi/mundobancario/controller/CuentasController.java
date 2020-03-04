@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import es.eoi.mundobancario.dto.CuentaDto;
+import es.eoi.mundobancario.dto.CuentaBasicaDto;
 import es.eoi.mundobancario.dto.MovimientoDto;
 import es.eoi.mundobancario.dto.PrestamoDto;
 import es.eoi.mundobancario.entity.Cuenta;
@@ -44,9 +44,9 @@ public class CuentasController {
 
 	
 	@GetMapping(value = "/{id}")
-	public CuentaDto FindById(@RequestParam(value = "id")int id) {
+	public CuentaBasicaDto FindById(@RequestParam(value = "id")int id) {
 		Cuenta cuenta = cuentaService.FindById(id);
-		CuentaDto dto = new CuentaDto();
+		CuentaBasicaDto dto = new CuentaBasicaDto();
 		dto.setNum_cuenta(cuenta.getNum_cuenta());
 		dto.setAlias(cuenta.getAlias());
 		dto.setSaldo(cuenta.getSaldo());
@@ -55,9 +55,9 @@ public class CuentasController {
 	}
 	
 	@PostMapping
-	public CuentaDto createCuenta(@RequestBody Cuenta cuenta) {;
+	public CuentaBasicaDto createCuenta(@RequestBody Cuenta cuenta) {;
 		cuentaService.createCuenta(cuenta);
-		CuentaDto dto = new CuentaDto(); 
+		CuentaBasicaDto dto = new CuentaBasicaDto(); 
 		dto.setNum_cuenta(cuenta.getNum_cuenta());
 		dto.setAlias(cuenta.getAlias());
 		dto.setSaldo(cuenta.getSaldo());
@@ -71,9 +71,9 @@ public class CuentasController {
 	}
 	
 	@PutMapping
-	public CuentaDto updateCuenta(@RequestBody Cuenta cuenta) {
+	public CuentaBasicaDto updateCuenta(@RequestBody Cuenta cuenta) {
 		cuentaService.updateCuenta(cuenta);
-		CuentaDto dto = new CuentaDto();
+		CuentaBasicaDto dto = new CuentaBasicaDto();
 		dto.setNum_cuenta(cuenta.getNum_cuenta());
 		dto.setAlias(cuenta.getAlias());
 		dto.setSaldo(cuenta.getSaldo());
@@ -82,11 +82,11 @@ public class CuentasController {
 	}
 	
 	@GetMapping
-	public List<CuentaDto> listCuentas() {
+	public List<CuentaBasicaDto> listCuentas() {
 		List<Cuenta> listCuentas = cuentaService.listCuentas();
-		List<CuentaDto> dto = new ArrayList<CuentaDto>();
+		List<CuentaBasicaDto> dto = new ArrayList<CuentaBasicaDto>();
 		for (Cuenta cuenta : listCuentas) {
-			CuentaDto cuentadto = new CuentaDto();
+			CuentaBasicaDto cuentadto = new CuentaBasicaDto();
 			cuentadto.setNum_cuenta(cuenta.getNum_cuenta());
 			cuentadto.setAlias(cuenta.getAlias());
 			cuentadto.setSaldo(cuenta.getSaldo());
@@ -97,9 +97,9 @@ public class CuentasController {
 	}
 
 	@GetMapping(value = "/deudores")
-	public CuentaDto FindBySaldo() {
+	public CuentaBasicaDto FindBySaldo() {
 		Cuenta cuenta = cuentaService.FindBySaldo();
-		CuentaDto dto = new CuentaDto();
+		CuentaBasicaDto dto = new CuentaBasicaDto();
 		dto.setNum_cuenta(cuenta.getNum_cuenta());
 		dto.setAlias(cuenta.getAlias());
 		dto.setSaldo(cuenta.getSaldo());
@@ -176,8 +176,8 @@ public class CuentasController {
 		return dto;
 	}
 
-	public CuentaDto clienteToDto(Cuenta cuenta) {
-		CuentaDto dto = new CuentaDto();
+	public CuentaBasicaDto clienteToDto(Cuenta cuenta) {
+		CuentaBasicaDto dto = new CuentaBasicaDto();
 		dto.setNum_cuenta(cuenta.getNum_cuenta());
 		dto.setAlias(cuenta.getAlias());
 		dto.setSaldo(cuenta.getSaldo());

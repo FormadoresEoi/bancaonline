@@ -38,8 +38,4 @@ public class PrestamoServiceImpl implements PrestamoService {
 		return repository.FindByPrestamoVivo();
 	}
 	
-	
-	
-	
-
 }
