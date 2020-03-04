@@ -8,7 +8,6 @@ import lombok.Setter;
 
 public class TipoMovimientoDto {
 
-	private int id;
 	private String tipo;
 
 }
