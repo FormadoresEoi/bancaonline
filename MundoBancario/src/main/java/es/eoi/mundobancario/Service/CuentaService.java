@@ -18,11 +18,11 @@ public interface CuentaService {
 
 	public void ejecutarAmortizacionsDiarias();
 
-	public Movimiento createPagos(Movimiento movimiento);
+	public Movimiento createPagos(Movimiento movimiento, int id);
 
 	public Prestamo createPrestamos(Prestamo prestamo, Movimiento movimiento, int id);
 
-	public Movimiento createIngresos(Movimiento movimiento);
+	public Movimiento createIngresos(Movimiento movimiento, int id);
 
 	public Cuenta findPrestamosAmortizados(int id);
 
