@@ -17,7 +17,4 @@ import es.eoi.mundobancario.entity.Cuenta;
  */
 
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
-	
-	List<Cuenta> findCuentasCliente(Cuenta cuenta);
-	
 }

@@ -84,5 +84,15 @@ public class CuentaServiceImpl implements CuentaService {
         return mvm;
     }
 
-    
+
+    /**
+     * Finds and returns all cuentas from a cliente.
+     *
+     * @param id Cliente ID.
+     *
+     * @return All cuentas of Cliente.
+     */
+    public List<Cuenta> findAllByClientesId(int id) {
+        return repository.findAllByClientesId(id);
+    }
 }

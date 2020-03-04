@@ -65,16 +65,14 @@ public class ClienteController implements IController<ClienteDto, Integer> {
 		return mapper.map(clienteService.update(cliente), ClienteDto.class);
 	}
 
-//	@GetMapping("/{id}/cuentas")
-//	@Override
-//	public List<CuentaDto> listCuentas(@RequestBody String numCuenta, Cliente @PathVariable int id) {
-//		Cuenta cuenta = mapper.map(findCuentasCliente(numCuenta), CuentaDto.class);
-//		
-//		
-//		return clienteService.findCuentasCliente(numCuenta, cliente);
-//							.map(c -> mapper.map(c, CuentaDto.class))
-//							.collect(Collectors.toList());
-//	}
+	@GetMapping("/{id}/cuentas")
+	public List<CuentaDto> listCuentas(@RequestBody String numCuenta, @PathVariable int id) {
+
+		return cuentaService.findAllByClientesId(id)
+							.stream()
+							.map(c -> mapper.map(c, CuentaDto.class))
+							.collect(Collectors.toList());
+	}
 	
 	@GetMapping("/{id}/cuentas")
 	public List<CuentaDto> listarCuentas(@PathVariable int id, @RequestBody CuentaDto entity) {
@@ -94,11 +92,5 @@ public class ClienteController implements IController<ClienteDto, Integer> {
         		),
                 ClienteDto.class
         );
-	}
-
-	@Override
-	public ClienteDto delete(ClienteDto entity) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

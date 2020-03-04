@@ -55,13 +55,4 @@ public class ClienteServiceImpl implements ClienteService {
 	public void delete(Cliente entity) {
 		repository.delete(entity);
 	}
-
-	/*
-	 * @inheritDoc
-	 */
-	@Override
-	public List<Cuenta> findCuentasCliente(Cuenta cuenta) {
-		return repository.findCuentasCliente(cuenta);
-	}
-
 }

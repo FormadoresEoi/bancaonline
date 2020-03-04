@@ -14,8 +14,4 @@ import es.eoi.mundobancario.entity.Cuenta;
  * @author Carlos Sanchez <karlos.sangar@gmail.com>
  */
 public interface ClienteService extends IService<Cliente, Integer> {
-
-	List<Cuenta> findCuentasCliente(Cuenta cuenta);
-	
-
 }

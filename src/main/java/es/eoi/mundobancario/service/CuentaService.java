@@ -33,5 +33,12 @@ public interface CuentaService extends IService<Cuenta, String> {
      */
     Movimiento movimiento(String id, Movimiento movimiento);
 
-
+    /**
+     * Finds and returns all cuentas from a cliente.
+     *
+     * @param id Cliente ID.
+     *
+     * @return All cuentas of Cliente.
+     */
+    List<Cuenta> findAllByClientesId(int id);
 }
