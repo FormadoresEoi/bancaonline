@@ -5,9 +5,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TiposMovimientoDTO {
 
+public class ClienteDTOPrint {
+	
 	private int id;
-	private String tipo;
-
+	private String usuario;
+	private String nombre;
+	private String email;
 }
