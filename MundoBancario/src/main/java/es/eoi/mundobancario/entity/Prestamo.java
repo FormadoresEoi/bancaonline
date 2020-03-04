@@ -37,7 +37,7 @@ public class Prestamo {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "num_cuenta", referencedColumnName = "num_cuenta")
-	private Cuenta Cuenta;
+	private Cuenta cuenta;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "prestamo")
 	private List<Amortizacion> listAmortizacion;

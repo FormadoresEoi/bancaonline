@@ -29,8 +29,8 @@ public class CuentaServiceImpl implements CuentaService {
 	
 
 	@Override
-	public Optional<Cuenta> buscarCuenta(int id) {
-		return cuentrepo.findById(id);
+	public Optional<Cuenta> buscarCuenta(int num_cuenta) {
+		return cuentrepo.findById(num_cuenta);
 	}
 
 	@Override

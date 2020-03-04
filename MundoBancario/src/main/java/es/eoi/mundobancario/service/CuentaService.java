@@ -12,7 +12,7 @@ public interface CuentaService {
 
 	Cuenta InsertarCuenta(Cuenta cuenta);
 
-	Optional<Cuenta> buscarCuenta(int id);
+	Optional<Cuenta> buscarCuenta(int num_cuenta);
 
 	Cuenta updateCuenta(Cuenta cuenta);
 
