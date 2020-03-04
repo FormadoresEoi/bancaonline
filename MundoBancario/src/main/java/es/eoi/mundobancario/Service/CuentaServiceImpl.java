@@ -25,14 +25,14 @@ public class CuentaServiceImpl implements CuentaService {
 	MovimientoRepository movimientoRepository;
 	@Autowired
 	PrestamoRepository prestamoRepository;
-	
+
 	TiposMovimiento tipo;
-	
-	//TODO añadir excepcion
+
+	// TODO añadir excepcion
 	private Cuenta checkNull(Optional<Cuenta> cuenta) {
-		if(cuenta.isPresent()) {
+		if (cuenta.isPresent()) {
 			return cuenta.get();
-		}else {
+		} else {
 			return null;
 		}
 	}
@@ -56,57 +56,58 @@ public class CuentaServiceImpl implements CuentaService {
 	public Movimiento createPagos(Movimiento movimiento) {
 		return movimientoRepository.save(movimiento);
 	}
-	
+
 	public Movimiento createIngresos(Movimiento movimiento) {
 		return movimientoRepository.save(movimiento);
 	}
-	
-	//TODO añadir las amortizaciones
+
+	// TODO añadir las amortizaciones
 	public Prestamo createPrestamos(Prestamo prestamo, Movimiento movimiento, int id) {
 		Date fecha = new Date();
 		int mes = fecha.getMonth();
 		List<Amortizacion> amortizaciones = new ArrayList<Amortizacion>();
-		for(int i = 0; i < prestamo.getPlazo(); i++) {
+		for (int i = 0; i < prestamo.getPlazo(); i++) {
 			fecha.setMonth(mes + i);
-			amortizaciones.add(new Amortizacion(fecha, (prestamo.getImporte()/4)));
+			amortizaciones.add(new Amortizacion(fecha, (prestamo.getImporte() / 4)));
 		}
 		prestamo.setAmortizacion(amortizaciones);
-		if(prestamoRepository.save(prestamo) != null) {
+		if (prestamoRepository.save(prestamo) != null) {
 			movimientoRepository.save(movimiento).setTipoMovimiento(tipo.PRESTAMO);
 			Cuenta cuenta = checkNull(cuentasRepository.findById(id));
 			cuenta.getPrestamo().add(prestamo);
 			cuenta.getMovimiento().add(movimiento);
 			update(cuenta);
 			return prestamo;
-		}else
+		} else
 			return null;
 	}
-	
-	//TODO arreglar
+
+	// TODO arreglar
 	public Cuenta findPrestamosAmortizados(int id) {
 		Cuenta cuenta = checkNull(cuentasRepository.findById(id));
 		for (Prestamo prestamo : cuenta.getPrestamo()) {
 			for (Amortizacion amortizacion : prestamo.getAmortizacion()) {
-				if(amortizacion.getFecha().compareTo(new Date()) <= 0)
+				if (amortizacion.getFecha().compareTo(new Date()) <= 0)
 					return cuenta;
 			}
 		}
 		return null;
 	}
-	//TODO arreglar
+
+	// TODO arreglar
 	public Cuenta findPrestamosVivos(int id) {
 		Cuenta cuenta = checkNull(cuentasRepository.findById(id));
 		for (Prestamo prestamo : cuenta.getPrestamo()) {
 			for (Amortizacion amortizacion : prestamo.getAmortizacion()) {
-				if(amortizacion.getFecha().compareTo(new Date()) > 0)
+				if (amortizacion.getFecha().compareTo(new Date()) > 0)
 					return cuenta;
 			}
 		}
 		return null;
 	}
-	
+
 	public List<Cuenta> findAllDeudora() {
-		
+
 //		List<Cuenta> cuentas = new ArrayList<Cuenta>();
 //		for (Cuenta cuenta : cuentasRepository.findAll()) {
 //			if(cuenta.getSaldo() < 0)
@@ -119,7 +120,7 @@ public class CuentaServiceImpl implements CuentaService {
 	public List<Cuenta> findAll() {
 		return cuentasRepository.findAll();
 	}
-	
+
 	public void ejecutarAmortizacionsDiarias() {
 		// TODO Auto-generated method stub
 	}
