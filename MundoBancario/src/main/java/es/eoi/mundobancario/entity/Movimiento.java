@@ -38,7 +38,7 @@ public class Movimiento {
 	private double importe;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ID_TIPO_MOVIMIENTO", referencedColumnName = "ID")
-	private TiposMovimiento tipoMovimiento;
+	private TipoMovimiento tipoMovimiento;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "NUM_CUENTA", referencedColumnName = "NUM_CUENTA")
 	private Cuenta cuenta;
@@ -50,7 +50,7 @@ public class Movimiento {
 		this.importe = importe;
 	}
 
-	public void setTipoMovimiento(TiposMovimiento tipoMovimiento) {
+	public void setTipoMovimiento(TipoMovimiento tipoMovimiento) {
 		this.tipoMovimiento = tipoMovimiento;
 		
 	}

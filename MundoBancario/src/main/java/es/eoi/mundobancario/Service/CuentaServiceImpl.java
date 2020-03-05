@@ -18,6 +18,7 @@ import es.eoi.mundobancario.entity.Amortizacion;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.entity.TipoMovimiento;
 import es.eoi.mundobancario.enums.TiposMovimiento;
 import es.eoi.mundobancario.excepcion.NotMoneyEnoughtException;
 
@@ -72,7 +73,7 @@ public class CuentaServiceImpl implements CuentaService {
 			if (saldo < movimiento.getImporte())
 				throw new NotMoneyEnoughtException();
 			cuenta.setSaldo(saldo - movimiento.getImporte());
-			movimiento.setTipoMovimiento(tipo.PAGO);
+			movimiento.setTipoMovimiento(new TipoMovimiento(tipo.PAGO));
 			movimientos.add(movimiento);
 			cuenta.setMovimiento(movimientos);
 			update(cuenta);
@@ -89,7 +90,7 @@ public class CuentaServiceImpl implements CuentaService {
 			List<Movimiento> movimientos = cuenta.getMovimiento();
 			double saldo = cuenta.getSaldo();
 			cuenta.setSaldo(saldo + movimiento.getImporte());
-			movimiento.setTipoMovimiento(tipo.INGRESO);
+			movimiento.setTipoMovimiento(new TipoMovimiento(tipo.INGRESO));
 			movimientos.add(movimiento);
 			cuenta.setMovimiento(movimientos);
 			update(cuenta);
@@ -115,7 +116,7 @@ public class CuentaServiceImpl implements CuentaService {
 			}
 			prestamo.setAmortizacion(amortizaciones);
 			if (prestamoRepository.save(prestamo) != null) {
-				movimiento.setTipoMovimiento(tipo.PRESTAMO);
+				movimiento.setTipoMovimiento(new TipoMovimiento(tipo.PRESTAMO));
 				movimientoRepository.save(movimiento);
 				prestamos.add(prestamo);
 				movimientos.add(movimiento);
@@ -176,10 +177,10 @@ public class CuentaServiceImpl implements CuentaService {
 					cuentasRepository.findById(amortizacion.getPrestamo().getCuenta().getNumeroCuenta()));
 			double saldo = cuenta.getSaldo();
 			Movimiento movimiento = new Movimiento("pago de amortizacion", new Date(), amortizacion.getImporte());
-			movimiento.setTipoMovimiento(tipo.AMORTIZACION);
+			movimiento.setTipoMovimiento(new TipoMovimiento(tipo.AMORTIZACION));
 			movimientoRepository.save(movimiento);
 			Movimiento interes = new Movimiento("pago de intereses", new Date(), (amortizacion.getImporte() * 0.2));
-			movimiento.setTipoMovimiento(tipo.INTERES);
+			movimiento.setTipoMovimiento(new TipoMovimiento(tipo.INTERES));
 			movimientoRepository.save(movimiento);
 			cuenta.setSaldo(saldo - amortizacion.getImporte() - (amortizacion.getImporte() * 0.2));
 		}
