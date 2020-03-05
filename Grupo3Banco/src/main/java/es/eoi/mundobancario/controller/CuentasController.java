@@ -18,9 +18,11 @@ import es.eoi.mundobancario.dto.CuentaClienteDTO;
 import es.eoi.mundobancario.dto.CuentaDTO;
 
 import es.eoi.mundobancario.dto.MovimientoDTO;
+import es.eoi.mundobancario.dto.NewPrestamoDTO;
 import es.eoi.mundobancario.dto.PrestamoDTO;
 import es.eoi.mundobancario.dto.TiposMovimientoDTO;
 import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.service.ClienteService;
 
 import es.eoi.mundobancario.service.CuentaService;
@@ -55,7 +57,6 @@ public class CuentasController {
 	@PostMapping
 	public void post(@RequestBody CuentaDTO cuenta) {
         service.createCuenta(mapper.map(cuenta,es.eoi.mundobancario.entity.Cuenta.class));
-         
     }
 	//Modifica campo alias de la cuenta solicitada.
 	@PutMapping("{id}")
@@ -84,5 +85,9 @@ public class CuentasController {
 	public List<PrestamoDTO> getPrestamosAmortizados(@PathVariable int id){
 		return mapper.map(service.listPrestamosAmortizados(id),new TypeToken<List<PrestamoDTO>>() {
 		}.getType());
+	}
+	@PostMapping("{id}/prestamos")
+	public void post(@RequestBody PrestamoDTO prestamo) {
+		service.CreatePrestamo(mapper.map(prestamo,es.eoi.mundobancario.entity.Prestamo.class));
 	}
 }

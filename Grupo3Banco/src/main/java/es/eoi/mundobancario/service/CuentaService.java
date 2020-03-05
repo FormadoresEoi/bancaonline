@@ -2,6 +2,8 @@ package es.eoi.mundobancario.service;
 
 import java.util.List;
 
+import es.eoi.mundobancario.dto.NewPrestamoDTO;
+import es.eoi.mundobancario.dto.PrestamoDTO;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
@@ -28,12 +30,19 @@ public interface CuentaService {
 	
 	public List<Cuenta> listCuentas();
 	
+	//Listado de Cuentas Duedoras
 	public List<Cuenta> listDeudoras();
 	
+	//Listado de Movimientos en la cuenta.
 	public List<Movimiento> listMovimientos(int id);
 	
+	//Listado de Prestamos Vivos.
 	public List<Prestamo> listPrestamosVivos(int id);
 	
+	//Listado de Prestamos Amortizados.
 	public List<Prestamo> listPrestamosAmortizados(int id);
+	
+	//Creacion de Prestamo
+	void CreatePrestamo(Prestamo prestamo);
 	
 }
