@@ -41,7 +41,14 @@ public class PrestamoServiceImpl implements PrestamoService{
 	public List<Prestamo> findAllByCuenta(int id) {
 		return prestamoRepository.findAllByCuentaNumCuenta(id);
 	}
-	
+		
+	@Override
+	public List<Prestamo> findAllByCuentaIdVivos(int id) {
+		return this.findAllByCuenta(id)
+				.stream()
+				.filter(p -> p.getAmortizaciones().size() < p.getPlazos())
+				.collect(Collectors.toList());
+	}
 	
 	@Override
 	public List<Prestamo> findAllByCuentaIdAmortizados(int id) {

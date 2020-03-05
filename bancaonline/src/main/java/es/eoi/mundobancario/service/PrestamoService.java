@@ -15,6 +15,8 @@ public interface PrestamoService{
 	
 	List<Prestamo> findAllByCuenta(int id);
 	
+	List<Prestamo> findAllByCuentaIdVivos(int id);
+	
 	List<Prestamo> findAllByCuentaIdAmortizados(int id);
 	
 }
