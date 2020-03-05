@@ -8,6 +8,7 @@ import es.eoi.mundobancario.dto.ClienteDto;
 import es.eoi.mundobancario.dto.ClienteNuevoDto;
 import es.eoi.mundobancario.dto.CuentaBasicaDto;
 import es.eoi.mundobancario.dto.CuentaConClienteDto;
+import es.eoi.mundobancario.dto.CuentaConMovimientosDto;
 import es.eoi.mundobancario.dto.CuentaNuevaDto;
 import es.eoi.mundobancario.dto.MovimientoDto;
 import es.eoi.mundobancario.dto.MovimientoNuevoDto;
@@ -31,6 +32,9 @@ public class DtoConverter {
 		dto.setNombre(cliente.getNombre());
 		return dto;
 	}
+	
+
+	
 
 	static public List<ClienteDto> toClienteDtoList(List<Cliente> clientes) {
 		List<ClienteDto> dtolist = new ArrayList<ClienteDto>();
@@ -79,7 +83,24 @@ public class DtoConverter {
 			dtolist.add(toCuentaConClienteDto(cuenta));
 		return dtolist;
 	}
+	
+	static public CuentaConMovimientosDto toCuentaConMovimientosDto(Cuenta cuenta) {
+		CuentaConMovimientosDto dto = new CuentaConMovimientosDto();
+		dto.setNum_cuenta(cuenta.getNum_cuenta());
+		dto.setAlias(cuenta.getAlias());
+		dto.setSaldo(cuenta.getSaldo());
+		dto.setMovimiento(toMovimientoDtoList(cuenta.getMovimientos()));
+		return dto;
 
+	}
+	static public List<CuentaConMovimientosDto> toCuentaConMovimientosDtoList(List<Cuenta> cuentas){
+		List<CuentaConMovimientosDto> dtolist = new ArrayList<CuentaConMovimientosDto>();
+		for (Cuenta cuenta : cuentas)
+			dtolist.add(toCuentaConMovimientosDto(cuenta));
+		return dtolist;
+	}
+	
+	
 	static public Cuenta fromCuentaNuevaDto(CuentaNuevaDto dto) {
 		Cuenta cuenta = new Cuenta();
 		cuenta.setAlias(dto.getAlias());

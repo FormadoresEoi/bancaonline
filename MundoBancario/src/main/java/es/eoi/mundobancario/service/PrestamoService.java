@@ -13,7 +13,7 @@ public interface PrestamoService {
 
 	public List<Prestamo> getByCuenta(Cuenta cuenta);
 
-	public List<Prestamo> getPrestamosVivos();
+	public List<Prestamo> getPrestamosVivos(Integer idcuenta);
 
 	public boolean post(Prestamo prestamo);
 

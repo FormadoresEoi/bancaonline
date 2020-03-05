@@ -37,8 +37,9 @@ public class PrestamoServiceImpl implements PrestamoService {
 	}
 
 	@Override
-	public List<Prestamo> getPrestamosVivos() {
-		return repository.FindByPrestamoVivo();
+	public List<Prestamo> getPrestamosVivos(Integer idcuenta) {
+		return repository.findByPrestamoVivo(idcuenta);
+
 	}
 
 }
