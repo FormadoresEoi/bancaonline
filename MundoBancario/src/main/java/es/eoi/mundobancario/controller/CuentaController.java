@@ -20,18 +20,22 @@ import org.springframework.web.bind.annotation.RestController;
 import es.eoi.mundobancario.dto.AmortizacionDTO;
 import es.eoi.mundobancario.dto.CuentaDTOCreate;
 import es.eoi.mundobancario.dto.CuentaDTOPrint;
-import es.eoi.mundobancario.dto.MovimientoDTO;
+import es.eoi.mundobancario.dto.MovimientoDTOCreate;
+import es.eoi.mundobancario.dto.MovimientoDTOPrint;
 import es.eoi.mundobancario.dto.PrestamoDTO;
 import es.eoi.mundobancario.dto.PrestamoDTOAmort;
 import es.eoi.mundobancario.entity.Amortizacion;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.entity.TiposMovimiento;
 import es.eoi.mundobancario.service.AmortizacionService;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
 import es.eoi.mundobancario.service.MovimientoService;
 import es.eoi.mundobancario.service.PrestamoService;
+import es.eoi.mundobancario.service.TipoMovimientoService;
 
 @RestController
 @RequestMapping(value = "/cuentas")
@@ -53,6 +57,9 @@ public class CuentaController {
 	
 	@Autowired
 	AmortizacionService amortserv;
+	
+	@Autowired
+	TipoMovimientoService tipomovserv;
 
 	@Autowired
 	private ModelMapper modelmapper;
@@ -113,8 +120,8 @@ public class CuentaController {
 	}
 
 	@GetMapping(value = "/{id}/movimientos")
-	public List<MovimientoDTO> buscarMovimientosCuenta(@PathVariable int id) {
-		Type listType = new TypeToken<List<MovimientoDTO>>() {
+	public List<MovimientoDTOPrint> buscarMovimientosCuenta(@PathVariable int id) {
+		Type listType = new TypeToken<List<MovimientoDTOPrint>>() {
 		}.getType();
 		Cuenta cuenta = cuentaserv.buscarCuenta(id).get();
 		return modelmapper.map(movserv.buscarMovimientosbyCuenta(cuenta), listType);
@@ -161,4 +168,16 @@ public class CuentaController {
 		return prestamosVivosDTO;
 
 	}
+	@PostMapping(value = "/{id}/ingresos")
+	public MovimientoDTOPrint crearIngreso(@PathVariable int id, @RequestBody MovimientoDTOCreate ingresodto) {
+		
+		Movimiento ingreso = modelmapper.map(ingresodto,Movimiento.class);
+		TiposMovimiento tipoingreso = tipomovserv.findByTipo("ingreso");
+		ingreso.setTiposmovimiento(tipoingreso);
+		ingreso.setCuenta(cuentaserv.buscarCuenta(id).get());
+		movserv.CrearMovimiento(ingreso);
+		//TODO CUENTA BAJAR SALDO
+		return modelmapper.map(ingresodto,MovimientoDTOPrint.class);
+	}
+	
 }

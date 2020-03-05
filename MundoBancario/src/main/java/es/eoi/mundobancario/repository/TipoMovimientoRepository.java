@@ -6,4 +6,5 @@ import es.eoi.mundobancario.entity.TiposMovimiento;
 
 public interface TipoMovimientoRepository  extends JpaRepository<TiposMovimiento, Integer>{
 
+	TiposMovimiento findByTipo(String tipo);
 }

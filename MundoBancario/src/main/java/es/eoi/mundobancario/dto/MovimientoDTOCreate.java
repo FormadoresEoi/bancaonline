@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MovimientoDTO {
+public class MovimientoDTOCreate {
 	
 	private int id;
 	private String descripcion;

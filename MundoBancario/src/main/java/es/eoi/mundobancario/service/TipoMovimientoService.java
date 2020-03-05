@@ -16,5 +16,7 @@ public interface TipoMovimientoService {
 	TiposMovimiento updateTiposMovimiento(TiposMovimiento tipomovimiento);
 
 	void removeTiposMovimiento(int id);
+	
+	public TiposMovimiento findByTipo(String tipo);
 
 }
