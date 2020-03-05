@@ -1,5 +1,7 @@
 package es.eoi.mundobancario.service;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,6 +28,13 @@ public class PrestamoServiceImpl implements PrestamoService{
 	
 	@Override
 	public void create(Prestamo prestamo) {
+		Timestamp timestamp = new Timestamp(prestamo.getFecha().getTime());
+		System.out.println(timestamp);
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(timestamp.getTime());
+		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+		prestamo.setFecha(new Timestamp(cal.getTime().getTime()));
+
 		prestamoRepository.save(prestamo);
 		
 		Tipos tipo = Tipos.Prestamo;
@@ -42,9 +51,14 @@ public class PrestamoServiceImpl implements PrestamoService{
 
 	@Override
 	public Optional<Prestamo> findByCuentaId(int id) {
-		return prestamoRepository.findById(id);
+		return prestamoRepository.findByCuenta(id);
 	}
 
+	@Override
+	public Optional<Prestamo> findById(int id){
+		return prestamoRepository.findById(id);
+	}
+	
 	@Override
 	public List<Prestamo> findAll() {
 		return prestamoRepository.findAll();

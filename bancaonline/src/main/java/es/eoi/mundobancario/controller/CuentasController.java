@@ -20,11 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 import es.eoi.mundobancario.dto.CuentaBasicaDto;
 import es.eoi.mundobancario.dto.MovimientoDto;
 import es.eoi.mundobancario.dto.NewCuentaDto;
+import es.eoi.mundobancario.dto.NewMovimientoDto;
 import es.eoi.mundobancario.dto.NewPrestamoDto;
 import es.eoi.mundobancario.dto.PrestamoDto;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.entity.TipoMovimiento;
+import es.eoi.mundobancario.enums.Tipos;
 import es.eoi.mundobancario.service.AmortizacionService;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
@@ -70,21 +74,80 @@ public class CuentasController {
 	}
 
 	@PostMapping("/{id}/prestamos")
-	public ResponseEntity<String> createPrestamo(@RequestBody NewPrestamoDto dto) {
+	public ResponseEntity<PrestamoDto> createPrestamo(@RequestBody NewPrestamoDto dto) {
 		Optional<Cuenta> cuenta = cuentaService.find(dto.getId_cuenta());
-		if (!cuenta.isPresent())
-			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+		if (!cuenta.isPresent() || dto.getPlazos() == 0)
+			return new ResponseEntity<PrestamoDto>(HttpStatus.NOT_FOUND);
 		else {
 			CuentaBasicaDto cuentaDto = model.map(cuenta.get(), CuentaBasicaDto.class);
 			PrestamoDto prestamoDto = model.map(dto, PrestamoDto.class);
-			prestamoDto.setCuentaPres(cuentaDto);
+			prestamoDto.setCuenta(cuentaDto);
 			Prestamo prestamo = model.map(prestamoDto, Prestamo.class);
 			prestamoService.create(prestamo);
 			amortizacionService.calcularAmortizaciones(prestamo);
-			//TODO llamar a realizar movimiento de movimientoService
+			
+			prestamoDto = model.map(prestamoService.findById(prestamo.getId()).get(), PrestamoDto.class);
+			
+			return new ResponseEntity<PrestamoDto>(prestamoDto, HttpStatus.OK);
 		}
-		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/{id}/ingresos")
+	public ResponseEntity<MovimientoDto> createIngreso(@RequestBody NewMovimientoDto dto) {
+		Optional<Cuenta> cuenta = cuentaService.find(dto.getCuenta());
+		if (!cuenta.isPresent())
+			return new ResponseEntity<MovimientoDto>(HttpStatus.NOT_FOUND);
+		else {
+			//CuentaBasicaDto cuentaDto = model.map(cuenta.get(), CuentaBasicaDto.class);
+			MovimientoDto movimientoDto = model.map(dto, MovimientoDto.class);
+			Movimiento movimiento = model.map(movimientoDto, Movimiento.class);
+
+			Tipos tipo = Tipos.Ingreso;
+			TipoMovimiento tipoMov = new TipoMovimiento();
+			tipoMov.setId(tipo.getEnumCode());
+			tipoMov.setTipo(tipo.getEnumDesc());
+			
+			movimientoService.RealizarMovimiento(
+					movimiento.getImporte(), 
+					movimiento.getCuenta(), 
+					movimiento.getFecha(), 
+					movimiento.getDescripcion(), tipoMov);
+			
+			return new ResponseEntity<MovimientoDto>(movimientoDto, HttpStatus.OK);
+		}
+	}
+	
+	@PostMapping("/{id}/pagos")
+	public ResponseEntity<MovimientoDto> createPagos(@RequestBody NewMovimientoDto dto) {
+		Optional<Cuenta> cuenta = cuentaService.find(dto.getCuenta());
+		if (!cuenta.isPresent())
+			return new ResponseEntity<MovimientoDto>(HttpStatus.NOT_FOUND);
+		else {
+			//CuentaBasicaDto cuentaDto = model.map(cuenta.get(), CuentaBasicaDto.class);
+			MovimientoDto movimientoDto = model.map(dto, MovimientoDto.class);
+			Movimiento movimiento = model.map(movimientoDto, Movimiento.class);
+
+			Tipos tipo = Tipos.Pago;
+			TipoMovimiento tipoMov = new TipoMovimiento();
+			tipoMov.setId(tipo.getEnumCode());
+			tipoMov.setTipo(tipo.getEnumDesc());
+			
+			movimientoService.RealizarMovimiento(
+					movimiento.getImporte(), 
+					movimiento.getCuenta(), 
+					movimiento.getFecha(), 
+					movimiento.getDescripcion(), tipoMov);
+			
+			return new ResponseEntity<MovimientoDto>(movimientoDto, HttpStatus.OK);
+		}
+	}
+	
+	
+	@PostMapping("/ejecutarAmortizacionesDiarias")
+	public ResponseEntity<String> ejecutarAmortizacionesDiarias() {
 		
+			amortizacionService.ejecutarAmortizacionesDiarias();
+			return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")

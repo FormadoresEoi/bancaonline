@@ -21,7 +21,7 @@ public class NewMovimientoDto {
 	
 	private double importe;
 	
-	private String cuenta;
+	private int cuenta;
 	
 	private String tipo;
 	
