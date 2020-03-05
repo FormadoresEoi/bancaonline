@@ -12,6 +12,7 @@ import es.eoi.mundobancario.dto.CuentaConMovimientosDto;
 import es.eoi.mundobancario.dto.CuentaNuevaDto;
 import es.eoi.mundobancario.dto.MovimientoDto;
 import es.eoi.mundobancario.dto.MovimientoNuevoDto;
+import es.eoi.mundobancario.dto.PrestamoConClienteDto;
 import es.eoi.mundobancario.dto.PrestamoDto;
 import es.eoi.mundobancario.dto.TipoMovimientoDto;
 import es.eoi.mundobancario.entity.Amortizacion;
@@ -165,6 +166,17 @@ public class DtoConverter {
 		dto.setFecha(prestamo.getFecha());
 		dto.setImporte(prestamo.getImporte());
 		dto.setPlazos(prestamo.getPlazos());
+		dto.setAmortizaciones(toAmortizacionDtoList(prestamo.getAmortizaciones()));
+		return dto;
+	}
+	static public PrestamoConClienteDto toPrestamoConClienteDto(Prestamo prestamo) {
+		PrestamoConClienteDto dto = new PrestamoConClienteDto();
+		dto.setId(prestamo.getId());
+		dto.setDescripcion(prestamo.getDescripcion());
+		dto.setFecha(prestamo.getFecha());
+		dto.setImporte(prestamo.getImporte());
+		dto.setPlazos(prestamo.getPlazos());
+		dto.setCliente(toClienteDto(prestamo.getCuenta().getCliente()));
 		dto.setAmortizaciones(toAmortizacionDtoList(prestamo.getAmortizaciones()));
 		return dto;
 	}

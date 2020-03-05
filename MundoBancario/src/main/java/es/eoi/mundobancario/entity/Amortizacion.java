@@ -1,5 +1,6 @@
 package es.eoi.mundobancario.entity;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -9,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.springframework.data.annotation.CreatedDate;
 
@@ -25,7 +28,8 @@ public class Amortizacion {
 	int id;
 
 	@Column
-	Date fecha;
+	@Temporal(TemporalType.DATE)
+	Calendar fecha;
 
 	@Column
 	float importe;

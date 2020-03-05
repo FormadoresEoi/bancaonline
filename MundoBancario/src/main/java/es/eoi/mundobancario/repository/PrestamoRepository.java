@@ -14,10 +14,17 @@ public interface PrestamoRepository extends JpaRepository<Prestamo, Integer> {
 
 	List<Prestamo> findByCuenta(Cuenta cuenta);
 
-	@Query(value = "SELECT DISTINCT p FROM prestamos AS p INNER JOIN amortizaciones AS a ON p.id = a.prestamo WHERE a.fecha > CURRENT_DATE() AND p.cuenta.id = :idcuenta") 
-	List<Prestamo> findByPrestamoVivo(int idcuenta);
-	//@Query(value = "SELECT DISTINCT p FROM prestamos WHERE p.plazos == (SELECT COUNT(*) FROM amortizaciones AS a INNER JOIN prestamos ON p.id = a.prestamo WHERE a.fecha > CURRENT_DATE() AND p.cuenta.id = :idcuenta)")
-	//List<Prestamo> findByPrestamoAmortizado(int idcuenta);
+	@Query(value = "SELECT DISTINCT p FROM prestamos AS p INNER JOIN amortizaciones AS a ON p.id = a.prestamo WHERE a.fecha > CURRENT_DATE() AND p.cuenta.id = :idcuenta")
+	List<Prestamo> findByPrestamoVivoByCuentaId(int idcuenta);
+
+	@Query(value = "SELECT DISTINCT p FROM prestamos AS p INNER JOIN amortizaciones AS a ON p.id = a.prestamo WHERE a.fecha > CURRENT_DATE()")
+	List<Prestamo> findByPrestamoVivoAll();
+	
+	@Query(value = "SELECT s.id, s.descripcion, s.fecha, s.importe, s.plazos, s.cuenta FROM (SELECT p.id, p.descripcion, p.fecha, p.importe, p.plazos, p.cuenta, COUNT(p.id) AS pagados FROM prestamos AS p INNER JOIN amortizaciones AS a ON p.id = prestamo WHERE a.fecha < current_date() GROUP BY a.prestamo) AS s WHERE pagados = plazos AND cuenta = :idcuenta", nativeQuery = true)
+	List<Prestamo> findByPrestamoAmortizadoByCuentaId(int idcuenta);
+	
+	@Query(value = "SELECT s.id, s.descripcion, s.fecha, s.importe, s.plazos, s.cuenta FROM (SELECT p.id, p.descripcion, p.fecha, p.importe, p.plazos, p.cuenta, COUNT(p.id) AS pagados FROM prestamos AS p INNER JOIN amortizaciones AS a ON p.id = prestamo WHERE a.fecha < current_date() GROUP BY a.prestamo) AS s WHERE pagados = plazos", nativeQuery = true)
+	List<Prestamo> findByPrestamoAmortizadoAll();
 
 
 }

@@ -1,6 +1,6 @@
 package es.eoi.mundobancario.dto;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +10,7 @@ import lombok.Setter;
 public class AmortizacionDto {
 
 	int id;
-	Date fecha;
+	Calendar fecha;
 	float importe;
 
 }

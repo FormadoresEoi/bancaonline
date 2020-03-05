@@ -1,6 +1,6 @@
 package es.eoi.mundobancario.dto;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import lombok.Getter;
@@ -12,7 +12,7 @@ public class PrestamoDto {
 
 	int id;
 	String descripcion;
-	Date fecha;
+	Calendar fecha;
 	float importe;
 	int plazos;
 	List<AmortizacionDto> amortizaciones;

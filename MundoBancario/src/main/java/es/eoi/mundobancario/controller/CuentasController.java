@@ -37,6 +37,7 @@ import es.eoi.mundobancario.service.CuentaService;
 import es.eoi.mundobancario.service.MovimientoService;
 import es.eoi.mundobancario.service.PrestamoService;
 import es.eoi.mundobancario.service.TipoMovimientoService;
+import static es.eoi.mundobancario.utils.Fechas.*;
 
 @RestController
 @RequestMapping(value = "/cuentas")
@@ -53,10 +54,10 @@ public class CuentasController {
 
 	@Autowired
 	PrestamoService prestamoService;
-	
+
 	@Autowired
 	ClienteService clienteService;
-	
+
 	@Autowired
 	AmortizacionService amortizacionService;
 
@@ -101,7 +102,7 @@ public class CuentasController {
 	public boolean postIngreso(@PathVariable Integer id, @RequestBody MovimientoNuevoDto dto) {
 		Movimiento movimiento = fromMovimientoNuevoDto(dto);
 		movimiento.setCuenta(cuentaService.getById(id));
-		movimiento.setFecha(new Timestamp((new Date()).getTime()));
+		movimiento.setFecha(queDiaEsHoy());
 		movimiento.setTipo(tipoMovimientoService.getByTipo("INGRESO"));
 		return movimientoService.post(movimiento);
 	}
@@ -110,11 +111,11 @@ public class CuentasController {
 	public boolean postPagos(@PathVariable Integer id, @RequestBody MovimientoNuevoDto dto) {
 		Movimiento movimiento = fromMovimientoNuevoDto(dto);
 		movimiento.setCuenta(cuentaService.getById(id));
-		movimiento.setFecha(new Timestamp((new Date()).getTime()));
+		movimiento.setFecha(queDiaEsHoy());
 		movimiento.setTipo(tipoMovimientoService.getByTipo("PAGO"));
 		return movimientoService.post(movimiento);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@PostMapping("/{id}/prestamos")
 	public boolean postPrestamo(@PathVariable Integer id, @RequestBody PrestamoNuevoDto dto) {
@@ -122,35 +123,42 @@ public class CuentasController {
 		movimiento.setCuenta(cuentaService.getById(id));
 		movimiento.setTipo(tipoMovimientoService.getByTipo("PRÉSTAMO"));
 		movimiento.setDescripcion("Prestamo: " + dto.getDescripcion());
-		movimiento.setFecha(new Timestamp((new Date()).getTime()));
+		movimiento.setFecha(queDiaEsHoy());
 		movimiento.setImporte(dto.getImporte());
 		movimientoService.post(movimiento);
 		Prestamo prestamo = new Prestamo();
 		prestamo.setDescripcion(dto.getDescripcion());
-		prestamo.setFecha(new Timestamp((new Date()).getTime()));
+		prestamo.setFecha(queDiaEsHoy());
 		prestamo.setImporte(dto.getImporte());
 		prestamo.setPlazos(dto.getPlazos());
 		prestamo.setCuenta(cuentaService.getById(id));
-		
+
 		prestamoService.post(prestamo);
-		
-		for(int i = 0; i<dto.getPlazos(); i++) {
+
+		for (int i = 0; i < dto.getPlazos(); i++) {
 			Amortizacion amortizacion = new Amortizacion();
-			amortizacion.setImporte(dto.getImporte()/dto.getPlazos());
-			Timestamp fecha = new Timestamp((new Date()).getTime());
-			fecha.setMonth(fecha.getMonth()+i);
-			amortizacion.setFecha(fecha);
+			amortizacion.setImporte(dto.getImporte() / dto.getPlazos());
+			amortizacion.setFecha(sumaMesesAHoy(i));
 			amortizacion.setPrestamo(prestamo);
 			prestamo.addAmortizacion(amortizacion);
 			amortizacionService.post(amortizacion);
 		}
 		return true;
 	}
-	
 
 	@GetMapping(value = "/{id}/prestamosVivos")
-	public List<PrestamoDto> FindByPrestamoVivo(@PathVariable Integer id) {
-		return toPrestamoDtoList(prestamoService.getPrestamosVivos(id));
+	public List<PrestamoDto> getPrestamosVivos(@PathVariable Integer id) {
+		return toPrestamoDtoList(prestamoService.getPrestamosVivosByCuentaId(id));
 	}
 
+	@GetMapping(value = "/{id}/prestamosAmortizados")
+	public List<PrestamoDto> getPrestamosAmortizados(@PathVariable Integer id) {
+		return toPrestamoDtoList(prestamoService.getPrestamosAmortizados(id));
+	}
+
+
+	@PostMapping("/ejecutarAmortizacionesDiarias")
+	public boolean ejecutarAmortizacionesDiarias() {
+		return amortizacionService.ejecutarAmortizacionesDiarias();
+	}
 }

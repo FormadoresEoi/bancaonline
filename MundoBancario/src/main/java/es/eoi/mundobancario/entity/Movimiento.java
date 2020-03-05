@@ -1,6 +1,6 @@
 package es.eoi.mundobancario.entity;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,13 +12,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.data.annotation.CreatedDate;
-
 import lombok.Getter;
 import lombok.Setter;
-
-@Getter
 @Setter
+@Getter
 @Entity(name = "movimientos")
 public class Movimiento {
 
@@ -30,7 +27,8 @@ public class Movimiento {
 	String descripcion;
 
 	@Column
-	Date fecha;
+	@Temporal(TemporalType.DATE)
+	Calendar fecha;
 
 	@Column
 	float importe;

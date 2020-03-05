@@ -1,7 +1,7 @@
 package es.eoi.mundobancario.entity;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -29,7 +31,8 @@ public class Prestamo {
 	String descripcion;
 
 	@Column
-	Date fecha;
+	@Temporal(TemporalType.DATE)
+	Calendar fecha;
 
 	@Column
 	float importe;
@@ -43,7 +46,7 @@ public class Prestamo {
 
 	@OneToMany(mappedBy = "prestamo")
 	List<Amortizacion> amortizaciones;
-	
+
 	public Prestamo() {
 		amortizaciones = new ArrayList<Amortizacion>();
 	}
