@@ -54,5 +54,6 @@ public class ClienteServiceImpl implements ClienteService {
 
 		return clientrepo.findByUsuarioAndPass(usuario, pass);
 	}
+	
 
 }

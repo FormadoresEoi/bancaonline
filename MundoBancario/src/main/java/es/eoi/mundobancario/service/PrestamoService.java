@@ -3,6 +3,7 @@ package es.eoi.mundobancario.service;
 import java.util.List;
 import java.util.Optional;
 
+import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Prestamo;
 
 public interface PrestamoService {
@@ -16,5 +17,8 @@ public interface PrestamoService {
 	Prestamo updatePrestamo(Prestamo prestamo);
 
 	void removePrestamo(int id);
-
+	
+	List<Prestamo> buscarPrestamosbyCuenta(Cuenta cuenta);
+	
+	List<Prestamo> buscarprestamosVivos(List<Prestamo> presdto);
 }

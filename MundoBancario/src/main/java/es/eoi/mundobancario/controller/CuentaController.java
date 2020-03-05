@@ -44,6 +44,9 @@ public class CuentaController {
 
 	@Autowired
 	MovimientoService movserv;
+	
+	@Autowired
+	PrestamoService preserv;
 
 
 	@Autowired
@@ -96,7 +99,7 @@ public class CuentaController {
 
 	}
 	
-	@GetMapping(value="/cuentas/deudoras")
+	@GetMapping(value="/deudoras")
 	public List<CuentaDTOPrint> buscarCuentasDeudoras(){
 		Type listType = new TypeToken<List<CuentaDTOPrint>>() {
 		}.getType();
@@ -104,12 +107,32 @@ public class CuentaController {
 		return modelmapper.map(cuentasdeudoras, listType);
 	}
 	
-	@GetMapping(value="/cuentas/{id}/movimientos")
+	@GetMapping(value="/{id}/movimientos")
 	public List<MovimientoDTO> buscarMovimientosCuenta(@PathVariable int id){
 		Type listType = new TypeToken<List<MovimientoDTO>>() {
 		}.getType();
 		Cuenta cuenta =cuentaserv.buscarCuenta(id).get();
 		return modelmapper.map(movserv.buscarMovimientosbyCuenta(cuenta),listType);
+	}
+	
+	@GetMapping(value="/{id}/prestamos")
+	public List<PrestamoDTO> buscarPrestamos(@PathVariable int id){
+		Type listType = new TypeToken<List<PrestamoDTO>>() {
+		}.getType();
+		Cuenta cuenta =cuentaserv.buscarCuenta(id).get();
+		List<Prestamo> prestamo=preserv.buscarPrestamosbyCuenta(cuenta);
+		return modelmapper.map(prestamo,listType);
+
+	}
+	
+	@GetMapping(value="/{id}/prestamosVivos")
+	public List<PrestamoDTO> buscarPrestamosVivos(@PathVariable int id){
+		Type listType = new TypeToken<List<PrestamoDTO>>() {
+		}.getType();
+		Cuenta cuenta =cuentaserv.buscarCuenta(id).get();
+		List<Prestamo> prestamo=preserv.buscarPrestamosbyCuenta(cuenta);
+		
+		return modelmapper.map(preserv.buscarprestamosVivos(prestamo),listType);
 
 	}
 }

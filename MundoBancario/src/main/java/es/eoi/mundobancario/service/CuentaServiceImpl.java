@@ -25,8 +25,6 @@ public class CuentaServiceImpl implements CuentaService {
 	public Cuenta InsertarCuenta(Cuenta cuenta) {
 		return cuentrepo.save(cuenta);
 	}
-	
-	
 
 	@Override
 	public Optional<Cuenta> buscarCuenta(int num_cuenta) {
@@ -45,7 +43,7 @@ public class CuentaServiceImpl implements CuentaService {
 
 	@Override
 	public List<Cuenta> findAllById_Clientes(Cliente cliente) {
-		
+
 		return cuentrepo.findAllByCliente(cliente);
 	}
 
@@ -53,5 +51,5 @@ public class CuentaServiceImpl implements CuentaService {
 	public List<Cuenta> buscarCuentasDeudoras(float zero) {
 		return cuentrepo.findAllBySaldoLessThan(zero);
 	}
-	
+
 }
