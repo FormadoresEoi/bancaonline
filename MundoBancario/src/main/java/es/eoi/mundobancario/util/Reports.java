@@ -64,7 +64,7 @@ public class Reports {
 			Document document = new Document();
 			try {
 				PdfWriter.getInstance(document, new FileOutputStream(
-						"C:\\Users\\formacion\\git\\finalProyect\\bancaonline\\Recursos\\EOI_BANK_PRESTAMO_000.pdf"));
+						"C:\\Javi\\repositorio\\ProyectoFinal\\bancaonline\\Recursos\\EOI_BANK_PRESTAMO_000.pdf"));
 			} catch (FileNotFoundException fileNotFoundException) {
 				System.out.println("No se encontró el fichero para generar el pdf" + fileNotFoundException);
 			}

@@ -52,7 +52,7 @@ public class Movimiento {
 
 	public void setTipoMovimiento(TipoMovimiento tipoMovimiento) {
 		this.tipoMovimiento = tipoMovimiento;
-		
+
 	}
 
 }
