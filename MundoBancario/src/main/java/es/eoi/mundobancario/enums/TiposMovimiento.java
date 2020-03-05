@@ -1,11 +1,11 @@
 package es.eoi.mundobancario.enums;
 
 public enum TiposMovimiento {
-	INGRESO			(0),
-	PRESTAMO		(1), 
-	PAGO			(2), 
-	AMORTIZACION	(3), 
-	INTERES			(4); 
+	INGRESO			(1),
+	PRESTAMO		(2), 
+	PAGO			(3), 
+	AMORTIZACION	(4), 
+	INTERES			(5); 
 	
 	private int value;
 
