@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.entity.Movimiento;
+import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.repository.CuentaRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -55,4 +57,42 @@ public class CuentaServiceImpl implements CuentaService {
 		}
 		return cuentasD;
 	}
+
+
+	@Override
+	public List<Movimiento> listMovimientos(int id) {
+
+		return repository.findById(id).get().getMovimientos();
+	}
+
+
+	@Override
+	public List<Prestamo> listPrestamosVivos(int id) {
+		List<Prestamo> prestamos = repository.findById(id).get().getPrestamos();
+		List<Prestamo> prestamosvivos = new ArrayList<Prestamo>();
+		for(int i = 0; i < prestamos.size(); i++)
+		{
+			if (prestamos.get(i).getPlazos() > 0)
+			{
+				prestamosvivos.add(prestamos.get(i));
+			}
+		}
+		return prestamosvivos;
+	}
+
+
+	@Override
+	public List<Prestamo> listPrestamosAmortizados(int id) {
+		List<Prestamo> prestamos = repository.findById(id).get().getPrestamos();
+		List<Prestamo> prestamosAmortizados = new ArrayList<Prestamo>();
+		for(int i = 0; i < prestamos.size(); i++)
+		{
+			if (prestamos.get(i).getPlazos() == 0)
+			{
+				prestamosAmortizados.add(prestamos.get(i));
+			}
+		}
+		return prestamosAmortizados;
+	}
+	
 }

@@ -1,6 +1,7 @@
 package es.eoi.mundobancario.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -11,4 +12,5 @@ public class PrestamoDTO {
 	private Date fecha;
 	private double importe;
 	private int plazos;
+	private List<AmortizacionDTO> amortizaciones;
 }

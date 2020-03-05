@@ -30,14 +30,14 @@ public class ClientesController {
 	
 	// Devuelve todos los clientes
 	@GetMapping
-	public List<ClienteDTO> getTodos(){
-		return mapper.map(service.findAll(),new TypeToken<List<ClienteDTO>>() {
+	public List<ClienteLoginDTO> getTodos(){
+		return mapper.map(service.findAll(),new TypeToken<List<ClienteLoginDTO>>() {
 		}.getType());
 	}
 	// Devuelve el cliente solicitado
 	@GetMapping("{id}")
-	public ClienteDTO getCliente(@PathVariable int id) {
-		return mapper.map(service.findById(id),ClienteDTO.class);
+	public ClienteLoginDTO getCliente(@PathVariable int id) {
+		return mapper.map(service.findById(id),ClienteLoginDTO.class);
 	}
 	// Devuelve las cuentas del cliente solicitado
 	@GetMapping("/cuentas/{id}")
