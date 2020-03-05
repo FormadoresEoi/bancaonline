@@ -50,12 +50,11 @@ public class CuentaController {
 	private ModelMapper modelmapper;
 
 	@PostMapping
-	public CuentaDTOCreate crearCuenta(@RequestBody CuentaDTOCreate dto) {
+	public CuentaDTOPrint crearCuenta(@RequestBody CuentaDTOCreate dto) {
 		Cuenta cuenta = modelmapper.map(dto, Cuenta.class);
 		cuenta.setCliente(modelmapper.map(clientserv.buscarCliente(dto.getId_cliente()).get(),Cliente.class));
-		CuentaDTOCreate resp = modelmapper.map(cuentaserv.InsertarCuenta(cuenta), CuentaDTOCreate.class);
-		resp.setId_cliente(cuenta.getCliente().getId());
-		return resp;
+		return modelmapper.map(cuentaserv.InsertarCuenta(cuenta), CuentaDTOPrint.class);
+
 		}
 
 	@DeleteMapping(value = "/{id}")
@@ -67,22 +66,15 @@ public class CuentaController {
 
 	@GetMapping
 	public List<CuentaDTOPrint> mostrarCuentas() {
-		Type listType = new TypeToken<List<CuentaDTOCreate>>() {
-		}.getType();
+		Type listType = new TypeToken<List<CuentaDTOPrint>>() {}.getType();
 		List<Cuenta> cuentas=cuentaserv.MostrarCuenta();
-		List<CuentaDTOPrint> listcuentdto = modelmapper.map(cuentas, listType);
-		for (int i = 0; i < listcuentdto.size(); i++) 
-			listcuentdto.get(i).setId_cliente(cuentas.get(i).getCliente().getId());
-
-		return listcuentdto;
+		return modelmapper.map(cuentas, listType);
 	}
 
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public CuentaDTOCreate buscarCuenta(@PathVariable(value = "id") int id) {
-		CuentaDTOCreate cuentadto = modelmapper.map(cuentaserv.buscarCuenta(id).get(),CuentaDTOCreate.class);
-		
-		return cuentadto;
+	public CuentaDTOPrint buscarCuenta(@PathVariable(value = "id") int id) {
+		return modelmapper.map(cuentaserv.buscarCuenta(id).get(),CuentaDTOPrint.class);
 	}
 	
 
@@ -100,9 +92,7 @@ public class CuentaController {
 	public CuentaDTOPrint updateCuenta(@PathVariable (value="id") int id, @RequestParam (value="alias")String alias) {
 		Cuenta cuenta = cuentaserv.buscarCuenta(id).get();
 		cuenta.setAlias(alias);
-		CuentaDTOPrint dtoprint = modelmapper.map(cuentaserv.updateCuenta(cuenta), CuentaDTOPrint.class);
-		dtoprint.setId_cliente(cuenta.getCliente().getId());
-		return dtoprint;
+		return modelmapper.map(cuentaserv.updateCuenta(cuenta), CuentaDTOPrint.class);
 
 	}
 	
@@ -111,10 +101,7 @@ public class CuentaController {
 		Type listType = new TypeToken<List<CuentaDTOPrint>>() {
 		}.getType();
 		List<Cuenta> cuentasdeudoras=cuentaserv.buscarCuentasDeudoras(0);
-		List<CuentaDTOPrint> listcuentdto = modelmapper.map(cuentasdeudoras, listType);
-		for (int i = 0; i < listcuentdto.size(); i++) 
-			listcuentdto.get(i).setId_cliente(cuentasdeudoras.get(i).getCliente().getId());
-		return listcuentdto;
+		return modelmapper.map(cuentasdeudoras, listType);
 	}
 	
 	@GetMapping(value="/cuentas/{id}/movimientos")
