@@ -135,7 +135,23 @@ public class CuentaController {
 		Type listType = new TypeToken<List<PrestamoDTOAmort>>() {}.getType();
 		Type listTypeAmort = new TypeToken<List<AmortizacionDTO>>() {}.getType();
 		List<Prestamo> prestamo = preserv.buscarPrestamosbyCuenta(cuentaserv.buscarCuenta(id).get());
-		List<Prestamo> prestamosVivos = preserv.buscarprestamosVivos(prestamo);
+		List<Prestamo> prestamosVivos = preserv.buscarPrestamosVivos(prestamo);
+		List<PrestamoDTOAmort> prestamosVivosDTO=modelmapper.map(prestamosVivos, listType);
+		for (int i = 0; i < prestamosVivosDTO.size(); i++)  {
+			List<Amortizacion> amortizaciones= amortserv.BuscarAmortizacionesByPrestamo(prestamosVivos.get(i));
+			List<AmortizacionDTO> amortdto=modelmapper.map(amortizaciones,listTypeAmort);
+			prestamosVivosDTO.get(i).setListAmort(amortdto);
+		}
+		return prestamosVivosDTO;
+
+	}
+	
+	@GetMapping(value = "/{id}/prestamosAmortizados")
+	public List<PrestamoDTOAmort> buscarPrestamosAmortizados(@PathVariable int id) {
+		Type listType = new TypeToken<List<PrestamoDTOAmort>>() {}.getType();
+		Type listTypeAmort = new TypeToken<List<AmortizacionDTO>>() {}.getType();
+		List<Prestamo> prestamo = preserv.buscarPrestamosbyCuenta(cuentaserv.buscarCuenta(id).get());
+		List<Prestamo> prestamosVivos = preserv.buscarPrestamosAmortizados(prestamo);
 		List<PrestamoDTOAmort> prestamosVivosDTO=modelmapper.map(prestamosVivos, listType);
 		for (int i = 0; i < prestamosVivosDTO.size(); i++)  {
 			List<Amortizacion> amortizaciones= amortserv.BuscarAmortizacionesByPrestamo(prestamosVivos.get(i));

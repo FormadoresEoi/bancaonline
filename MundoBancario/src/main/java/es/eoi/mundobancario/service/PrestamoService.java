@@ -20,5 +20,7 @@ public interface PrestamoService {
 	
 	List<Prestamo> buscarPrestamosbyCuenta(Cuenta cuenta);
 	
-	List<Prestamo> buscarprestamosVivos(List<Prestamo> presdto);
+	List<Prestamo> buscarPrestamosVivos(List<Prestamo> presdto);
+	
+	List<Prestamo> buscarPrestamosAmortizados(List<Prestamo> presdto);
 }
