@@ -17,18 +17,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import es.eoi.mundobancario.dto.AmortizacionDTO;
 import es.eoi.mundobancario.dto.CuentaDTOCreate;
 import es.eoi.mundobancario.dto.CuentaDTOPrint;
 import es.eoi.mundobancario.dto.MovimientoDTO;
 import es.eoi.mundobancario.dto.PrestamoDTO;
+import es.eoi.mundobancario.dto.PrestamoDTOAmort;
+import es.eoi.mundobancario.entity.Amortizacion;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.service.AmortizacionService;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
 import es.eoi.mundobancario.service.MovimientoService;
 import es.eoi.mundobancario.service.PrestamoService;
-
 
 @RestController
 @RequestMapping(value = "/cuentas")
@@ -39,15 +42,17 @@ public class CuentaController {
 	@Autowired
 	ClienteService clientserv;
 
-	@Autowired 
+	@Autowired
 	PrestamoService prestamoserv;
 
 	@Autowired
 	MovimientoService movserv;
-	
+
 	@Autowired
 	PrestamoService preserv;
-
+	
+	@Autowired
+	AmortizacionService amortserv;
 
 	@Autowired
 	private ModelMapper modelmapper;
@@ -55,10 +60,10 @@ public class CuentaController {
 	@PostMapping
 	public CuentaDTOPrint crearCuenta(@RequestBody CuentaDTOCreate dto) {
 		Cuenta cuenta = modelmapper.map(dto, Cuenta.class);
-		cuenta.setCliente(modelmapper.map(clientserv.buscarCliente(dto.getId_cliente()).get(),Cliente.class));
+		cuenta.setCliente(modelmapper.map(clientserv.buscarCliente(dto.getId_cliente()).get(), Cliente.class));
 		return modelmapper.map(cuentaserv.InsertarCuenta(cuenta), CuentaDTOPrint.class);
 
-		}
+	}
 
 	@DeleteMapping(value = "/{id}")
 	public void removeCuenta(@PathVariable(value = "id") int id) {
@@ -69,70 +74,75 @@ public class CuentaController {
 
 	@GetMapping
 	public List<CuentaDTOPrint> mostrarCuentas() {
-		Type listType = new TypeToken<List<CuentaDTOPrint>>() {}.getType();
-		List<Cuenta> cuentas=cuentaserv.MostrarCuenta();
+		Type listType = new TypeToken<List<CuentaDTOPrint>>() {
+		}.getType();
+		List<Cuenta> cuentas = cuentaserv.MostrarCuenta();
 		return modelmapper.map(cuentas, listType);
 	}
 
-
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public CuentaDTOPrint buscarCuenta(@PathVariable(value = "id") int id) {
-		return modelmapper.map(cuentaserv.buscarCuenta(id).get(),CuentaDTOPrint.class);
+		return modelmapper.map(cuentaserv.buscarCuenta(id).get(), CuentaDTOPrint.class);
 	}
-	
 
-	@PostMapping (value = "/{id}/prestamos")
+	@PostMapping(value = "/{id}/prestamos")
 	public PrestamoDTO CrearPrestamo(@PathVariable int id, @RequestBody PrestamoDTO dto) {
-	Cuenta cuenta=	cuentaserv.buscarCuenta(id).get();
-	Prestamo prestamo= modelmapper.map(dto, Prestamo.class);
-	prestamo.setCuenta(cuenta);
-	Prestamo prestamofinal= prestamoserv.CrearPrestamo(prestamo);
-	return modelmapper.map(prestamofinal, PrestamoDTO.class);
-	
+		Cuenta cuenta = cuentaserv.buscarCuenta(id).get();
+		Prestamo prestamo = modelmapper.map(dto, Prestamo.class);
+		prestamo.setCuenta(cuenta);
+		Prestamo prestamofinal = prestamoserv.CrearPrestamo(prestamo);
+		return modelmapper.map(prestamofinal, PrestamoDTO.class);
+
 	}
 
-	@PutMapping(value = "/update/{id}",params= {"alias"})
-	public CuentaDTOPrint updateCuenta(@PathVariable (value="id") int id, @RequestParam (value="alias")String alias) {
+	@PutMapping(value = "/update/{id}", params = { "alias" })
+	public CuentaDTOPrint updateCuenta(@PathVariable(value = "id") int id,
+			@RequestParam(value = "alias") String alias) {
 		Cuenta cuenta = cuentaserv.buscarCuenta(id).get();
 		cuenta.setAlias(alias);
 		return modelmapper.map(cuentaserv.updateCuenta(cuenta), CuentaDTOPrint.class);
 
 	}
-	
-	@GetMapping(value="/deudoras")
-	public List<CuentaDTOPrint> buscarCuentasDeudoras(){
+
+	@GetMapping(value = "/deudoras")
+	public List<CuentaDTOPrint> buscarCuentasDeudoras() {
 		Type listType = new TypeToken<List<CuentaDTOPrint>>() {
 		}.getType();
-		List<Cuenta> cuentasdeudoras=cuentaserv.buscarCuentasDeudoras(0);
+		List<Cuenta> cuentasdeudoras = cuentaserv.buscarCuentasDeudoras(0);
 		return modelmapper.map(cuentasdeudoras, listType);
 	}
-	
-	@GetMapping(value="/{id}/movimientos")
-	public List<MovimientoDTO> buscarMovimientosCuenta(@PathVariable int id){
+
+	@GetMapping(value = "/{id}/movimientos")
+	public List<MovimientoDTO> buscarMovimientosCuenta(@PathVariable int id) {
 		Type listType = new TypeToken<List<MovimientoDTO>>() {
 		}.getType();
-		Cuenta cuenta =cuentaserv.buscarCuenta(id).get();
-		return modelmapper.map(movserv.buscarMovimientosbyCuenta(cuenta),listType);
+		Cuenta cuenta = cuentaserv.buscarCuenta(id).get();
+		return modelmapper.map(movserv.buscarMovimientosbyCuenta(cuenta), listType);
 	}
-	
-	@GetMapping(value="/{id}/prestamos")
-	public List<PrestamoDTO> buscarPrestamos(@PathVariable int id){
+
+	@GetMapping(value = "/{id}/prestamos")
+	public List<PrestamoDTO> buscarPrestamos(@PathVariable int id) {
 		Type listType = new TypeToken<List<PrestamoDTO>>() {
 		}.getType();
-		Cuenta cuenta =cuentaserv.buscarCuenta(id).get();
-		List<Prestamo> prestamo=preserv.buscarPrestamosbyCuenta(cuenta);
-		return modelmapper.map(prestamo,listType);
+		Cuenta cuenta = cuentaserv.buscarCuenta(id).get();
+		List<Prestamo> prestamo = preserv.buscarPrestamosbyCuenta(cuenta);
+		return modelmapper.map(prestamo, listType);
 
 	}
-	
-	@GetMapping(value="/{id}/prestamosVivos")
-	public List<PrestamoDTO> buscarPrestamosVivos(@PathVariable int id){
-		Type listType = new TypeToken<List<PrestamoDTO>>() {
-		}.getType();
-		Cuenta cuenta =cuentaserv.buscarCuenta(id).get();
-		List<Prestamo> prestamo=preserv.buscarPrestamosbyCuenta(cuenta);
-		
-		return modelmapper.map(preserv.buscarprestamosVivos(prestamo),listType);
+
+	@GetMapping(value = "/{id}/prestamosVivos")
+	public List<PrestamoDTOAmort> buscarPrestamosVivos(@PathVariable int id) {
+		Type listType = new TypeToken<List<PrestamoDTOAmort>>() {}.getType();
+		Type listTypeAmort = new TypeToken<List<AmortizacionDTO>>() {}.getType();
+		List<Prestamo> prestamo = preserv.buscarPrestamosbyCuenta(cuentaserv.buscarCuenta(id).get());
+		List<Prestamo> prestamosVivos = preserv.buscarprestamosVivos(prestamo);
+		List<PrestamoDTOAmort> prestamosVivosDTO=modelmapper.map(prestamosVivos, listType);
+		for (int i = 0; i < prestamosVivosDTO.size(); i++)  {
+			List<Amortizacion> amortizaciones= amortserv.BuscarAmortizacionesByPrestamo(prestamosVivos.get(i));
+			List<AmortizacionDTO> amortdto=modelmapper.map(amortizaciones,listTypeAmort);
+			prestamosVivosDTO.get(i).setListAmort(amortdto);
+		}
+		return prestamosVivosDTO;
 
 	}
 }

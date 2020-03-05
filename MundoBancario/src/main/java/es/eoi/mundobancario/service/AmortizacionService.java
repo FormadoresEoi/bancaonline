@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import es.eoi.mundobancario.entity.Amortizacion;
+import es.eoi.mundobancario.entity.Prestamo;
 
 public interface AmortizacionService {
 
@@ -17,4 +18,5 @@ public interface AmortizacionService {
 
 	void removeAmortizacion(int id);
 
+	List<Amortizacion> BuscarAmortizacionesByPrestamo(Prestamo prestamo);
 }

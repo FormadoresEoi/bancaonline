@@ -58,7 +58,6 @@ public class PrestamoServiceImpl implements PrestamoService {
 		for (Prestamo prestamo : pres) {
 			auxdate.setTime(prestamo.getFecha());
 			auxdate.add(Calendar.MONTH, prestamo.getPlazos());
-			System.out.println("Fecha actual: "+actualdate+"Fecha comparacion:"+auxdate);
 			if (actualdate.compareTo(auxdate)<0)
 				presvivos.add(prestamo);
 			

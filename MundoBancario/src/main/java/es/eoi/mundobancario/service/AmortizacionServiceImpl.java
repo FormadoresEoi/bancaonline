@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.eoi.mundobancario.entity.Amortizacion;
+import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.repository.AmortizacionRepository;
 
 @Service
@@ -41,4 +42,10 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 	public void removeAmortizacion(int id) {
 		amortrepo.deleteById(id);
 	}
+
+	@Override
+	public List<Amortizacion> BuscarAmortizacionesByPrestamo(Prestamo prestamo) {
+		return amortrepo.findAllByPrestamo(prestamo);
+	}
+
 }
