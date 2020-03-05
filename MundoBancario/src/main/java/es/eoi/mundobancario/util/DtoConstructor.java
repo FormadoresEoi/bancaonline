@@ -6,11 +6,13 @@ import org.springframework.stereotype.Component;
 
 import es.eoi.mundobancario.dto.ClienteDto;
 import es.eoi.mundobancario.dto.ClienteDtoCuentas;
+import es.eoi.mundobancario.dto.ClienteDtoCuentasMovimientos;
 import es.eoi.mundobancario.dto.CuentaDto;
 import es.eoi.mundobancario.dto.CuentaDtoMovimientos;
 import es.eoi.mundobancario.dto.CuentaDtoPrestamos;
 import es.eoi.mundobancario.dto.MovimientoDto;
 import es.eoi.mundobancario.dto.PrestamoDto;
+import es.eoi.mundobancario.dto.PrestamoDtoCliente;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
@@ -47,6 +49,11 @@ public class DtoConstructor {
 		return prestamoDto;
 	}
 	
+	public PrestamoDtoCliente toPrestamoDtoCliente(Prestamo prestamo) {
+		PrestamoDtoCliente prestamoDto = modelMapper.map(prestamo, PrestamoDtoCliente.class);
+		return prestamoDto;
+	}
+	
 	public ClienteDto toClienteDto(Cliente cliente) {
 		ClienteDto clienteDto = modelMapper.map(cliente, ClienteDto.class);
 		return clienteDto;
@@ -54,6 +61,11 @@ public class DtoConstructor {
 	
 	public ClienteDtoCuentas toClienteDtoCuentas(Cliente cliente) {
 		ClienteDtoCuentas clienteDto = modelMapper.map(cliente, ClienteDtoCuentas.class);
+		return clienteDto;
+	}
+	
+	public ClienteDtoCuentasMovimientos ClienteDtoCuentasMovimientos(Cliente cliente) {
+		ClienteDtoCuentasMovimientos clienteDto = modelMapper.map(cliente, ClienteDtoCuentasMovimientos.class);
 		return clienteDto;
 	}
 }

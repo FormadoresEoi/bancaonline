@@ -14,7 +14,7 @@ public class PrestamoServiceImpl implements PrestamoService {
 	@Autowired
 	PrestamoRepository prestamoRepository;
 
-	public Prestamo createPrestamo(Prestamo prestamo) {
+	public Prestamo create(Prestamo prestamo) {
 		return prestamoRepository.save(prestamo);
 	}
 
@@ -38,23 +38,5 @@ public class PrestamoServiceImpl implements PrestamoService {
 	public List<Prestamo> findAllAmortizados() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public Optional<Prestamo> findPrestamoById(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Prestamo updatePrestamo(Prestamo prestamo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void removePrestamo(int id) {
-		// TODO Auto-generated method stub
-
 	}
 }

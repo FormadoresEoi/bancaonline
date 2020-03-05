@@ -33,11 +33,6 @@ public class ClienteServiceImpl implements ClienteService {
 		clientesRepository.deleteById(id);
 	}
 
-	public Cliente findPrestamos(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public Cliente login(String user, String pass) {
 		return clientesRepository.findOneByUsuarioAndPass(user, pass).get();
 	}
