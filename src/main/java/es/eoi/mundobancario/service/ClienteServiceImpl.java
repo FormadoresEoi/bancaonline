@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import es.eoi.mundobancario.dto.ClienteDto;
 import es.eoi.mundobancario.entity.Cliente;
+import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.repository.ClienteRepository;
 
 /**
@@ -62,8 +63,4 @@ public class ClienteServiceImpl implements ClienteService {
 		return repository.save(entity);
 	}
 
-//	@Override
-//	public Optional<Cliente> showLogin(int id, String nombre, String email, String usuario) {
-//		return repository.findById(id);
-//	}
 }

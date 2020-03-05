@@ -52,4 +52,10 @@ public class AmortizacionServiceImpl implements AmortizacionService {
     public void delete(Amortizacion entity) {
         repository.delete(entity);
     }
+
+	@Override
+	public Amortizacion create(Amortizacion entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

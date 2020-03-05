@@ -60,4 +60,10 @@ public class MovimientoServiceImpl implements MovimientoService {
     public List<Movimiento> findByCuentaId(String id) {
         return repository.findAllByCuentasNumCuenta(id);
     }
+
+	@Override
+	public Movimiento create(Movimiento entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

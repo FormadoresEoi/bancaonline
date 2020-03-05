@@ -94,4 +94,10 @@ public class CuentaServiceImpl implements CuentaService {
     public List<Cuenta> findAllByClientesId(int id) {
         return repository.findAllByClientesId(id);
     }
+
+	@Override
+	public Cuenta create(Cuenta entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
