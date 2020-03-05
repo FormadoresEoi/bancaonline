@@ -22,5 +22,6 @@ public interface MovimientoService {
 							Cuenta cuenta, 
 							Timestamp fecha, 
 							String descripcion, 
-							TipoMovimiento.Tipos tipo);
+							TipoMovimiento tipo);
+	
 }

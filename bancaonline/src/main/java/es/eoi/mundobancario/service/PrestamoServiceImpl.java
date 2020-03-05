@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.entity.TipoMovimiento;
+import es.eoi.mundobancario.enums.Tipos;
 import es.eoi.mundobancario.repository.PrestamoRepository;
 
 @Service
@@ -20,11 +22,22 @@ public class PrestamoServiceImpl implements PrestamoService{
 	CuentaService cuentaService;
 	
 	@Autowired
-	AmortizacionService amortizacionService;
+	MovimientoService movimientoService;
 	
 	@Override
 	public void create(Prestamo prestamo) {
 		prestamoRepository.save(prestamo);
+		
+		Tipos tipo = Tipos.Prestamo;
+		TipoMovimiento tipoMov = new TipoMovimiento();
+		tipoMov.setId(tipo.getEnumCode());
+		tipoMov.setTipo(tipo.getEnumDesc());
+		movimientoService.RealizarMovimiento(
+				prestamo.getImporte(), 
+				prestamo.getCuenta(),
+				prestamo.getFecha(), 
+				prestamo.getDescripcion(),
+				tipoMov);
 	}
 
 	@Override

@@ -42,7 +42,8 @@ public class MovimientoServiceImpl implements MovimientoService {
 	}
 	
 	@Override
-	public void RealizarMovimiento(double importe, Cuenta cuenta, Timestamp fecha, String descripcion, TipoMovimiento.Tipos tipo) {
+	public void RealizarMovimiento(double importe, Cuenta cuenta, Timestamp fecha, 
+								   String descripcion, TipoMovimiento tipo) {
 		Movimiento movimiento = new Movimiento();
 		movimiento.setDescripcion(descripcion);
 		movimiento.setFecha(fecha);

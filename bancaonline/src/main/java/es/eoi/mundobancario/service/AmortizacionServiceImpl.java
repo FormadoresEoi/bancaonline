@@ -13,6 +13,7 @@ import es.eoi.mundobancario.entity.Amortizacion;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.entity.TipoMovimiento;
+import es.eoi.mundobancario.enums.Tipos;
 import es.eoi.mundobancario.repository.AmortizacionRepository;
 
 @Service
@@ -30,6 +31,7 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 	@Override
 	public void create(Amortizacion amortizacion) {
 		amortizacionRepository.save(amortizacion);
+		
 	}
 
 	@Override
@@ -44,18 +46,25 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 
 	@Override
 	public void calcularAmortizaciones(Prestamo prestamo) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeZone(TimeZone.getTimeZone("GMT"));
-		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+		Timestamp timestamp = new Timestamp(prestamo.getFecha().getTime());
+		System.out.println(timestamp);
+		//Calendar cal = Calendar.getInstance();
+		Calendar cal2 = Calendar.getInstance();
+		cal2.setTimeInMillis(timestamp.getTime());
 		
 		double importe = prestamo.getImporte() / prestamo.getPlazos();
 
+//		cal2.setTimeZone(TimeZone.getTimeZone("GMT"));
+//		cal2.set(cal2.get(Calendar.YEAR), cal2.get(Calendar.MONTH), cal2.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+		System.out.println(cal2.getTimeInMillis());
+		
 		for (int i = 1; i <= prestamo.getPlazos(); i++) {
 			Amortizacion amortizacion = new Amortizacion();
 			amortizacion.setImporte(importe);
 			amortizacion.setPrestamo(prestamo);
-			cal.add(Calendar.MONTH, i);
-			amortizacion.setFecha(new Timestamp(cal.getTimeInMillis()));
+			cal2.add(Calendar.MONTH, i);
+			timestamp = new Timestamp(cal2.getTime().getTime());
+			amortizacion.setFecha(timestamp);
 			System.out.println(amortizacion.getFecha());
 			create(amortizacion);
 		}
@@ -81,19 +90,27 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 		cuenta.setSaldo(cuenta.getSaldo() + (-(a.getPrestamo().getImporte() * 1.02)));
 		cuentaService.update(cuenta);
 		
+		Tipos tipo = Tipos.Amortizacion;
+		TipoMovimiento tipoMov = new TipoMovimiento();
+		tipoMov.setId(tipo.getEnumCode());
+		tipoMov.setTipo(tipo.getEnumDesc());
 		movimientoService.RealizarMovimiento(
 				-a.getImporte(), 
 				a.getPrestamo().getCuenta(),
 				a.getFecha(), 
 				a.getPrestamo().getDescripcion(),
-				TipoMovimiento.Tipos.Amortizacion);
+				tipoMov);
 		
+		
+		tipo = Tipos.Interes;
+		tipoMov.setId(tipo.getEnumCode());
+		tipoMov.setTipo(tipo.getEnumDesc());
 		movimientoService.RealizarMovimiento(
 				-(a.getImporte() * 1.02), 
 				a.getPrestamo().getCuenta(),
 				a.getFecha(), 
 				a.getPrestamo().getDescripcion(),
-				TipoMovimiento.Tipos.Interes);
+				tipoMov);
 		
 	}
 	

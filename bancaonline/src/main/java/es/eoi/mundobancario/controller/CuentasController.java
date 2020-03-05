@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.CuentaBasicaDto;
+import es.eoi.mundobancario.dto.MovimientoDto;
 import es.eoi.mundobancario.dto.NewCuentaDto;
-import es.eoi.mundobancario.dto.NewMovimientoDto;
 import es.eoi.mundobancario.dto.NewPrestamoDto;
 import es.eoi.mundobancario.dto.PrestamoDto;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.entity.Cuenta;
-import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.service.AmortizacionService;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
 import es.eoi.mundobancario.service.MovimientoService;
@@ -36,19 +36,23 @@ import es.eoi.mundobancario.service.PrestamoService;
 public class CuentasController {
 
 	@Autowired
+	private ModelMapper model;
+	
+	@Autowired
 	private CuentaService cuentaService;
 
 	@Autowired
 	private ClienteService clienteService;
-
+	
 	@Autowired
 	private PrestamoService prestamoService;
 	
 	@Autowired
 	private MovimientoService movimientoService;
-
+	
 	@Autowired
-	private ModelMapper model;
+	private AmortizacionService amortizacionService;
+	
 
 	@PostMapping
 	public ResponseEntity<String> create(@RequestBody NewCuentaDto dto) {
@@ -72,24 +76,17 @@ public class CuentasController {
 			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 		else {
 			CuentaBasicaDto cuentaDto = model.map(cuenta.get(), CuentaBasicaDto.class);
-			PrestamoDto prestamo = model.map(dto, PrestamoDto.class);
-			prestamo.setCuentaPres(cuentaDto);
-			prestamoService.create(model.map(prestamo, Prestamo.class));
+			PrestamoDto prestamoDto = model.map(dto, PrestamoDto.class);
+			prestamoDto.setCuentaPres(cuentaDto);
+			Prestamo prestamo = model.map(prestamoDto, Prestamo.class);
+			prestamoService.create(prestamo);
+			amortizacionService.calcularAmortizaciones(prestamo);
+			
 		}
 		return new ResponseEntity<String>(HttpStatus.OK);
 		
 	}
 	
-
-	@PostMapping({"/{id}/prestamos","/{id}/pagos","/{id}/ingresos"})
-	public ResponseEntity<NewMovimientoDto> createMovimiento(@PathVariable int id, @RequestBody NewMovimientoDto dto){
-		Movimiento movimiento = model.map(dto, Movimiento.class);
-		movimiento.setCuenta(cuentaService.find(id).get());
-		movimientoService.create(movimiento);
-		return new ResponseEntity<NewMovimientoDto>(dto, HttpStatus.OK);
-	}
-
-
 	@GetMapping("/{id}")
 	public ResponseEntity<CuentaBasicaDto> find(@PathVariable int id) {
 		Optional<Cuenta> cuenta = cuentaService.find(id);
@@ -136,23 +133,23 @@ public class CuentasController {
 //	}
 	
 	@GetMapping("/{id}/movimientos")
-	public ResponseEntity<List<NewMovimientoDto>> findAllMovimientosById(@PathVariable int id) {
-		List<NewMovimientoDto> movimientos =  movimientoService.findAllByCuentaId(id) 
+	public ResponseEntity<List<MovimientoDto>> findAllMovimientosById(@PathVariable int id) {
+		List<MovimientoDto> movimientos =  movimientoService.findAllByCuentaId(id) 
 				.stream()
-                .map(c -> model.map(c, NewMovimientoDto.class))
+                .map(c -> model.map(c, MovimientoDto.class))
                 .collect(Collectors.toList());
 		
-		return new ResponseEntity<List<NewMovimientoDto>>(movimientos, HttpStatus.FOUND);
+		return new ResponseEntity<List<MovimientoDto>>(movimientos, HttpStatus.FOUND);
 	}
 	
 	@GetMapping("/{id}/prestamos")
-	public ResponseEntity<List<NewPrestamoDto>> findPrestamos(@PathVariable int id) {		
-		List<NewPrestamoDto> prestamos = prestamoService.findAllByCuenta(id)
+	public ResponseEntity<List<PrestamoDto>> findPrestamos(@PathVariable int id) {		
+		List<PrestamoDto> prestamos = prestamoService.findAllByCuenta(id)
 				.stream()
-                .map(c -> model.map(c, NewPrestamoDto.class))
+                .map(c -> model.map(c, PrestamoDto.class))
                 .collect(Collectors.toList());
 
-		return new ResponseEntity<List<NewPrestamoDto>>(prestamos, HttpStatus.OK);
+		return new ResponseEntity<List<PrestamoDto>>(prestamos, HttpStatus.OK);
 	}
 
 }
