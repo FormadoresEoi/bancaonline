@@ -91,9 +91,10 @@ public class CuentaServiceImpl implements CuentaService {
 			double saldo = cuenta.getSaldo();
 			cuenta.setSaldo(saldo + movimiento.getImporte());
 			movimiento.setTipoMovimiento(new TipoMovimiento(tipo.INGRESO));
-			movimientos.add(movimiento);
-			cuenta.setMovimiento(movimientos);
-			update(cuenta);
+//			movimientos.add(movimiento);
+			movimiento.setCuenta(cuenta);
+//			cuenta.setMovimiento(movimientos);
+//			update(cuenta);
 			return movimientoRepository.save(movimiento);
 		} catch (Exception e) {
 			e.getMessage();
