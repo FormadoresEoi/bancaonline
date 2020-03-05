@@ -162,7 +162,7 @@ public class CuentaServiceImpl implements CuentaService {
 
 	public List<Cuenta> findAllDeudora() {
 		double saldo = 0;
-		return cuentasRepository.findAllBySaldoLessThan(saldo);
+		return cuentasRepository.findBySaldoLessThan(saldo);
 	}
 
 	public List<Cuenta> findAll() {
