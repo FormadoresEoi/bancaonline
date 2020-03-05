@@ -3,10 +3,8 @@ package es.eoi.mundobancario.service;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.springframework.stereotype.Service;
 
-import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.repository.CuentaRepository;
 import lombok.RequiredArgsConstructor;

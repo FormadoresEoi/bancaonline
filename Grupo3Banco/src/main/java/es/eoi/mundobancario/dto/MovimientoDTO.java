@@ -10,4 +10,5 @@ public class MovimientoDTO {
 	private int id;
 	private String descripcion;
 	private double importe;
+	private TiposMovimientoDTO tipo;
 }
