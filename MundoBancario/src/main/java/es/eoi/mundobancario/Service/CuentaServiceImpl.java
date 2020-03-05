@@ -87,14 +87,10 @@ public class CuentaServiceImpl implements CuentaService {
 	public Movimiento createIngresos(Movimiento movimiento, int id) {
 		try {
 			Cuenta cuenta = checkNull(cuentasRepository.findById(id));
-			List<Movimiento> movimientos = cuenta.getMovimiento();
 			double saldo = cuenta.getSaldo();
 			cuenta.setSaldo(saldo + movimiento.getImporte());
 			movimiento.setTipoMovimiento(new TipoMovimiento(tipo.INGRESO));
-//			movimientos.add(movimiento);
 			movimiento.setCuenta(cuenta);
-//			cuenta.setMovimiento(movimientos);
-//			update(cuenta);
 			return movimientoRepository.save(movimiento);
 		} catch (Exception e) {
 			e.getMessage();
@@ -115,14 +111,20 @@ public class CuentaServiceImpl implements CuentaService {
 				fecha.setMonth(mes + i);
 				amortizaciones.add(new Amortizacion(fecha, (prestamo.getImporte() / 4)));
 			}
-			prestamo.setAmortizacion(amortizaciones);
+			for (Amortizacion amortizacion : amortizaciones) {
+				amortizacion.setPrestamo(prestamo);
+				amortizacionRepository.save(amortizacion);
+			}
+//			prestamo.setAmortizacion(amortizaciones);
+			prestamo.setCuenta(cuenta);
 			if (prestamoRepository.save(prestamo) != null) {
 				movimiento.setTipoMovimiento(new TipoMovimiento(tipo.PRESTAMO));
+				movimiento.setCuenta(cuenta);
 				movimientoRepository.save(movimiento);
-				prestamos.add(prestamo);
-				movimientos.add(movimiento);
-				cuenta.setMovimiento(movimientos);
-				cuenta.setPrestamo(prestamos);
+//				prestamos.add(prestamo);
+//				movimientos.add(movimiento);
+//				cuenta.setMovimiento(movimientos);
+//				cuenta.setPrestamo(prestamos);
 				cuenta.setSaldo(saldo + prestamo.getImporte());
 				update(cuenta);
 				return prestamo;
