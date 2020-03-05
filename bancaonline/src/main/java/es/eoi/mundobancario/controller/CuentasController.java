@@ -81,7 +81,7 @@ public class CuentasController {
 			Prestamo prestamo = model.map(prestamoDto, Prestamo.class);
 			prestamoService.create(prestamo);
 			amortizacionService.calcularAmortizaciones(prestamo);
-			
+			//TODO llamar a realizar movimiento de movimientoService
 		}
 		return new ResponseEntity<String>(HttpStatus.OK);
 		
@@ -150,6 +150,28 @@ public class CuentasController {
                 .collect(Collectors.toList());
 
 		return new ResponseEntity<List<PrestamoDto>>(prestamos, HttpStatus.OK);
+	}
+	
+	
+	@GetMapping("/{id}/prestamosAmortizados")
+	public ResponseEntity<List<NewPrestamoDto>> findPrestamosAmortizados(@PathVariable int id) {		
+		List<NewPrestamoDto> prestamos = prestamoService.findAllByCuentaIdAmortizados(id)
+				.stream()
+                .map(c -> model.map(c, NewPrestamoDto.class))
+                .collect(Collectors.toList());
+
+		return new ResponseEntity<List<NewPrestamoDto>>(prestamos, HttpStatus.OK);
+	}
+	
+	
+	@GetMapping("/{id}/prestamoVivos")
+	public ResponseEntity<List<NewPrestamoDto>> findPrestamosVivos(@PathVariable int id) {		
+		List<NewPrestamoDto> prestamos = prestamoService.findAllByCuentaIdVivos(id)
+				.stream()
+                .map(c -> model.map(c, NewPrestamoDto.class))
+                .collect(Collectors.toList());
+
+		return new ResponseEntity<List<NewPrestamoDto>>(prestamos, HttpStatus.OK);
 	}
 
 }
