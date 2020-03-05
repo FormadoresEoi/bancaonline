@@ -24,10 +24,11 @@ public class TipoMovimiento {
 	private int id;
 	@Column(name = "TIPO")
 	private TiposMovimiento tipo;
-
+	
 	public TipoMovimiento(TiposMovimiento tipo) {
 		super();
 		this.tipo = tipo;
 	}
-
+	
+	
 }
