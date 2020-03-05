@@ -17,4 +17,6 @@ public interface TipoMovimientoService {
 
 	void removeTiposMovimiento(int id);
 
+	TiposMovimiento findByTipo(String tipo);
+
 }

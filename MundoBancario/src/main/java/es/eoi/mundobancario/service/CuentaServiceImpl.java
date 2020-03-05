@@ -6,8 +6,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import es.eoi.mundobancario.entity.Amortizacion;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.repository.CuentaRepository;
 
 @Service
@@ -54,4 +56,15 @@ public class CuentaServiceImpl implements CuentaService {
 		return cuentrepo.findAllBySaldoLessThan(zero);
 	}
 	
+	@Override
+	public void ActualizarSaldoPrestamo (Prestamo prestamo, Cuenta cuenta) {
+		Cuenta cuentafinal= cuenta;
+		cuentafinal.setSaldo(cuenta.getSaldo()+prestamo.getImporte());
+		this.updateCuenta(cuentafinal);	
+	}
+	@Override
+	public void ActualizarSaldoAmortizacion(Amortizacion amortizacion,Cuenta cuenta) {
+		Cuenta cuentaFinal = cuenta;
+		cuentaFinal.setSaldo(cuenta.getSaldo()-amortizacion.getImporte());
+	}
 }

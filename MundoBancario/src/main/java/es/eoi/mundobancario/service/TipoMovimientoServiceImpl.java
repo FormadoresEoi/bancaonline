@@ -41,5 +41,9 @@ public class TipoMovimientoServiceImpl implements TipoMovimientoService {
 		tipomovirepo.deleteById(id);
 		
 	}
+	@Override
+	public TiposMovimiento findByTipo(String tipo) {
+	return tipomovirepo.findByTipo(tipo);
+	}
 
 }
