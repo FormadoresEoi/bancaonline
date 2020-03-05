@@ -1,24 +1,39 @@
 package es.eoi.mundobancario.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.eoi.mundobancario.Repository.ClientesRepository;
 import es.eoi.mundobancario.entity.Cliente;
+import es.eoi.mundobancario.entity.Cuenta;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
 	@Autowired
 	ClientesRepository clientesRepository;
+	
+	private Cliente checkNull(Optional<Cliente> cliente) {
+		try {
+			if (cliente.isPresent()) {
+				return cliente.get();
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			e.getMessage();
+			return null;
+		}
+	}
 
 	public Cliente Create(String usuario, String nombre, String pass, String email) {
 		return clientesRepository.save(new Cliente(usuario, pass, nombre, email));
 	}
 
 	public Cliente findById(int id) {
-		return clientesRepository.findById(id).get();
+		return checkNull(clientesRepository.findById(id));
 	}
 
 	public List<Cliente> findAll() {
@@ -34,16 +49,10 @@ public class ClienteServiceImpl implements ClienteService {
 	}
 
 	public Cliente login(String user, String pass) {
-		return clientesRepository.findOneByUsuarioAndPass(user, pass).get();
+		return checkNull(clientesRepository.findOneByUsuarioAndPass(user, pass));
 	}
 
 	public Cliente findCuentas(int id) {
-		
-		return null;
+		return checkNull(clientesRepository.findById(id));
 	}
-
-	public Cliente updateEmail(int id) {
-		return null;
-	}
-
 }
