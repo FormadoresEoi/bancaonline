@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.ClienteReportDTO;
-import es.eoi.mundobancario.dto.CuentaDTO;
 import es.eoi.mundobancario.service.ClienteService;
 import lombok.RequiredArgsConstructor;
 
