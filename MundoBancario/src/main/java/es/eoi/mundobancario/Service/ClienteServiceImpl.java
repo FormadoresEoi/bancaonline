@@ -37,12 +37,16 @@ public class ClienteServiceImpl implements ClienteService {
 		return clientesRepository.findOneByUsuarioAndPass(user, pass).get();
 	}
 
-	public Cliente findCuentas(int id) {
-		
+	public Cliente updateEmail(int id) {
 		return null;
 	}
 
-	public Cliente updateEmail(int id) {
+	public Cliente findCuentas(int id) {
+		return List < Cuenta > findAll();
+	}
+
+	public Cliente findPrestamos(int id) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
