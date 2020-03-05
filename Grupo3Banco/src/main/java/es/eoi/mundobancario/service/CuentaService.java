@@ -3,6 +3,8 @@ package es.eoi.mundobancario.service;
 import java.util.List;
 
 import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.entity.Movimiento;
+import es.eoi.mundobancario.entity.Prestamo;
 
 public interface CuentaService {
 
@@ -26,6 +28,12 @@ public interface CuentaService {
 	
 	public List<Cuenta> listCuentas();
 	
-	
 	public List<Cuenta> listDeudoras();
+	
+	public List<Movimiento> listMovimientos(int id);
+	
+	public List<Prestamo> listPrestamosVivos(int id);
+	
+	public List<Prestamo> listPrestamosAmortizados(int id);
+	
 }
