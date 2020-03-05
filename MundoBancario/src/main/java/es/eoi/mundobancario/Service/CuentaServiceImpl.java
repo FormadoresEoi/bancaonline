@@ -69,7 +69,7 @@ public class CuentaServiceImpl implements CuentaService {
 			Cuenta cuenta = checkNull(cuentasRepository.findById(id));
 			List<Movimiento> movimientos = cuenta.getMovimiento();
 			double saldo = cuenta.getSaldo();
-			if (saldo <= movimiento.getImporte())
+			if (saldo < movimiento.getImporte())
 				throw new NotMoneyEnoughtException();
 			cuenta.setSaldo(saldo - movimiento.getImporte());
 			movimiento.setTipoMovimiento(tipo.PAGO);

@@ -10,6 +10,6 @@ import es.eoi.mundobancario.entity.Cuenta;
 @Repository
 public interface CuentasRepository extends JpaRepository<Cuenta, Integer> {
 
-	List<Cuenta> findAllBySaldoLessThan(int i);
+	public List<Cuenta> findAllBySaldoLessThan(double saldo);
 
 }
