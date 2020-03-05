@@ -59,14 +59,14 @@ public class CuentasController {
 		Optional<Cliente> cliente = clienteService.find(dto.getId_cliente());
 
 		if (!cliente.isPresent())
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("fallo",HttpStatus.BAD_REQUEST);
 		else {
 			Cuenta cuenta = model.map(dto, Cuenta.class);
 			cuenta.setCliente(cliente.get());
 			cuentaService.create(cuenta);
 		}
 
-		return new ResponseEntity<String>(HttpStatus.OK);
+		return new ResponseEntity<String>("cuenta creada con exito", HttpStatus.OK);
 	}
 
 	@PostMapping("/{id}/prestamos")

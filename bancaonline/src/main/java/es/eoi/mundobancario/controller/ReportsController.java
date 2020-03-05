@@ -30,6 +30,7 @@ import org.springframework.http.MediaType;
 
 import es.eoi.mundobancario.dto.ClienteDto;
 import es.eoi.mundobancario.dto.NewPrestamoDto;
+import es.eoi.mundobancario.dto.PrestamoDto;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
@@ -81,7 +82,7 @@ public class ReportsController {
         ByteArrayInputStream bis = GeneratePdfReport.clientesReport(dto);
 
         var headers = new HttpHeaders();
-        headers.add("Content-Disposition", "inline; filename=citiesreport.pdf");
+        headers.add("Content-Disposition", "inline; filename=clientesreport.pdf");
 
         return ResponseEntity
                 .ok()
@@ -93,15 +94,15 @@ public class ReportsController {
 	
 	
 	
-	//TODO no esta terminado
+	//TODO falta que devuelva los datos del cliente
 	@GetMapping("/prestamos/{id}")
-	public ResponseEntity<List<NewPrestamoDto>> findPrestamos(@PathVariable int id) {		
-		List<NewPrestamoDto> prestamos = prestamoService.findAllByCuenta(id)
+	public ResponseEntity<List<PrestamoDto>> findPrestamos(@PathVariable int id) {		
+		List<PrestamoDto> prestamos = prestamoService.findAllByCuenta(id)
 				.stream()
-                .map(c -> model.map(c, NewPrestamoDto.class))
+                .map(c -> model.map(c, PrestamoDto.class))
                 .collect(Collectors.toList());
 
-		return new ResponseEntity<List<NewPrestamoDto>>(prestamos, HttpStatus.OK);
+		return new ResponseEntity<List<PrestamoDto>>(prestamos, HttpStatus.OK);
 	}
 	
 	

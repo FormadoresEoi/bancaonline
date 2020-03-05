@@ -46,10 +46,6 @@ public class GeneratePdfReport {
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(hcell);
 
-			hcell = new PdfPCell(new Phrase("Population", headFont));
-			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(hcell);
-
 			PdfPCell cell;
 
 			cell = new PdfPCell(new Phrase(cliente.getId()));

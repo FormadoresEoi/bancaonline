@@ -35,11 +35,12 @@ public class ClientesController {
 
 	@PostMapping
 	public ResponseEntity<String> create(@RequestBody NewClienteDto dto) {
+		
 		if (clienteService.find(dto.getId()).isPresent())
-			return new ResponseEntity<>(HttpStatus.CONFLICT);
+			return new ResponseEntity<String>("false",HttpStatus.CONFLICT);
 		else {
 			clienteService.create(model.map(dto, Cliente.class));
-			return new ResponseEntity<>(HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>("true",HttpStatus.ACCEPTED);
 		}
 	}
 
