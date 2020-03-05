@@ -47,8 +47,24 @@ public class MovimientoServiceImpl implements MovimientoService {
 		Movimiento movimiento = new Movimiento();
 		movimiento.setDescripcion(descripcion);
 		movimiento.setFecha(fecha);
+		movimiento.setCuenta(cuenta);
 		movimiento.setImporte(importe);
 		movimiento.setTipo(tipo);
 		this.create(movimiento);
+		
+		
+		Cuenta cuentaMod = cuenta;
+		if(tipo.getTipo().equals("Ingreso")) {
+			cuentaMod.setSaldo(cuentaMod.getSaldo() + importe);
+			cuentaService.update(cuentaMod);
+		}
+		else if(tipo.getTipo().equals("Pago")) {
+			cuentaMod.setSaldo(cuentaMod.getSaldo() - importe);
+			cuentaService.update(cuentaMod);
+		}
+		else if(tipo.getTipo().equals("Prestamo")) {
+			cuentaMod.setSaldo(cuentaMod.getSaldo() + importe);
+			cuentaService.update(cuentaMod);
+		}
 	}
 }

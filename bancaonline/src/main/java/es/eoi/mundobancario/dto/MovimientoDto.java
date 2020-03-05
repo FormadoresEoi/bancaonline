@@ -21,7 +21,7 @@ public class MovimientoDto {
 	
 	private double importe;
 	
-	private CuentaDto cuenta;
+	private int cuenta;
 	
 	private TipoMovimientoDto tipo;
 	

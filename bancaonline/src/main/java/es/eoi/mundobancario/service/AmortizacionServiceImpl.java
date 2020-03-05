@@ -48,22 +48,18 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 	public void calcularAmortizaciones(Prestamo prestamo) {
 		Timestamp timestamp = new Timestamp(prestamo.getFecha().getTime());
 		System.out.println(timestamp);
-		//Calendar cal = Calendar.getInstance();
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(timestamp.getTime());
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(timestamp.getTime());
+		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
 		
 		double importe = prestamo.getImporte() / prestamo.getPlazos();
-
-//		cal2.setTimeZone(TimeZone.getTimeZone("GMT"));
-//		cal2.set(cal2.get(Calendar.YEAR), cal2.get(Calendar.MONTH), cal2.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
-		System.out.println(cal2.getTimeInMillis());
 		
 		for (int i = 1; i <= prestamo.getPlazos(); i++) {
 			Amortizacion amortizacion = new Amortizacion();
 			amortizacion.setImporte(importe);
 			amortizacion.setPrestamo(prestamo);
-			cal2.add(Calendar.MONTH, i);
-			timestamp = new Timestamp(cal2.getTime().getTime());
+			cal.add(Calendar.MONTH, 1);
+			timestamp = new Timestamp(cal.getTime().getTime());
 			amortizacion.setFecha(timestamp);
 			System.out.println(amortizacion.getFecha());
 			create(amortizacion);
