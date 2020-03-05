@@ -1,6 +1,6 @@
 delete from tipos_movimiento;
-insert into TIPOS_MOVIMIENTO values (0,'INGRESO');
-insert into TIPOS_MOVIMIENTO values (1,'PRESTAMO');
-insert into TIPOS_MOVIMIENTO values (2,'PAGO');
-insert into TIPOS_MOVIMIENTO values (3,'AMORTIZACION');
-insert into TIPOS_MOVIMIENTO values (4,'INTERES');
+insert into TIPOS_MOVIMIENTO(TIPO) values ('INGRESO');
+insert into TIPOS_MOVIMIENTO(TIPO) values ('PRESTAMO');
+insert into TIPOS_MOVIMIENTO(TIPO) values ('PAGO');
+insert into TIPOS_MOVIMIENTO(TIPO) values ('AMORTIZACION');
+insert into TIPOS_MOVIMIENTO(TIPO) values ('INTERES');
