@@ -75,6 +75,7 @@ public class CuentasController {
 			PrestamoDto prestamo = model.map(dto, PrestamoDto.class);
 			prestamo.setCuentaPres(cuentaDto);
 			prestamoService.create(model.map(prestamo, Prestamo.class));
+			//TODO llamar a realizar movimiento de movimientoService
 		}
 		return new ResponseEntity<String>(HttpStatus.OK);
 		
@@ -148,6 +149,28 @@ public class CuentasController {
 	@GetMapping("/{id}/prestamos")
 	public ResponseEntity<List<NewPrestamoDto>> findPrestamos(@PathVariable int id) {		
 		List<NewPrestamoDto> prestamos = prestamoService.findAllByCuenta(id)
+				.stream()
+                .map(c -> model.map(c, NewPrestamoDto.class))
+                .collect(Collectors.toList());
+
+		return new ResponseEntity<List<NewPrestamoDto>>(prestamos, HttpStatus.OK);
+	}
+	
+	
+	@GetMapping("/{id}/prestamosAmortizados")
+	public ResponseEntity<List<NewPrestamoDto>> findPrestamosAmortizados(@PathVariable int id) {		
+		List<NewPrestamoDto> prestamos = prestamoService.findAllByCuentaIdAmortizados(id)
+				.stream()
+                .map(c -> model.map(c, NewPrestamoDto.class))
+                .collect(Collectors.toList());
+
+		return new ResponseEntity<List<NewPrestamoDto>>(prestamos, HttpStatus.OK);
+	}
+	
+	
+	@GetMapping("/{id}/prestamoVivos")
+	public ResponseEntity<List<NewPrestamoDto>> findPrestamosVivos(@PathVariable int id) {		
+		List<NewPrestamoDto> prestamos = prestamoService.findAllByCuentaIdVivos(id)
 				.stream()
                 .map(c -> model.map(c, NewPrestamoDto.class))
                 .collect(Collectors.toList());
