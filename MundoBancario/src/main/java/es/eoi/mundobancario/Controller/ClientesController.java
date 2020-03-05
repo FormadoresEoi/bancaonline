@@ -54,8 +54,10 @@ public class ClientesController {
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
-	public ClienteDto updateEmail(@PathVariable int id) {
-		return dtoConstructor.toClienteDto(service.updateEmail(id));
+	public ClienteDto updateEmail(@PathVariable int id, @RequestParam String email) {
+		Cliente cliente = service.findById(id);
+		cliente.setEmail(email);
+		return dtoConstructor.toClienteDto(service.update(cliente));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/clientes")

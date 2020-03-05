@@ -36,9 +36,14 @@ public class CuentaServiceImpl implements CuentaService {
 
 	// TODO añadir excepcion
 	private Cuenta checkNull(Optional<Cuenta> cuenta) {
-		if (cuenta.isPresent()) {
-			return cuenta.get();
-		} else {
+		try {
+			if (cuenta.isPresent()) {
+				return cuenta.get();
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			e.getMessage();
 			return null;
 		}
 	}
@@ -95,7 +100,6 @@ public class CuentaServiceImpl implements CuentaService {
 		}
 	}
 
-	// TODO arreglar
 	public Prestamo createPrestamos(Prestamo prestamo, Movimiento movimiento, int id) {
 		Date fecha = new Date();
 		int mes = fecha.getMonth();
@@ -112,14 +116,11 @@ public class CuentaServiceImpl implements CuentaService {
 		if (prestamoRepository.save(prestamo) != null) {
 			movimiento.setTipoMovimiento(tipo.PRESTAMO);
 			movimientoRepository.save(movimiento);
-
 			prestamos.add(prestamo);
 			movimientos.add(movimiento);
-
 			cuenta.setMovimiento(movimientos);
 			cuenta.setPrestamo(prestamos);
 			cuenta.setSaldo(saldo + prestamo.getImporte());
-
 			update(cuenta);
 			return prestamo;
 		} else

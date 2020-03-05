@@ -20,5 +20,4 @@ public interface ClienteService {
 
 	public Cliente findCuentas(int id);
 
-	public Cliente updateEmail(int id);
 }
