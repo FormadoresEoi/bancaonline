@@ -8,7 +8,7 @@ import lombok.Data;
 public class ClienteReportDTO {
 	
 	private ClienteLoginDTO cliente;
-	private CuentaReportDTO cuentas;
-	private List<MovimientoDTO> movimientos;
+	private CuentaReportDTO cuenta;
+	
 	
 }

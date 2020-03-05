@@ -59,7 +59,9 @@ public class CuentasController {
 		return mapper.map(service.findById(id).getMovimientos(), new TypeToken<List<MovimientoDTO>>(){
 		}.getType());
 	}
-	
+
+	//Devuelve los prestamos de la cuenta.(Incluyen las amortizaciones planicifcas)
+
 //	@DeleteMapping
 //	public void deleteCuenta(@RequestBody Cuenta cuenta) {
 //		service.deleteCuenta(cuenta);

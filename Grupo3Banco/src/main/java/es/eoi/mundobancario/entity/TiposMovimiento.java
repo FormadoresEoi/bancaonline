@@ -32,7 +32,7 @@ public class TiposMovimiento {
 	@Column(name = "TIPO")
 	private String tipo;
 	
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY , mappedBy = "tiposmovimiento")
 	private List<Movimiento> movimientos;
 
 }
