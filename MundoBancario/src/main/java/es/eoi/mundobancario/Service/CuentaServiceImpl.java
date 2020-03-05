@@ -101,30 +101,33 @@ public class CuentaServiceImpl implements CuentaService {
 	}
 
 	public Prestamo createPrestamos(Prestamo prestamo, Movimiento movimiento, int id) {
-		Date fecha = new Date();
-		int mes = fecha.getMonth();
-		Cuenta cuenta = checkNull(cuentasRepository.findById(id));
-		List<Amortizacion> amortizaciones = new ArrayList<Amortizacion>();
-		List<Prestamo> prestamos = cuenta.getPrestamo();
-		List<Movimiento> movimientos = cuenta.getMovimiento();
-		double saldo = cuenta.getSaldo();
-		for (int i = 0; i < prestamo.getPlazo(); i++) {
-			fecha.setMonth(mes + i);
-			amortizaciones.add(new Amortizacion(fecha, (prestamo.getImporte() / 4)));
-		}
-		prestamo.setAmortizacion(amortizaciones);
-		if (prestamoRepository.save(prestamo) != null) {
-			movimiento.setTipoMovimiento(tipo.PRESTAMO);
-			movimientoRepository.save(movimiento);
-			prestamos.add(prestamo);
-			movimientos.add(movimiento);
-			cuenta.setMovimiento(movimientos);
-			cuenta.setPrestamo(prestamos);
-			cuenta.setSaldo(saldo + prestamo.getImporte());
-			update(cuenta);
-			return prestamo;
+		if (prestamo.getPlazo() > 0) {
+			Date fecha = new Date();
+			int mes = fecha.getMonth();
+			Cuenta cuenta = checkNull(cuentasRepository.findById(id));
+			List<Amortizacion> amortizaciones = new ArrayList<Amortizacion>();
+			List<Prestamo> prestamos = cuenta.getPrestamo();
+			List<Movimiento> movimientos = cuenta.getMovimiento();
+			double saldo = cuenta.getSaldo();
+			for (int i = 0; i < prestamo.getPlazo(); i++) {
+				fecha.setMonth(mes + i);
+				amortizaciones.add(new Amortizacion(fecha, (prestamo.getImporte() / 4)));
+			}
+			prestamo.setAmortizacion(amortizaciones);
+			if (prestamoRepository.save(prestamo) != null) {
+				movimiento.setTipoMovimiento(tipo.PRESTAMO);
+				movimientoRepository.save(movimiento);
+				prestamos.add(prestamo);
+				movimientos.add(movimiento);
+				cuenta.setMovimiento(movimientos);
+				cuenta.setPrestamo(prestamos);
+				cuenta.setSaldo(saldo + prestamo.getImporte());
+				update(cuenta);
+				return prestamo;
+			}
 		} else
 			return null;
+		return null;
 	}
 
 	public Cuenta findPrestamosAmortizados(int id) {
@@ -158,7 +161,8 @@ public class CuentaServiceImpl implements CuentaService {
 	}
 
 	public List<Cuenta> findAllDeudora() {
-		return cuentasRepository.findAllBySaldoLessThan(0);
+		double saldo = 0;
+		return cuentasRepository.findAllBySaldoLessThan(saldo);
 	}
 
 	public List<Cuenta> findAll() {
