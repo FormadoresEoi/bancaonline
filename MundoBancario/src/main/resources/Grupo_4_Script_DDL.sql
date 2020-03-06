@@ -39,6 +39,7 @@ CREATE TABLE prestamos (
 	importe FLOAT,
     plazos INT,
     cuenta INT,
+    pagado VARCHAR,
     FOREIGN KEY (cuenta) REFERENCES cuentas (num_cuenta)
 );
 		
@@ -46,6 +47,7 @@ CREATE TABLE amortizaciones (
 	id INT PRIMARY KEY AUTO_INCREMENT, 
     fecha DATE,
 	importe FLOAT,
-    prestamo INT, 
+    prestamo INT,
+    pagado VARCHAR,
     FOREIGN KEY (prestamo) REFERENCES prestamos (id)
 );	

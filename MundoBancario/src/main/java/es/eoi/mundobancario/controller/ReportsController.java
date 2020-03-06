@@ -75,7 +75,7 @@ public class ReportsController {
 						entrada.add(new Chunk(Float.toString(movimiento.getImporte()) + " €",
 								new Font(FontFamily.HELVETICA, 12, Font.NORMAL, BaseColor.GREEN)));
 					else
-						entrada.add(new Chunk(Float.toString(-1 * movimiento.getImporte())+ " €",
+						entrada.add(new Chunk(Float.toString(-1 * movimiento.getImporte()) + " €",
 								new Font(FontFamily.HELVETICA, 12, Font.NORMAL, BaseColor.RED)));
 					entrada.add(new Chunk(" | " + movimiento.getTipo().getTipo()));
 					document.add(entrada);
@@ -89,8 +89,7 @@ public class ReportsController {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		(new SendEmailAttachment()).Enviar("EOI_BANK_CLIENTE_" + id.toString() + ".pdf",
-				cliente.getEmail());
+		(new SendEmailAttachment()).Enviar("EOI_BANK_CLIENTE_" + id.toString() + ".pdf", cliente.getEmail());
 	}
 
 	@Autowired

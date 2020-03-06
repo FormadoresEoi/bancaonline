@@ -23,7 +23,7 @@ import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.entity.TipoMovimiento;
 
 public class DtoConverter {
-	
+
 	// Bloque de Cliente
 	static public ClienteDto toClienteDto(Cliente cliente) {
 		ClienteDto dto = new ClienteDto();
@@ -33,9 +33,6 @@ public class DtoConverter {
 		dto.setNombre(cliente.getNombre());
 		return dto;
 	}
-	
-
-	
 
 	static public List<ClienteDto> toClienteDtoList(List<Cliente> clientes) {
 		List<ClienteDto> dtolist = new ArrayList<ClienteDto>();
@@ -84,7 +81,7 @@ public class DtoConverter {
 			dtolist.add(toCuentaConClienteDto(cuenta));
 		return dtolist;
 	}
-	
+
 	static public CuentaConMovimientosDto toCuentaConMovimientosDto(Cuenta cuenta) {
 		CuentaConMovimientosDto dto = new CuentaConMovimientosDto();
 		dto.setNum_cuenta(cuenta.getNum_cuenta());
@@ -94,14 +91,14 @@ public class DtoConverter {
 		return dto;
 
 	}
-	static public List<CuentaConMovimientosDto> toCuentaConMovimientosDtoList(List<Cuenta> cuentas){
+
+	static public List<CuentaConMovimientosDto> toCuentaConMovimientosDtoList(List<Cuenta> cuentas) {
 		List<CuentaConMovimientosDto> dtolist = new ArrayList<CuentaConMovimientosDto>();
 		for (Cuenta cuenta : cuentas)
 			dtolist.add(toCuentaConMovimientosDto(cuenta));
 		return dtolist;
 	}
-	
-	
+
 	static public Cuenta fromCuentaNuevaDto(CuentaNuevaDto dto) {
 		Cuenta cuenta = new Cuenta();
 		cuenta.setAlias(dto.getAlias());
@@ -169,6 +166,7 @@ public class DtoConverter {
 		dto.setAmortizaciones(toAmortizacionDtoList(prestamo.getAmortizaciones()));
 		return dto;
 	}
+
 	static public PrestamoConClienteDto toPrestamoConClienteDto(Prestamo prestamo) {
 		PrestamoConClienteDto dto = new PrestamoConClienteDto();
 		dto.setId(prestamo.getId());

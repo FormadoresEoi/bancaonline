@@ -32,6 +32,7 @@ import es.eoi.mundobancario.entity.Amortizacion;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.exceptions.SaldoInsuficienteException;
 import es.eoi.mundobancario.service.AmortizacionService;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
@@ -105,28 +106,29 @@ public class CuentasController {
 		movimiento.setCuenta(cuentaService.getById(id));
 		movimiento.setFecha(queDiaEsHoy());
 		movimiento.setTipo(tipoMovimientoService.getByTipo("INGRESO"));
-		cuenta.setSaldo(cuenta.getSaldo()+dto.getImporte());
+		cuenta.setSaldo(cuenta.getSaldo() + dto.getImporte());
 		cuentaService.post(cuenta);
 		return movimientoService.post(movimiento);
 	}
 
 	@PostMapping("/{id}/pagos")
-	public boolean postPagos(@PathVariable Integer id, @RequestBody MovimientoNuevoDto dto) {
+	public boolean postPagos(@PathVariable Integer id, @RequestBody MovimientoNuevoDto dto)
+			throws SaldoInsuficienteException {
 		Cuenta cuenta = cuentaService.getById(id);
-		if(cuentaService.getById(id).getSaldo()-dto.getImporte()>0) {
+		if (cuentaService.getById(id).getSaldo() - dto.getImporte() > 0) {
 			Movimiento movimiento = fromMovimientoNuevoDto(dto);
 			movimiento.setCuenta(cuentaService.getById(id));
 			movimiento.setFecha(queDiaEsHoy());
 			movimiento.setTipo(tipoMovimientoService.getByTipo("PAGO"));
-			cuenta.setSaldo(cuenta.getSaldo()-movimiento.getImporte());
+			cuenta.setSaldo(cuenta.getSaldo() - movimiento.getImporte());
 			return movimientoService.post(movimiento);
-		}
-		return false;
+		} else
+			throw new SaldoInsuficienteException("Saldo insuficiente");
 	}
 
 	@PostMapping("/{id}/prestamos")
 	public boolean postPrestamo(@PathVariable Integer id, @RequestBody PrestamoNuevoDto dto) {
-		if(prestamoService.getByCuentaAndPagado(cuentaService.getById(id), "PENDIENTE").isPresent())
+		if (prestamoService.getByCuentaAndPagado(cuentaService.getById(id), "PENDIENTE").isPresent())
 			return false;
 		Movimiento movimiento = new Movimiento();
 		movimiento.setCuenta(cuentaService.getById(id));
@@ -168,9 +170,8 @@ public class CuentasController {
 		return toPrestamoDtoList(prestamoService.getPrestamosAmortizados(id));
 	}
 
-	
 	@PostMapping("/ejecutarAmortizacionesDiarias")
-	@Scheduled(fixedDelay = 1000)
+	@Scheduled(fixedDelay = 1000*60*60*24)
 	public void ejecutarAmortizacionesDiarias() {
 		amortizacionService.ejecutarAmortizacionesDiarias();
 	}

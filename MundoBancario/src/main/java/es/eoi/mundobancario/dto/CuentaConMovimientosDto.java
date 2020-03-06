@@ -13,5 +13,5 @@ public class CuentaConMovimientosDto {
 	String alias;
 	float saldo;
 	List<MovimientoDto> movimiento;
-	
+
 }

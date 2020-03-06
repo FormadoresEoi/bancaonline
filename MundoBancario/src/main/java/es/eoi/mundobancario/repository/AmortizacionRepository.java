@@ -10,7 +10,7 @@ import es.eoi.mundobancario.entity.Amortizacion;
 
 @Repository
 public interface AmortizacionRepository extends JpaRepository<Amortizacion, Integer> {
-	
+
 	List<Amortizacion> findByFechaAndPagado(Calendar fecha, String pagado);
-	
+
 }

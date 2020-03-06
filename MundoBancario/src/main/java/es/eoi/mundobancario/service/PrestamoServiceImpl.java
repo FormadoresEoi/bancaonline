@@ -41,25 +41,29 @@ public class PrestamoServiceImpl implements PrestamoService {
 	public List<Prestamo> getPrestamosVivosByCuentaId(Integer idcuenta) {
 		return repository.findByPrestamoVivoByCuentaId(idcuenta);
 	}
+
 	@Override
 	public List<Prestamo> getPrestamosVivosAll() {
 		return repository.findByPrestamoVivoAll();
 	}
+
 	@Override
-	public List<Prestamo> getPrestamosAmortizados(Integer idcuenta){
+	public List<Prestamo> getPrestamosAmortizados(Integer idcuenta) {
 		return repository.findByPrestamoAmortizadoByCuentaId(idcuenta);
 	}
+
 	@Override
-	public List<Prestamo> getPrestamosAmortizados(){
+	public List<Prestamo> getPrestamosAmortizados() {
 		return repository.findByPrestamoAmortizadoAll();
 	}
-	
+
 	@Override
-	public List<Prestamo> getPrestamosRecienPagados(){
+	public List<Prestamo> getPrestamosRecienPagados() {
 		return repository.findByPrestamoRecienPagado();
 	}
+
 	@Override
-	public Optional<Prestamo> getByCuentaAndPagado(Cuenta cuenta, String pagado){
+	public Optional<Prestamo> getByCuentaAndPagado(Cuenta cuenta, String pagado) {
 		return repository.findByCuentaAndPagado(cuenta, pagado);
 	}
 

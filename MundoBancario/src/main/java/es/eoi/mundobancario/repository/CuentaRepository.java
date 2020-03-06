@@ -14,6 +14,6 @@ public interface CuentaRepository extends JpaRepository<Cuenta, Integer> {
 
 	@Query("select c from cuentas c where c.saldo < 0")
 	List<Cuenta> findByDeudas();
-	
+
 	List<Cuenta> findByCliente(Cliente cliente);
 }

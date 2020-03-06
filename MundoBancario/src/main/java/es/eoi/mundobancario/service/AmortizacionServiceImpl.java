@@ -12,12 +12,13 @@ import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.repository.AmortizacionRepository;
+
 @Service
 public class AmortizacionServiceImpl implements AmortizacionService {
 
 	@Autowired
 	AmortizacionRepository repository;
-	
+
 	@Autowired
 	MovimientoService movimientoService;
 	@Autowired
@@ -26,6 +27,7 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 	PrestamoService prestamoService;
 	@Autowired
 	TipoMovimientoService tipoService;
+
 	@Override
 	public Amortizacion getById(Integer id) {
 		return repository.findById(id).get();
@@ -43,7 +45,7 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 	}
 
 	public boolean ejecutarAmortizacionesDiarias() {
-		for(Amortizacion amortizacion : repository.findByFechaAndPagado(queDiaEsHoy(), "PENDIENTE")) {
+		for (Amortizacion amortizacion : repository.findByFechaAndPagado(queDiaEsHoy(), "PENDIENTE")) {
 			Movimiento movamorti = new Movimiento();
 			movamorti.setDescripcion("Amortización: " + amortizacion.getPrestamo().getDescripcion());
 			movamorti.setFecha(queDiaEsHoy());
@@ -54,13 +56,13 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 			Movimiento movinteres = new Movimiento();
 			movinteres.setDescripcion("Interés: " + amortizacion.getPrestamo().getDescripcion());
 			movinteres.setFecha(queDiaEsHoy());
-			movinteres.setImporte(amortizacion.getImporte()*0.02f);
+			movinteres.setImporte(amortizacion.getImporte() * 0.02f);
 			movinteres.setCuenta(amortizacion.getPrestamo().getCuenta());
 			movinteres.setTipo(tipoService.getByTipo("INTERÉS"));
 			movimientoService.post(movinteres);
 			Cuenta cuentamorti = amortizacion.getPrestamo().getCuenta();
 			cuentamorti.setSaldo(cuentamorti.getSaldo() - amortizacion.getImporte());
-			cuentamorti.setSaldo(cuentamorti.getSaldo() - amortizacion.getImporte()*0.02f);
+			cuentamorti.setSaldo(cuentamorti.getSaldo() - amortizacion.getImporte() * 0.02f);
 			cuentaService.post(cuentamorti);
 			amortizacion.setPagado("PAGADO");
 			repository.save(amortizacion);

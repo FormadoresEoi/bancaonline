@@ -29,10 +29,12 @@ public class CuentaServiceImpl implements CuentaService {
 	public List<Cuenta> getDeudoras() {
 		return repository.findByDeudas();
 	}
+
 	@Override
-	public List<Cuenta> getByCliente(Cliente cliente){
+	public List<Cuenta> getByCliente(Cliente cliente) {
 		return repository.findByCliente(cliente);
 	}
+
 	@Override
 	public boolean post(Cuenta cuenta) {
 		repository.save(cuenta);

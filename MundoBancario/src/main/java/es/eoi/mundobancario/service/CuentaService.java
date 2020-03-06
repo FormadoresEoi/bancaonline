@@ -12,7 +12,7 @@ public interface CuentaService {
 	public List<Cuenta> getAll();
 
 	public List<Cuenta> getDeudoras();
-	
+
 	public List<Cuenta> getByCliente(Cliente cliente);
 
 	public boolean post(Cuenta cuenta);

@@ -15,15 +15,15 @@ public interface PrestamoService {
 	public List<Prestamo> getByCuenta(Cuenta cuenta);
 
 	public List<Prestamo> getPrestamosVivosByCuentaId(Integer idcuenta);
-	
+
 	public List<Prestamo> getPrestamosVivosAll();
 
 	public List<Prestamo> getPrestamosAmortizados(Integer idcuenta);
-	
+
 	public List<Prestamo> getPrestamosAmortizados();
-	
+
 	public Optional<Prestamo> getByCuentaAndPagado(Cuenta cuenta, String pagado);
-	
+
 	List<Prestamo> getPrestamosRecienPagados();
 
 	public boolean post(Prestamo prestamo);
