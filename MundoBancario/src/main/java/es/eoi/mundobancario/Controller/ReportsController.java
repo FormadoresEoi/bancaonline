@@ -61,7 +61,7 @@ public class ReportsController {
 	@RequestMapping(method = RequestMethod.GET, value = "/prestamosVivos/{id}")
 	public List<PrestamoDto> findPrestamosVivos(@PathVariable int id) {
 		List<PrestamoDto> prestamos = new ArrayList<PrestamoDto>();
-		for (Prestamo prestamo : prestamoService.findAllVivos()) {
+		for (Prestamo prestamo : prestamoService.findAllVivos(id)) {
 			prestamos.add(dtoConfigurator.toPrestamoDto(prestamo));
 		}
 		return prestamos;
@@ -70,7 +70,7 @@ public class ReportsController {
 	@RequestMapping(method = RequestMethod.GET, value = "/prestamosAmortizados/{id}")
 	public List<PrestamoDto> findPrestamosAmortizados(@PathVariable int id) {
 		List<PrestamoDto> prestamos = new ArrayList<PrestamoDto>();
-		for (Prestamo prestamo : prestamoService.findAllAmortizados()) {
+		for (Prestamo prestamo : prestamoService.findAllAmortizados(id)) {
 			prestamos.add(dtoConfigurator.toPrestamoDto(prestamo));
 		}
 		return prestamos;
