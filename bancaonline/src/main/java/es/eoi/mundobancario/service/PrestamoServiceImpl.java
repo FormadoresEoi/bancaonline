@@ -37,6 +37,8 @@ public class PrestamoServiceImpl implements PrestamoService{
 		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
 		prestamo.setFecha(new Timestamp(cal.getTime().getTime()));
 
+		prestamo.setEstado("PENDIENTE");
+		
 		prestamoRepository.save(prestamo);
 		
 		Tipos tipo = Tipos.Prestamo;
@@ -98,6 +100,26 @@ public class PrestamoServiceImpl implements PrestamoService{
 				.stream()
 				.filter(p -> p.getAmortizaciones().size() >= p.getPlazos())
 				.collect(Collectors.toList());
+	}
+	
+	public List<Prestamo> findAllVivos() {
+		 List<Prestamo> prestamos=prestamoRepository.findAll();
+		 List<Prestamo> prestamosVivos = new ArrayList<>();
+		 
+		 boolean isVivo;
+		 for (Prestamo prestamo : prestamos) {
+			 isVivo = false;
+			for (Amortizacion a : prestamo.getAmortizaciones()) {
+				
+				if(a.getFecha().after(Calendar.getInstance().getTime())) {
+					isVivo = true;
+				}
+			}
+			if(isVivo)
+				prestamosVivos.add(prestamo);
+		}
+		 
+		 return prestamosVivos;
 	}
 	
 }

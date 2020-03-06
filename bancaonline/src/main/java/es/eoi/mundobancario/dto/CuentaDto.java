@@ -21,7 +21,7 @@ public class CuentaDto {
 	
 	private double saldo;
 	
-	private ClienteDto cliente;
+	private ClienteBasicoDto cliente;
 	
 	private List<MovimientoDto> movimientos;
 	

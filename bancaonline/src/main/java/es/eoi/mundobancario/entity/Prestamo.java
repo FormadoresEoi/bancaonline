@@ -48,6 +48,9 @@ public class Prestamo {
 	@Column(name = "plazos")
 	private int plazos;
 	
+	@Column(name = "estado")
+	private String estado;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_cuenta", referencedColumnName = "num_cuenta")
 	private Cuenta cuenta;

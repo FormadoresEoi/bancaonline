@@ -34,7 +34,6 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 	@Override
 	public void create(Amortizacion amortizacion) {
 		amortizacionRepository.save(amortizacion);
-		
 	}
 
 	@Override
@@ -92,7 +91,13 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 		cuenta.setSaldo(cuenta.getSaldo() + (-(a.getPrestamo().getImporte() * 1.02)));
 		cuentaService.update(cuenta);
 		
-		//a.getPrestamo().getAmortizaciones().stream().filter(am -> am.equals(a) == 0).findFirst().get().//Set Estado;
+		a.getPrestamo().getAmortizaciones()
+						.stream()
+						.filter(am -> am.equals(a)).findFirst().get().setEstado("PAGADO");
+		
+		
+		amortizacionRepository.save(a);
+		
 		Tipos tipo = Tipos.Amortizacion;
 		TipoMovimiento tipoMov = new TipoMovimiento();
 		tipoMov.setId(tipo.getEnumCode());

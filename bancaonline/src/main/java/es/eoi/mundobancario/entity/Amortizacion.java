@@ -40,6 +40,9 @@ public class Amortizacion {
 	@Column(name = "id_prestamo")
 	private int id_prestamo;
 	
+	@Column(name = "estado")
+	private String estado;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_prestamo", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
 	private Prestamo prestamo;

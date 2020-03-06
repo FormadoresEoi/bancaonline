@@ -25,6 +25,8 @@ public class PrestamoDto {
 	
 	private int plazos;
 	
+	private String estado;
+	
 	private CuentaBasicaDto cuenta;
 	
 	private List<AmortizacionDto> amortizaciones;
