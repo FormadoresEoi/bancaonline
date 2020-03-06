@@ -56,7 +56,7 @@ public class Reports {
 			System.out.println("Your PDF file has been generated!(¡Se ha generado tu hoja PDF!");
 		} catch (com.itextpdf.text.DocumentException documentException) {
 			System.out.println(
-					"The file not exists (Se ha producido un error al generar un documento): " + documentException);
+					"Se ha producido un error al generar un documento: " + documentException);
 		}
 	}
 	
