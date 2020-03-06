@@ -39,7 +39,7 @@ public class Prestamo {
 	private Date fecha;
 	
 	@Column(name = "IMPORTE")
-	private double importe;
+	private int importe;
 	
 	@Column(name = "PLAZOS")
 	private int plazos;

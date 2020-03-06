@@ -77,5 +77,10 @@ public class CuentasController {
 		return mapper.map(service.listPrestamosAmortizados(id),new TypeToken<List<PrestamoDTO>>() {
 		}.getType());
 	}
+	
+	@PostMapping("{id}/prestamos")
+	public void post(@RequestBody PrestamoDTO prestamo) {
+		service.CreatePrestamo(mapper.map(prestamo,es.eoi.mundobancario.entity.Prestamo.class));
+	}
 
 }
