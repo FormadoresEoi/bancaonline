@@ -20,6 +20,7 @@ import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.Paragraph;
@@ -36,6 +37,7 @@ import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
 import es.eoi.mundobancario.service.PrestamoService;
+
 import es.eoi.mundobancario.utils.SendEmailAttachment;
 
 @RestController
