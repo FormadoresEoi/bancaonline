@@ -64,11 +64,8 @@ public class ClienteServiceImpl implements ClienteService {
 		return repository.save(entity);
 	}
 
-<<<<<<< HEAD
-=======
 	@Override
 	public Cliente login(String username, String password) {
 		return repository.findByUsuarioAndPass(username, password);
 	}
->>>>>>> 538ef91967123b6a44646889a30dab162dc77103
 }

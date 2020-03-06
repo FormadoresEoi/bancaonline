@@ -3,6 +3,7 @@ package es.eoi.mundobancario.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import es.eoi.mundobancario.dto.ClienteDto;
 import es.eoi.mundobancario.dto.LoginDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,6 +61,18 @@ public class ClienteController implements IController<ClienteDto, Integer> {
 	}
 
 	/**
+	 * Creates an entity.
+	 *
+	 * @param entity Entity to create.
+	 *
+	 * @return Created entity.
+	 */
+	@Override
+	public ClienteDto create(ClienteDto entity) {
+		return null;
+	}
+
+	/**
 	 * Devuelve el cliente solicitado.
 	 * 
 	 */
@@ -76,8 +89,8 @@ public class ClienteController implements IController<ClienteDto, Integer> {
 	 * 
 	 */
 	@PutMapping("/{id}")
-	public FullClienteDto update(@PathVariable Integer id, @RequestBody FullClienteDto entity) {
-		Cliente cliente = clienteService.find(id).orElseThrow(RuntimeException::new);3
+	public ClienteDto update(@PathVariable Integer id, @RequestBody ClienteDto entity) {
+		Cliente cliente = clienteService.find(id).orElseThrow(RuntimeException::new);
 		cliente.setEmail(entity.getEmail());
 		return mapper.map(clienteService.update(cliente), ClienteDto.class);
 	}
@@ -96,13 +109,6 @@ public class ClienteController implements IController<ClienteDto, Integer> {
 	 * Crea un nuevo cliente.
 	 * 
 	 */
-<<<<<<< HEAD
-	@PostMapping("")
-	public FullClienteDto create(@RequestBody FullClienteDto entity) {
-		return mapper.map(clienteService.create(mapper.map(entity, Cliente.class)), FullClienteDto.class);
-	}
-
-=======
 	@PostMapping
 	public ClienteDto create(@RequestBody FullClienteDto cliente) {
 		return mapper.map(
@@ -110,5 +116,4 @@ public class ClienteController implements IController<ClienteDto, Integer> {
 				ClienteDto.class
 		);
 	}
->>>>>>> 538ef91967123b6a44646889a30dab162dc77103
 }
