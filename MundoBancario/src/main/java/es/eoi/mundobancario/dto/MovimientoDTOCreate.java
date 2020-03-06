@@ -10,7 +10,6 @@ import lombok.Setter;
 public class MovimientoDTOCreate {
 
 	private String descripcion;
-	private Date fecha;
 	private float importe;
 
 }

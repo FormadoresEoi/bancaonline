@@ -12,5 +12,5 @@ public class CuentaDTOPrint {
 	private int num_cuenta;
 	private String alias;
 	private float saldo;
-
+	private ClienteDTOPrint cliente;
 }

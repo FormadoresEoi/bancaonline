@@ -1,5 +1,7 @@
 package es.eoi.mundobancario.controller;
 
+import static es.eoi.mundobancario.util.Util_dates.getDateWithoutTime;
+
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -69,14 +71,11 @@ public class CuentaController {
 		Cuenta cuenta = modelmapper.map(dto, Cuenta.class);
 		cuenta.setCliente(modelmapper.map(clientserv.buscarCliente(dto.getId_cliente()).get(), Cliente.class));
 		return modelmapper.map(cuentaserv.InsertarCuenta(cuenta), CuentaDTOPrint.class);
-
 	}
 
 	@DeleteMapping(value = "/{id}")
 	public void removeCuenta(@PathVariable(value = "id") int id) {
-
 		cuentaserv.removeCuenta(id);
-
 	}
 
 	@GetMapping
@@ -93,24 +92,25 @@ public class CuentaController {
 	}
 
 	@PostMapping(value = "/{id}/prestamos")
-	public PrestamoDTO CrearPrestamo(@PathVariable int id, @RequestBody PrestamoDTO dto) {
+	public Object CrearPrestamo(@PathVariable int id, @RequestBody PrestamoDTO dto) {
 
-		TiposMovimiento tipoMovimiento = tipomovserv.findByTipo("Prestamo");
-		Cuenta cuenta = cuentaserv.buscarCuenta(id).get();
-		Prestamo prestamo = insertarPrestamo(cuenta, dto);
-		List<Amortizacion> listaAmortizacion = amortserv.calcularAmortizacion(prestamo);
-		amortserv.CrearAmortizaciones(listaAmortizacion);
-		movserv.crearMovimientoPrestamo(prestamo, cuenta, tipoMovimiento, dto.getDescripcion());
-		cuentaserv.ActualizarSaldoPrestamo(prestamo, cuenta);
-		return modelmapper.map(prestamo, PrestamoDTO.class);
-
+		if (this.buscarPrestamosVivos(id).size() < 1) {
+			TiposMovimiento tipoMovimiento = tipomovserv.findByTipo("Prestamo");
+			Cuenta cuenta = cuentaserv.buscarCuenta(id).get();
+			Prestamo prestamo = insertarPrestamo(cuenta, dto);
+			List<Amortizacion> listaAmortizacion = amortserv.calcularAmortizacion(prestamo);
+			amortserv.CrearAmortizaciones(listaAmortizacion);
+			movserv.crearMovimientoPrestamo(prestamo, cuenta, tipoMovimiento, dto.getDescripcion());
+			cuentaserv.ActualizarSaldoPrestamo(prestamo, cuenta);
+			return modelmapper.map(prestamo, PrestamoDTO.class);
+		} else
+			return "Ya tienes un prestamo pendiente. No puedes solicitar otro";
 	}
 
 	private Prestamo insertarPrestamo(Cuenta cuenta, PrestamoDTO dto) {
-
 		Prestamo prestamo = modelmapper.map(dto, Prestamo.class);
 		prestamo.setCuenta(cuenta);
-
+		prestamo.setFecha(getDateWithoutTime());
 		return prestamoserv.CrearPrestamo(prestamo);
 	}
 
@@ -120,7 +120,6 @@ public class CuentaController {
 		Cuenta cuenta = cuentaserv.buscarCuenta(id).get();
 		cuenta.setAlias(alias);
 		return modelmapper.map(cuentaserv.updateCuenta(cuenta), CuentaDTOPrint.class);
-
 	}
 
 	@GetMapping(value = "/deudoras")
@@ -140,13 +139,18 @@ public class CuentaController {
 	}
 
 	@GetMapping(value = "/{id}/prestamos")
-	public List<PrestamoDTO> buscarPrestamos(@PathVariable int id) {
-		Type listType = new TypeToken<List<PrestamoDTO>>() {
+	public List<PrestamoDTOAmort> buscarPrestamos(@PathVariable int id) {
+		Type listType = new TypeToken<List<PrestamoDTOAmort>>() {
 		}.getType();
 		Cuenta cuenta = cuentaserv.buscarCuenta(id).get();
 		List<Prestamo> prestamo = preserv.buscarPrestamosbyCuenta(cuenta);
-		return modelmapper.map(prestamo, listType);
-
+		List<PrestamoDTOAmort> prestamosdto = modelmapper.map(prestamo, listType);
+		for (int i = 0; i < prestamosdto.size(); i++) {
+			List<Amortizacion> amortizaciones = amortserv.BuscarAmortizacionesByPrestamo(prestamo.get(i));
+			List<AmortizacionDTO> amortdto = modelmapper.map(amortizaciones, listType);
+			prestamosdto.get(i).setListAmort(amortdto);
+		}
+		return prestamosdto;
 	}
 
 	@GetMapping(value = "/{id}/prestamosVivos")
@@ -164,7 +168,6 @@ public class CuentaController {
 			prestamosVivosDTO.get(i).setListAmort(amortdto);
 		}
 		return prestamosVivosDTO;
-
 	}
 
 	@GetMapping(value = "/{id}/prestamosAmortizados")
@@ -174,23 +177,22 @@ public class CuentaController {
 		Type listTypeAmort = new TypeToken<List<AmortizacionDTO>>() {
 		}.getType();
 		List<Prestamo> prestamo = preserv.buscarPrestamosbyCuenta(cuentaserv.buscarCuenta(id).get());
-		List<Prestamo> prestamosVivos = preserv.buscarPrestamosAmortizados(prestamo);
-		List<PrestamoDTOAmort> prestamosVivosDTO = modelmapper.map(prestamosVivos, listType);
-		for (int i = 0; i < prestamosVivosDTO.size(); i++) {
-			List<Amortizacion> amortizaciones = amortserv.BuscarAmortizacionesByPrestamo(prestamosVivos.get(i));
+		List<Prestamo> prestamosAmortizados = preserv.buscarPrestamosAmortizados(prestamo);
+		List<PrestamoDTOAmort> prestamosAmortizadosDTO = modelmapper.map(prestamosAmortizados, listType);
+		for (int i = 0; i < prestamosAmortizadosDTO.size(); i++) {
+			List<Amortizacion> amortizaciones = amortserv.BuscarAmortizacionesByPrestamo(prestamosAmortizados.get(i));
 			List<AmortizacionDTO> amortdto = modelmapper.map(amortizaciones, listTypeAmort);
-			prestamosVivosDTO.get(i).setListAmort(amortdto);
+			prestamosAmortizadosDTO.get(i).setListAmort(amortdto);
 		}
-		return prestamosVivosDTO;
-
+		return prestamosAmortizadosDTO;
 	}
 
 	@PostMapping(value = "/{id}/ingresos")
 	public MovimientoDTOPrint crearIngreso(@PathVariable int id, @RequestBody MovimientoDTOCreate ingresodto) {
-
 		Movimiento ingreso = modelmapper.map(ingresodto, Movimiento.class);
 		TiposMovimiento tipoingreso = tipomovserv.findByTipo("ingreso");
 		Cuenta cuenta = cuentaserv.buscarCuenta(id).get();
+		ingreso.setFecha(getDateWithoutTime());
 		ingreso.setTiposmovimiento(tipoingreso);
 		ingreso.setCuenta(cuenta);
 		Movimiento result = movserv.CrearMovimiento(ingreso);
@@ -201,13 +203,13 @@ public class CuentaController {
 
 	@PostMapping(value = "/{id}/pagos")
 	public Object crearPagos(@PathVariable int id, @RequestBody MovimientoDTOCreate pagodto) {
-
 		Movimiento ingreso = modelmapper.map(pagodto, Movimiento.class);
 		TiposMovimiento tipoingreso = tipomovserv.findByTipo("pago");
 		Cuenta cuenta = cuentaserv.buscarCuenta(id).get();
 		if (cuenta.getSaldo() < 0)
 			return "Pago cancelado. Cuenta en nuemros rojos";
 		else {
+			ingreso.setFecha(getDateWithoutTime());
 			ingreso.setTiposmovimiento(tipoingreso);
 			ingreso.setCuenta(cuenta);
 			Movimiento mov = movserv.CrearMovimiento(ingreso);
@@ -219,5 +221,3 @@ public class CuentaController {
 	}
 
 }
-
-//AllShiftM

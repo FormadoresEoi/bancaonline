@@ -13,5 +13,6 @@ public class MovimientoDTOPrint {
 	private String descripcion;
 	private Date fecha;
 	private float importe;
+	private TiposMovimientoDTO tiposmovimiento;
 
 }

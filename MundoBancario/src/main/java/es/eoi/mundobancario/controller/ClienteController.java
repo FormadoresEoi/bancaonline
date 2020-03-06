@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import es.eoi.mundobancario.dto.ClienteDTOCreate;
 import es.eoi.mundobancario.dto.ClienteDTOLogin;
 import es.eoi.mundobancario.dto.ClienteDTOPrint;
-import es.eoi.mundobancario.dto.CuentaDTOCreate;
+import es.eoi.mundobancario.dto.CuentaDTOPrint;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
@@ -51,7 +51,7 @@ public class ClienteController {
 	}
 
 	@GetMapping
-	public List<ClienteDTOPrint> mostrarCliente() {
+	public List<ClienteDTOPrint> mostrarClientes() {
 		Type listType = new TypeToken<List<ClienteDTOPrint>>() {
 		}.getType();
 		List<ClienteDTOPrint> listbancdto = modelmapper.map(clientserv.MostrarCliente(), listType);
@@ -75,11 +75,11 @@ public class ClienteController {
 	}
 
 	@RequestMapping(value = "/{id}/cuentas", method = RequestMethod.GET)
-	public List<CuentaDTOCreate> findAllById_Clientes(@PathVariable(value = "id") int id) {
+	public List<CuentaDTOPrint> findAllById_Clientes(@PathVariable(value = "id") int id) {
 		Cliente cliente = clientserv.buscarCliente(id).get();
-		Type listType = new TypeToken<List<CuentaDTOCreate>>() {
+		Type listType = new TypeToken<List<CuentaDTOPrint>>() {
 		}.getType();
-		List<CuentaDTOCreate> listclidto = modelmapper.map(cuentaService.findAllById_Clientes(cliente), listType);
+		List<CuentaDTOPrint> listclidto = modelmapper.map(cuentaService.findAllById_Clientes(cliente), listType);
 		return listclidto;
 	}
 

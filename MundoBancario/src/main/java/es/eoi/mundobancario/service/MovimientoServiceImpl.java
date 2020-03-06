@@ -49,8 +49,8 @@ public class MovimientoServiceImpl implements MovimientoService {
 	public List<Movimiento> buscarMovimientosbyCuenta(Cuenta cuenta) {
 		return movirepo.findAllByCuenta(cuenta);
 	}
-	@Override
 	
+	@Override
 	public Movimiento crearMovimientoAmortizacion
 	(Amortizacion  amortizacion, Cuenta cuenta,TiposMovimiento tipoMovimientos,
 			String descripcion) {

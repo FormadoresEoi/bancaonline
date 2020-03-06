@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.repository.PrestamoRepository;
+import static es.eoi.mundobancario.util.Util_dates.*;
 
 @Service
 public class PrestamoServiceImpl implements PrestamoService {
@@ -52,8 +53,8 @@ public class PrestamoServiceImpl implements PrestamoService {
 	@Override
 	public List<Prestamo> buscarPrestamosVivos(List<Prestamo> pres) {
 		List<Prestamo> presvivos = new ArrayList<Prestamo>();
-		Calendar actualdate = Calendar.getInstance();
-		Calendar auxdate = Calendar.getInstance();
+		Calendar actualdate = convertDateWithoutTime(Calendar.getInstance());
+		Calendar auxdate = convertDateWithoutTime(Calendar.getInstance());
 		for (Prestamo prestamo : pres) {
 			auxdate.setTime(prestamo.getFecha());
 			auxdate.add(Calendar.MONTH, prestamo.getPlazos());
@@ -67,8 +68,8 @@ public class PrestamoServiceImpl implements PrestamoService {
 	@Override
 	public List<Prestamo> buscarPrestamosAmortizados(List<Prestamo> pres) {
 		List<Prestamo> presvivos = new ArrayList<Prestamo>();
-		Calendar actualdate = Calendar.getInstance();
-		Calendar auxdate = Calendar.getInstance();
+		Calendar actualdate = convertDateWithoutTime(Calendar.getInstance());
+		Calendar auxdate = convertDateWithoutTime(Calendar.getInstance());
 		for (Prestamo prestamo : pres) {
 			auxdate.setTime(prestamo.getFecha());
 			auxdate.add(Calendar.MONTH, prestamo.getPlazos());
