@@ -7,7 +7,7 @@ import es.eoi.mundobancario.entity.Cliente;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
-	// @Query("SELECT cli FROM Cliente WHERE cli.usuario = :usuario")
+	
 	public Cliente findByUsuarioAndPass(String usuario, String pass);
 
 }

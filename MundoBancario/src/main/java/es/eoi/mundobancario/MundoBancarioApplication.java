@@ -12,12 +12,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories
 public class MundoBancarioApplication {
 
-	public static void main(String[] args     ) {
+	public static void main(String[] args) {
 		SpringApplication.run(MundoBancarioApplication.class, args);
 	}
-	
+
 	@Bean
 	public ModelMapper modelMapper() {
-	    return new ModelMapper();
+		return new ModelMapper();
 	}
 }

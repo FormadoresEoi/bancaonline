@@ -1,5 +1,6 @@
 package es.eoi.mundobancario.service;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Service;
 import es.eoi.mundobancario.entity.Amortizacion;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.entity.TiposMovimiento;
 import es.eoi.mundobancario.repository.CuentaRepository;
 
 @Service
@@ -67,4 +70,12 @@ public class CuentaServiceImpl implements CuentaService {
 		Cuenta cuentaFinal = cuenta;
 		cuentaFinal.setSaldo(cuenta.getSaldo()-amortizacion.getImporte());
 	}
+	
+	//@Override
+	
+//	public Movimiento ejecutarAmortizacionesDiarias (Amortizacion  amortizacion, Cuenta  cuenta, TiposMovimiento tiposmovimiento)
+//	{
+//	
+//		
+//	}
 }
