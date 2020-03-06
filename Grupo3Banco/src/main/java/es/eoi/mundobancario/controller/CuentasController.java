@@ -16,6 +16,15 @@ import es.eoi.mundobancario.dto.CuentaClienteDTO;
 import es.eoi.mundobancario.dto.CuentaDTO;
 import es.eoi.mundobancario.dto.MovimientoDTO;
 import es.eoi.mundobancario.dto.PrestamoDTO;
+<<<<<<< HEAD
+import es.eoi.mundobancario.dto.TiposMovimientoDTO;
+import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.entity.TiposMovimiento;
+import es.eoi.mundobancario.service.ClienteService;
+
+=======
+>>>>>>> 923b6b2ae4e0197d8333a759be125cdb32f69154
 import es.eoi.mundobancario.service.CuentaService;
 import lombok.RequiredArgsConstructor;
 
@@ -79,8 +88,16 @@ public class CuentasController {
 	}
 	
 	@PostMapping("{id}/prestamos")
-	public void post(@RequestBody PrestamoDTO prestamo) {
-		service.CreatePrestamo(mapper.map(prestamo,es.eoi.mundobancario.entity.Prestamo.class));
+	public void post(@RequestBody PrestamoDTO prestamo, @PathVariable int id) {
+		service.CreatePrestamo(mapper.map(prestamo,es.eoi.mundobancario.entity.Prestamo.class), id);
+	}
+	@PostMapping("{id}/ingresos")
+	public void postIngreso() {
+		service.CreateIngreso();
+	}
+	@PostMapping("{id}/pagos")
+	public void postPago() {
+		service.CreatePago();
 	}
 
 }

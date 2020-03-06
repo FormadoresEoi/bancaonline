@@ -1,6 +1,8 @@
 package es.eoi.mundobancario.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.entity.TiposMovimiento;
 import es.eoi.mundobancario.repository.AmortizacionRepository;
 import es.eoi.mundobancario.repository.CuentaRepository;
+import es.eoi.mundobancario.repository.MovimientoRepository;
 import es.eoi.mundobancario.repository.PrestamoRepository;
 import es.eoi.mundobancario.repository.TipoMovimientoRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +27,7 @@ public class CuentaServiceImpl implements CuentaService {
 	public final PrestamoRepository prestamosrepo;
 	public final AmortizacionRepository amorrepo;
 	public final TipoMovimientoRepository tiporepo;
+	public final MovimientoRepository movimientorepo;
 
 	@Override
 	public Cuenta findById(int id) {
@@ -105,33 +109,74 @@ public class CuentaServiceImpl implements CuentaService {
 
 
 	@Override
-	public void CreatePrestamo(Prestamo prestamo) {
-		
+	public void CreatePrestamo(Prestamo prestamo , int id) {
 		//Insertamos el prestamo
+		Calendar c = Calendar.getInstance();
+		Date d = new Date();
+
+		prestamo.setCuenta(repository.findById(id).get());
 		prestamosrepo.save(prestamo);
+		
+		int a = prestamo.getImporte()/prestamo.getPlazos(); // Sacamos el importe de las amortizaciones
 		//Calculamos amortizacion y la insertamos
-		int a = prestamo.getImporte()/prestamo.getPlazos();
-		Amortizacion amor = new Amortizacion();
-		amor.setImporte(a);
-		amor.setPrestamo(prestamo);
+		List<Amortizacion> amor = new ArrayList<Amortizacion>();
 		
-		amorrepo.save(amor);
+		
+		for(int i= 0; i < prestamo.getPlazos() ; i++)
+		{
+			Amortizacion A = new Amortizacion();
+			A.setImporte(a); // Seteamos el Importe de la amortizacion.
+			c.add(Calendar.MONTH, 1);
+			A.setPrestamo(prestamo);
+			A.setFecha(c.getTime());
+			amor.add(A); // Añadimo Amortizacion a la Lista de Amortizaciones
+			amorrepo.save(A);
+			
+		}
+		
+		
+		
 		//Creamos Movimiento Prestamo
-		TiposMovimiento tipo = new TiposMovimiento();
-		
-		tipo.setTipo("Prestamo");
-		
-		tiporepo.save(tipo);
+		Movimiento tipo = new Movimiento();
+		Date date = new Date();
+		tipo.setDescripcion("Prestamo");
+		tipo.setFecha(date);
+		tipo.setCuenta(repository.findById(id).get());
+		tipo.setImporte(prestamo.getImporte());
+		tipo.setTiposmovimiento(tiporepo.findById(1).get());
+		movimientorepo.save(tipo);
 		
 		//Actualizamos Saldo Cuenta
-		float saldoN = (float) (repository.findById(prestamo.getCuenta().getNumcuenta()).get().getSaldo() - prestamo.getImporte());
+		double saldoc = repository.findById(id).get().getSaldo();
+		double importec = prestamo.getImporte();
+		double saldof = saldoc + importec;
 		
-		repository.findById(prestamo.getCuenta().getNumcuenta()).get().setSaldo(saldoN);
+		repository.findById(id).get().setSaldo(saldof);
+		repository.save(repository.findById(id).get());
 		
 		
 		
 		
 		
 	}
+	@Override
+	public void CreateIngreso()
+	{
+		TiposMovimiento tipo = new TiposMovimiento();
+		tipo.setTipo("Ingreso");
+		tiporepo.save(tipo);
+	}
+
+
+	@Override
+	public void CreatePago() {
+
+		TiposMovimiento tipo = new TiposMovimiento();
+		tipo.setTipo("Pago");
+		tiporepo.save(tipo);
+	}
+	
+
+	
 	
 }
