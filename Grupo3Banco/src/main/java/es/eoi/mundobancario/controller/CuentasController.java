@@ -23,6 +23,7 @@ import es.eoi.mundobancario.dto.PrestamoDTO;
 import es.eoi.mundobancario.dto.TiposMovimientoDTO;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.entity.TiposMovimiento;
 import es.eoi.mundobancario.service.ClienteService;
 
 import es.eoi.mundobancario.service.CuentaService;
@@ -87,7 +88,16 @@ public class CuentasController {
 		}.getType());
 	}
 	@PostMapping("{id}/prestamos")
-	public void post(@RequestBody PrestamoDTO prestamo) {
-		service.CreatePrestamo(mapper.map(prestamo,es.eoi.mundobancario.entity.Prestamo.class));
+	public void post(@RequestBody PrestamoDTO prestamo, @PathVariable int id) {
+		service.CreatePrestamo(mapper.map(prestamo,es.eoi.mundobancario.entity.Prestamo.class), id);
 	}
+	@PostMapping("{id}/ingresos")
+	public void postIngreso() {
+		service.CreateIngreso();
+	}
+	@PostMapping("{id}/pagos")
+	public void postPago() {
+		service.CreatePago();
+	}
+	
 }

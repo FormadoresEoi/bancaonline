@@ -4,9 +4,11 @@ import java.util.List;
 
 import es.eoi.mundobancario.dto.NewPrestamoDTO;
 import es.eoi.mundobancario.dto.PrestamoDTO;
+import es.eoi.mundobancario.dto.TiposMovimientoDTO;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.entity.TiposMovimiento;
 
 public interface CuentaService {
 
@@ -43,6 +45,12 @@ public interface CuentaService {
 	public List<Prestamo> listPrestamosAmortizados(int id);
 	
 	//Creacion de Prestamo
-	void CreatePrestamo(Prestamo prestamo);
+	void CreatePrestamo(Prestamo prestamo, int id);
+	
+	//Creacion de Ingreso
+	void CreateIngreso();
+	
+	//Create Pago
+	void CreatePago();
 	
 }
