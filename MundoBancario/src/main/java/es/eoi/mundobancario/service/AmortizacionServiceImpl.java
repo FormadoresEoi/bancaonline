@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.eoi.mundobancario.entity.Amortizacion;
+import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.repository.AmortizacionRepository;
+import static es.eoi.mundobancario.utils.Util_dates.*;
 
 @Service
 public class AmortizacionServiceImpl implements AmortizacionService {
@@ -81,6 +83,34 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 
 		return listaAmortizaciones;
 
+	}
+
+	@Override
+	public List<Amortizacion> findAllByCuenta(Cuenta cuenta) {
+		return amortrepo.findAllByCuenta(cuenta);
+	}
+
+	@Override
+	public List<Amortizacion> findAllByDate(Cuenta cuenta, Date fechaHoy) {
+		List<Amortizacion> listamortizacion = this.findAllByCuenta(cuenta);
+		List <Amortizacion>listAmortizacionHoy= new ArrayList<Amortizacion>();
+		
+		for (Amortizacion amortizacion : listamortizacion) {
+			int diaHoy = fechaHoy.getDay();
+			int mesHoy = fechaHoy.getMonth();
+			int anoHoy = fechaHoy.getYear();
+			int diaAmort = amortizacion.getFecha().getDay();
+			int mesAmort = amortizacion.getFecha().getMonth();
+			int anoAmort = amortizacion.getFecha().getYear();
+
+			if (diaHoy == diaAmort && mesHoy == mesAmort && anoHoy == anoAmort) {
+				listAmortizacionHoy.add(amortizacion);
+
+			}
+			
+
+		}
+		return listAmortizacionHoy;
 	}
 
 }

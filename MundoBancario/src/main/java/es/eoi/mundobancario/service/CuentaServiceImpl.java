@@ -1,6 +1,6 @@
 package es.eoi.mundobancario.service;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +20,12 @@ public class CuentaServiceImpl implements CuentaService {
 
 	@Autowired
 	CuentaRepository cuentrepo;
+	@Autowired
+	AmortizacionService amorService;
+	@Autowired
+	MovimientoService movService;
+	@Autowired
+	TipoMovimientoService tipoMovService;
 
 	@Override
 	public List<Cuenta> MostrarCuenta() {
@@ -30,8 +36,6 @@ public class CuentaServiceImpl implements CuentaService {
 	public Cuenta InsertarCuenta(Cuenta cuenta) {
 		return cuentrepo.save(cuenta);
 	}
-	
-	
 
 	@Override
 	public Optional<Cuenta> buscarCuenta(int num_cuenta) {
@@ -50,7 +54,7 @@ public class CuentaServiceImpl implements CuentaService {
 
 	@Override
 	public List<Cuenta> findAllById_Clientes(Cliente cliente) {
-		
+
 		return cuentrepo.findAllByCliente(cliente);
 	}
 
@@ -58,24 +62,43 @@ public class CuentaServiceImpl implements CuentaService {
 	public List<Cuenta> buscarCuentasDeudoras(float zero) {
 		return cuentrepo.findAllBySaldoLessThan(zero);
 	}
-	
+
 	@Override
-	public void ActualizarSaldoPrestamo (Prestamo prestamo, Cuenta cuenta) {
-		Cuenta cuentafinal= cuenta;
-		cuentafinal.setSaldo(cuenta.getSaldo()+prestamo.getImporte());
-		this.updateCuenta(cuentafinal);	
+	public void ActualizarSaldoPrestamo(Prestamo prestamo, Cuenta cuenta) {
+		Cuenta cuentafinal = cuenta;
+		cuentafinal.setSaldo(cuenta.getSaldo() + prestamo.getImporte());
+		this.updateCuenta(cuentafinal);
 	}
+
 	@Override
-	public void ActualizarSaldoAmortizacion(Amortizacion amortizacion,Cuenta cuenta) {
+	public void ActualizarSaldoAmortizacion(Amortizacion amortizacion, Cuenta cuenta) {
 		Cuenta cuentaFinal = cuenta;
-		cuentaFinal.setSaldo(cuenta.getSaldo()-amortizacion.getImporte());
+		cuentaFinal.setSaldo(cuenta.getSaldo() - amortizacion.getImporte());
 	}
-	
+
 	@Override
-	
-	public Movimiento ejecutarAmortizacionesDiarias (Amortizacion  amortizacion, Cuenta  cuenta, TiposMovimiento tiposmovimiento)
-	{
-	
-		
+	public void ActualizarSaldoInteres(Amortizacion amortizacion, Cuenta cuenta) {
+		float interes = (float) (amortizacion.getImporte() * 0.02);
+		cuenta.setSaldo(cuenta.getSaldo() - interes);
+
+	}
+
+	@Override
+
+	public String ejecutarAmortizacionesDiarias(Cuenta cuenta,  Date fecha) {
+	TiposMovimiento tiposMovimiento	=tipoMovService.findByTipo("Amortizacion");
+
+		List<Amortizacion> listAmortizacion = amorService.findAllByDate(cuenta,fecha);
+		if (!listAmortizacion.isEmpty()) {
+			for (Amortizacion amortizacion2 : listAmortizacion) {
+				movService.crearMovimientoAmortizacion(amortizacion2, cuenta, tiposMovimiento);
+				movService.crearMovimientoInteres(amortizacion2, cuenta, tiposMovimiento);
+				this.ActualizarSaldoAmortizacion(amortizacion2, cuenta);
+				this.ActualizarSaldoInteres(amortizacion2, cuenta);
+			}
+			return "Cobro de Amortizaciones ejecutado";
+		}
+		return "No hay amortizaciones para cobrar";
+
 	}
 }

@@ -1,6 +1,7 @@
 package es.eoi.mundobancario.controller;
 
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -36,6 +37,7 @@ import es.eoi.mundobancario.service.CuentaService;
 import es.eoi.mundobancario.service.MovimientoService;
 import es.eoi.mundobancario.service.PrestamoService;
 import es.eoi.mundobancario.service.TipoMovimientoService;
+import static es.eoi.mundobancario.utils.Util_dates.*;
 
 @RestController
 @RequestMapping(value = "/cuentas")
@@ -217,7 +219,13 @@ public class CuentaController {
 		}
 
 	}
+	
+	@PostMapping(value="/{cuenta}/EjecutarAmortizacionesDiarias")
+	public void ejecutarAmortizacionesDiarias(@PathVariable(value = "cuenta") Cuenta cuenta) {
+		Date FechaActual= getDateWithoutTime();
+		cuentaserv.ejecutarAmortizacionesDiarias(cuenta, FechaActual);
+		}
 
 }
 
-//AllShiftM
+

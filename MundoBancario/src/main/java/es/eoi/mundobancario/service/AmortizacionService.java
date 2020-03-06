@@ -1,9 +1,11 @@
 package es.eoi.mundobancario.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import es.eoi.mundobancario.entity.Amortizacion;
+import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Prestamo;
 
 public interface AmortizacionService {
@@ -23,4 +25,10 @@ public interface AmortizacionService {
 	List <Amortizacion> calcularAmortizacion(Prestamo prestamo) ;
 
 	List<Amortizacion> BuscarAmortizacionesByPrestamo(Prestamo prestamo);
+
+	
+
+	List<Amortizacion> findAllByCuenta(Cuenta cuenta);
+
+	List<Amortizacion> findAllByDate(Cuenta cuenta, Date fechadeHoy);
 }

@@ -23,10 +23,13 @@ public interface MovimientoService {
 
 	List<Movimiento> buscarMovimientosbyCuenta(Cuenta cuenta);
 
-	Movimiento crearMovimientoAmortizacion(Amortizacion amortizacion, Cuenta cuenta,
-			TiposMovimiento tipoMovimientos, String descripcion);
+	
 
 	Movimiento crearMovimientoPrestamo(Prestamo prestamo, Cuenta cuenta, TiposMovimiento tipoMovimientos,
 			String descripcion);
+
+	Movimiento crearMovimientoInteres(Amortizacion amortizacion, Cuenta cuenta, TiposMovimiento tipoMovimientos);
+
+	Movimiento crearMovimientoAmortizacion(Amortizacion amortizacion, Cuenta cuenta, TiposMovimiento tipoMovimientos);
 
 }
