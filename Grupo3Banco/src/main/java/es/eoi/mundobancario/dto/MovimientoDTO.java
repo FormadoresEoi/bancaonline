@@ -1,6 +1,5 @@
 package es.eoi.mundobancario.dto;
 
-import es.eoi.mundobancario.entity.TiposMovimiento;
 import lombok.Data;
 
 @Data

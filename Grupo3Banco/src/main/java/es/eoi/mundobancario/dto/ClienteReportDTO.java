@@ -1,7 +1,5 @@
 package es.eoi.mundobancario.dto;
 
-import java.util.List;
-
 import lombok.Data;
 
 @Data
