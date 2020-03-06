@@ -17,7 +17,7 @@ public interface MovimientoService {
 	Movimiento updateMovimiento(Movimiento movimiento);
 
 	void removeMovimiento(int id);
-	
-	List<Movimiento>buscarMovimientosbyCuenta(Cuenta cuenta);
+
+	List<Movimiento> buscarMovimientosbyCuenta(Cuenta cuenta);
 
 }

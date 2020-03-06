@@ -24,11 +24,11 @@ public class Amortizacion {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@Column(name = "fecha")	//Utilizamos Date del java util comprobar si funciona sino Date de sql util
+	@Column(name = "fecha")
 	private Date fecha;
 	@Column(name = "importe")
 	private float importe;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_prestamo", referencedColumnName = "id")
 	private Prestamo prestamo;

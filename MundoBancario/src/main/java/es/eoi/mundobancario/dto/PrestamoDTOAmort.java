@@ -9,13 +9,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PrestamoDTOAmort {
-	
+
 	private int id;
 	private String descripcion;
 	private Date fecha;
 	private float importe;
 	private int plazos;
 	private List<AmortizacionDTO> listAmort;
-	
 
 }

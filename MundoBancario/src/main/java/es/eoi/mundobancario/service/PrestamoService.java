@@ -17,10 +17,10 @@ public interface PrestamoService {
 	Prestamo updatePrestamo(Prestamo prestamo);
 
 	void removePrestamo(int id);
-	
+
 	List<Prestamo> buscarPrestamosbyCuenta(Cuenta cuenta);
-	
+
 	List<Prestamo> buscarPrestamosVivos(List<Prestamo> presdto);
-	
+
 	List<Prestamo> buscarPrestamosAmortizados(List<Prestamo> presdto);
 }

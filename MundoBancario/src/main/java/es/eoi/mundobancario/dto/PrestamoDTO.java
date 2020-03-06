@@ -8,13 +8,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PrestamoDTO {
-	
-	
+
 	private String descripcion;
 	private Date fecha;
 	private float importe;
 	private int plazos;
-
-	
 
 }

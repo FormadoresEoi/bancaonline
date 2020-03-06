@@ -18,7 +18,6 @@ public class PrestamoServiceImpl implements PrestamoService {
 	@Autowired
 	PrestamoRepository presrepo;
 
-	
 	@Override
 	public List<Prestamo> MostrarPrestamo() {
 		return presrepo.findAll();
@@ -42,9 +41,9 @@ public class PrestamoServiceImpl implements PrestamoService {
 	@Override
 	public void removePrestamo(int id) {
 		presrepo.deleteById(id);
-		
+
 	}
-	
+
 	@Override
 	public List<Prestamo> buscarPrestamosbyCuenta(Cuenta cuenta) {
 		return presrepo.findAllByCuenta(cuenta);
@@ -52,34 +51,32 @@ public class PrestamoServiceImpl implements PrestamoService {
 
 	@Override
 	public List<Prestamo> buscarPrestamosVivos(List<Prestamo> pres) {
-		List<Prestamo> presvivos=new ArrayList<Prestamo>();
+		List<Prestamo> presvivos = new ArrayList<Prestamo>();
 		Calendar actualdate = Calendar.getInstance();
-		Calendar auxdate= Calendar.getInstance();
+		Calendar auxdate = Calendar.getInstance();
 		for (Prestamo prestamo : pres) {
 			auxdate.setTime(prestamo.getFecha());
 			auxdate.add(Calendar.MONTH, prestamo.getPlazos());
-			if (actualdate.compareTo(auxdate)<0)
+			if (actualdate.compareTo(auxdate) < 0)
 				presvivos.add(prestamo);
-			
+
 		}
 		return presvivos;
 	}
-	
+
 	@Override
 	public List<Prestamo> buscarPrestamosAmortizados(List<Prestamo> pres) {
-		List<Prestamo> presvivos=new ArrayList<Prestamo>();
+		List<Prestamo> presvivos = new ArrayList<Prestamo>();
 		Calendar actualdate = Calendar.getInstance();
-		Calendar auxdate= Calendar.getInstance();
+		Calendar auxdate = Calendar.getInstance();
 		for (Prestamo prestamo : pres) {
 			auxdate.setTime(prestamo.getFecha());
 			auxdate.add(Calendar.MONTH, prestamo.getPlazos());
-			if (actualdate.compareTo(auxdate)>0)
+			if (actualdate.compareTo(auxdate) > 0)
 				presvivos.add(prestamo);
-			
+
 		}
 		return presvivos;
 	}
-
-
 
 }

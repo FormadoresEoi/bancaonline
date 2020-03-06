@@ -16,10 +16,7 @@ public interface ClienteService {
 	Cliente updateCliente(Cliente cliente);
 
 	String removeCliente(int id);
-	
-	public Cliente findByUsuarioAndPass( String usuario,String pass);
-	
 
-	
+	public Cliente findByUsuarioAndPass(String usuario, String pass);
 
 }

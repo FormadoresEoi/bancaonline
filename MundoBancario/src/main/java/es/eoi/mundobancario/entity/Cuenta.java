@@ -33,7 +33,7 @@ public class Cuenta {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_clientes", referencedColumnName = "id")
 	private Cliente cliente;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cuenta")
 	private List<Movimiento> listMovimiento;
 

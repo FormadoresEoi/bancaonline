@@ -8,8 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MovimientoDTOCreate {
-	
-	private int id;
+
 	private String descripcion;
 	private Date fecha;
 	private float importe;

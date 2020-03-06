@@ -54,10 +54,10 @@ public class CuentaController {
 
 	@Autowired
 	PrestamoService preserv;
-	
+
 	@Autowired
 	AmortizacionService amortserv;
-	
+
 	@Autowired
 	TipoMovimientoService tipomovserv;
 
@@ -139,45 +139,70 @@ public class CuentaController {
 
 	@GetMapping(value = "/{id}/prestamosVivos")
 	public List<PrestamoDTOAmort> buscarPrestamosVivos(@PathVariable int id) {
-		Type listType = new TypeToken<List<PrestamoDTOAmort>>() {}.getType();
-		Type listTypeAmort = new TypeToken<List<AmortizacionDTO>>() {}.getType();
+		Type listType = new TypeToken<List<PrestamoDTOAmort>>() {
+		}.getType();
+		Type listTypeAmort = new TypeToken<List<AmortizacionDTO>>() {
+		}.getType();
 		List<Prestamo> prestamo = preserv.buscarPrestamosbyCuenta(cuentaserv.buscarCuenta(id).get());
 		List<Prestamo> prestamosVivos = preserv.buscarPrestamosVivos(prestamo);
-		List<PrestamoDTOAmort> prestamosVivosDTO=modelmapper.map(prestamosVivos, listType);
-		for (int i = 0; i < prestamosVivosDTO.size(); i++)  {
-			List<Amortizacion> amortizaciones= amortserv.BuscarAmortizacionesByPrestamo(prestamosVivos.get(i));
-			List<AmortizacionDTO> amortdto=modelmapper.map(amortizaciones,listTypeAmort);
+		List<PrestamoDTOAmort> prestamosVivosDTO = modelmapper.map(prestamosVivos, listType);
+		for (int i = 0; i < prestamosVivosDTO.size(); i++) {
+			List<Amortizacion> amortizaciones = amortserv.BuscarAmortizacionesByPrestamo(prestamosVivos.get(i));
+			List<AmortizacionDTO> amortdto = modelmapper.map(amortizaciones, listTypeAmort);
 			prestamosVivosDTO.get(i).setListAmort(amortdto);
 		}
 		return prestamosVivosDTO;
 
 	}
-	
+
 	@GetMapping(value = "/{id}/prestamosAmortizados")
 	public List<PrestamoDTOAmort> buscarPrestamosAmortizados(@PathVariable int id) {
-		Type listType = new TypeToken<List<PrestamoDTOAmort>>() {}.getType();
-		Type listTypeAmort = new TypeToken<List<AmortizacionDTO>>() {}.getType();
+		Type listType = new TypeToken<List<PrestamoDTOAmort>>() {
+		}.getType();
+		Type listTypeAmort = new TypeToken<List<AmortizacionDTO>>() {
+		}.getType();
 		List<Prestamo> prestamo = preserv.buscarPrestamosbyCuenta(cuentaserv.buscarCuenta(id).get());
 		List<Prestamo> prestamosVivos = preserv.buscarPrestamosAmortizados(prestamo);
-		List<PrestamoDTOAmort> prestamosVivosDTO=modelmapper.map(prestamosVivos, listType);
-		for (int i = 0; i < prestamosVivosDTO.size(); i++)  {
-			List<Amortizacion> amortizaciones= amortserv.BuscarAmortizacionesByPrestamo(prestamosVivos.get(i));
-			List<AmortizacionDTO> amortdto=modelmapper.map(amortizaciones,listTypeAmort);
+		List<PrestamoDTOAmort> prestamosVivosDTO = modelmapper.map(prestamosVivos, listType);
+		for (int i = 0; i < prestamosVivosDTO.size(); i++) {
+			List<Amortizacion> amortizaciones = amortserv.BuscarAmortizacionesByPrestamo(prestamosVivos.get(i));
+			List<AmortizacionDTO> amortdto = modelmapper.map(amortizaciones, listTypeAmort);
 			prestamosVivosDTO.get(i).setListAmort(amortdto);
 		}
 		return prestamosVivosDTO;
 
 	}
+
 	@PostMapping(value = "/{id}/ingresos")
 	public MovimientoDTOPrint crearIngreso(@PathVariable int id, @RequestBody MovimientoDTOCreate ingresodto) {
-		
-		Movimiento ingreso = modelmapper.map(ingresodto,Movimiento.class);
+
+		Movimiento ingreso = modelmapper.map(ingresodto, Movimiento.class);
 		TiposMovimiento tipoingreso = tipomovserv.findByTipo("ingreso");
+		Cuenta cuenta = cuentaserv.buscarCuenta(id).get();
 		ingreso.setTiposmovimiento(tipoingreso);
-		ingreso.setCuenta(cuentaserv.buscarCuenta(id).get());
-		movserv.CrearMovimiento(ingreso);
-		//TODO CUENTA BAJAR SALDO
-		return modelmapper.map(ingresodto,MovimientoDTOPrint.class);
+		ingreso.setCuenta(cuenta);
+		Movimiento result = movserv.CrearMovimiento(ingreso);
+		cuenta.setSaldo(cuenta.getSaldo() + ingresodto.getImporte());
+		cuentaserv.updateCuenta(cuenta);
+		return modelmapper.map(result, MovimientoDTOPrint.class);
 	}
-	
+
+	@PostMapping(value = "/{id}/pagos")
+	public Object crearPagos(@PathVariable int id, @RequestBody MovimientoDTOCreate pagodto) {
+
+		Movimiento ingreso = modelmapper.map(pagodto, Movimiento.class);
+		TiposMovimiento tipoingreso = tipomovserv.findByTipo("pago");
+		Cuenta cuenta = cuentaserv.buscarCuenta(id).get();
+		if (cuenta.getSaldo() < 0)
+			return "Pago cancelado. Cuenta en nuemros rojos";
+		else {
+			ingreso.setTiposmovimiento(tipoingreso);
+			ingreso.setCuenta(cuenta);
+			Movimiento mov = movserv.CrearMovimiento(ingreso);
+			cuenta.setSaldo(cuenta.getSaldo() - pagodto.getImporte());
+			cuentaserv.updateCuenta(cuenta);
+			return modelmapper.map(mov, MovimientoDTOPrint.class);
+		}
+
+	}
 }

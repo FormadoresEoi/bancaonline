@@ -20,13 +20,13 @@ import lombok.Setter;
 @Entity
 @Table(name = "movimientos")
 public class Movimiento {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@Column(name = "descripcion")
 	private String descripcion;
-	@Column(name = "fecha")	//Utilizamos Date del java util comprobar si funciona sino Date de sql util
+	@Column(name = "fecha") 
 	private Date fecha;
 	@Column(name = "importe")
 	private float importe;
@@ -34,7 +34,7 @@ public class Movimiento {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "num_cuenta", referencedColumnName = "num_cuenta")
 	private Cuenta cuenta;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_tipo", referencedColumnName = "id")
 	private TiposMovimiento tiposmovimiento;

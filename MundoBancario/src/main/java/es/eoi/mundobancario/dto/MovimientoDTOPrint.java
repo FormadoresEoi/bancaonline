@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MovimientoDTOPrint {
-	
+
 	private int id;
 	private String descripcion;
 	private Date fecha;

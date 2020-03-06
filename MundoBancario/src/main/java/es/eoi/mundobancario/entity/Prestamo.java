@@ -29,7 +29,7 @@ public class Prestamo implements Serializable {
 	private int id;
 	@Column(name = "descripcion")
 	private String descripcion;
-	@Column(name = "fecha") // Utilizamos Date del java util comprobar si funciona sino Date de sql util
+	@Column(name = "fecha") 
 	private Date fecha;
 	@Column(name = "importe")
 	private float importe;

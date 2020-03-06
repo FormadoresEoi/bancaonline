@@ -16,7 +16,6 @@ public class MovimientoServiceImpl implements MovimientoService {
 	@Autowired
 	MovimientoRepository movirepo;
 
-	
 	@Override
 	public List<Movimiento> MostrarMovimiento() {
 		return movirepo.findAll();
@@ -40,7 +39,7 @@ public class MovimientoServiceImpl implements MovimientoService {
 	@Override
 	public void removeMovimiento(int id) {
 		movirepo.deleteById(id);
-		
+
 	}
 
 	@Override
