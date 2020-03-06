@@ -15,7 +15,6 @@ public class TipoMovimientoServiceImpl implements TipoMovimientoService {
 	@Autowired
 	TipoMovimientoRepository tipomovirepo;
 
-	
 	@Override
 	public List<TiposMovimiento> MostrarTiposMovimiento() {
 		return tipomovirepo.findAll();
@@ -39,9 +38,8 @@ public class TipoMovimientoServiceImpl implements TipoMovimientoService {
 	@Override
 	public void removeTiposMovimiento(int id) {
 		tipomovirepo.deleteById(id);
-		
 	}
-	
+
 	@Override
 	public TiposMovimiento findByTipo(String tipo) {
 		return tipomovirepo.findByTipo(tipo);

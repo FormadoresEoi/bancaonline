@@ -94,12 +94,24 @@ public class CuentaController {
 
 	@PostMapping(value = "/{id}/prestamos")
 	public PrestamoDTO CrearPrestamo(@PathVariable int id, @RequestBody PrestamoDTO dto) {
+
+		TiposMovimiento tipoMovimiento = tipomovserv.findByTipo("Prestamo");
 		Cuenta cuenta = cuentaserv.buscarCuenta(id).get();
+		Prestamo prestamo = insertarPrestamo(cuenta, dto);
+		List<Amortizacion> listaAmortizacion = amortserv.calcularAmortizacion(prestamo);
+		amortserv.CrearAmortizaciones(listaAmortizacion);
+		movserv.crearMovimientoPrestamo(prestamo, cuenta, tipoMovimiento, dto.getDescripcion());
+		cuentaserv.ActualizarSaldoPrestamo(prestamo, cuenta);
+		return modelmapper.map(prestamo, PrestamoDTO.class);
+
+	}
+
+	private Prestamo insertarPrestamo(Cuenta cuenta, PrestamoDTO dto) {
+
 		Prestamo prestamo = modelmapper.map(dto, Prestamo.class);
 		prestamo.setCuenta(cuenta);
-		Prestamo prestamofinal = prestamoserv.CrearPrestamo(prestamo);
-		return modelmapper.map(prestamofinal, PrestamoDTO.class);
 
+		return prestamoserv.CrearPrestamo(prestamo);
 	}
 
 	@PutMapping(value = "/update/{id}", params = { "alias" })
@@ -205,4 +217,7 @@ public class CuentaController {
 		}
 
 	}
+
 }
+
+//AllShiftM

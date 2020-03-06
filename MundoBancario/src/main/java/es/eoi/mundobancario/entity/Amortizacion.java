@@ -24,8 +24,10 @@ public class Amortizacion {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	
 	@Column(name = "fecha")
 	private Date fecha;
+	
 	@Column(name = "importe")
 	private float importe;
 

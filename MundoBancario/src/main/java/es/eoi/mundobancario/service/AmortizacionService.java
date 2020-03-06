@@ -9,14 +9,18 @@ import es.eoi.mundobancario.entity.Prestamo;
 public interface AmortizacionService {
 
 	List<Amortizacion> MostrarAmortizacion();
-
+	
 	Amortizacion CrearAmortizacion(Amortizacion amortizacion);
+
+	void CrearAmortizaciones(List <Amortizacion> amortizaciones);
 
 	Optional<Amortizacion> buscarAmortizacion(int id);
 
 	Amortizacion updateAmortizacion(Amortizacion amortizacion);
 
 	void removeAmortizacion(int id);
+   
+	List <Amortizacion> calcularAmortizacion(Prestamo prestamo) ;
 
 	List<Amortizacion> BuscarAmortizacionesByPrestamo(Prestamo prestamo);
 }

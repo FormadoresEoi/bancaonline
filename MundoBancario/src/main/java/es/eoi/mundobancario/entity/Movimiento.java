@@ -26,7 +26,8 @@ public class Movimiento {
 	private int id;
 	@Column(name = "descripcion")
 	private String descripcion;
-	@Column(name = "fecha") 
+
+	@Column(name = "fecha")	
 	private Date fecha;
 	@Column(name = "importe")
 	private float importe;

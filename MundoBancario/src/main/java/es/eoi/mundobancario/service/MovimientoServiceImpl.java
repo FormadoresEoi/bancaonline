@@ -6,8 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import es.eoi.mundobancario.entity.Amortizacion;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
+import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.entity.TiposMovimiento;
 import es.eoi.mundobancario.repository.MovimientoRepository;
 
 @Service
@@ -46,5 +49,33 @@ public class MovimientoServiceImpl implements MovimientoService {
 	public List<Movimiento> buscarMovimientosbyCuenta(Cuenta cuenta) {
 		return movirepo.findAllByCuenta(cuenta);
 	}
-
+	@Override
+	
+	public Movimiento crearMovimientoAmortizacion
+	(Amortizacion  amortizacion, Cuenta cuenta,TiposMovimiento tipoMovimientos,
+			String descripcion) {
+		
+		Movimiento movimientoAmor= new Movimiento();
+		movimientoAmor.setDescripcion(descripcion);
+		movimientoAmor.setFecha(amortizacion.getFecha());
+		movimientoAmor.setImporte(amortizacion.getImporte());
+		movimientoAmor.setCuenta(cuenta);
+		movimientoAmor.setTiposmovimiento(tipoMovimientos);
+		return this.CrearMovimiento(movimientoAmor);
+		
+	}
+	
+	@Override
+	public Movimiento crearMovimientoPrestamo
+	(Prestamo prestamo, Cuenta cuenta,TiposMovimiento tipoMovimientos,	String descripcion)
+	{
+	 Movimiento movimientoPrest= new Movimiento();
+	 movimientoPrest.setDescripcion(descripcion);
+	 movimientoPrest.setCuenta(cuenta);
+	 movimientoPrest.setFecha(prestamo.getFecha());
+	 movimientoPrest.setImporte(prestamo.getImporte());
+	 movimientoPrest.setTiposmovimiento(tipoMovimientos);
+	 return this.CrearMovimiento(movimientoPrest);
+		
+	}
 }
