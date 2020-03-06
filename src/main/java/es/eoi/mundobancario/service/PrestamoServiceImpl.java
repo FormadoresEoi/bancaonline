@@ -5,10 +5,8 @@ import es.eoi.mundobancario.repository.PrestamoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
+import java.time.Instant;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -72,9 +70,15 @@ public class PrestamoServiceImpl implements PrestamoService {
      */
     @Override
     public List<Prestamo> findAllByCuentaIdVivos(String id) {
+        Date now = Date.from(Instant.now());
         return this.findAllByCuentaId(id)
                    .stream()
-                   .filter(p -> p.getAmortizacionesById().size() < p.getPlazos())
+                   .filter(
+                           p -> p.getAmortizacionesById()
+                                 .stream()
+                                 .filter(a -> a.getFecha().after(now))
+                                 .count() < p.getPlazos()
+                   )
                    .collect(Collectors.toList());
     }
 
@@ -83,9 +87,14 @@ public class PrestamoServiceImpl implements PrestamoService {
      */
     @Override
     public List<Prestamo> findAllByCuentaIdAmortizados(String id) {
+        Date now = Date.from(Instant.now());
         return this.findAllByCuentaId(id)
                    .stream()
-                   .filter(p -> p.getAmortizacionesById().size() >= p.getPlazos())
+                   .filter(p -> p.getAmortizacionesById()
+                                 .stream()
+                                 .filter(a -> a.getFecha().after(now))
+                                 .count() >= p.getPlazos()
+                   )
                    .collect(Collectors.toList());
     }
 
