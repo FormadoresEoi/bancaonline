@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.ClienteReportDTO;
-import es.eoi.mundobancario.dto.CuentaDTO;
 import es.eoi.mundobancario.service.ClienteService;
 import lombok.RequiredArgsConstructor;
 
@@ -22,15 +21,41 @@ public class ReportsController {
 	private final ClienteService service;
 	private final ModelMapper mapper;
 	
+	//Falta hacerlos xD
 	@GetMapping("clientes/{id}")
 	public List<ClienteReportDTO> getClientes(@PathVariable int id) {
-        return mapper.map(service.findById(id).getCuentas(), new TypeToken<List<ClienteReportDTO>>() {
+        return mapper.map(service.findById(id).getCuentas(),new TypeToken<List<ClienteReportDTO>>() {
         }.getType());
     }
 	
-//	@GetMapping("prestamos/{id}")
-//	public List<ClienteReportDTO> getPrestamos(@PathVariable int id) {
+//	@PostMapping("clientes/{id}")
+//	public List<ClienteReportDTO> postClientes(@PathVariable int id) {
 //        return mapper.map(service.findById(id).getCuentas(), new TypeToken<List<CuentaReportDTO>>() {
+//        }.getType());
+//    }
+//	
+	@GetMapping("prestamos/{id}")
+	public List<ClienteReportDTO> getPrestamos(@PathVariable int id) {
+        return mapper.map(service.findById(id).getCuentas(),new TypeToken<List<ClienteReportDTO>>() {
+        }.getType());
+    }
+	
+//	
+//	@PostMapping("prestamos/{id}")
+//	public List<ClienteReportDTO> postPrestamos(@PathVariable int id) {
+//        return mapper.map(service.findById(id).getCuentas(), new TypeToken<List<CuentaReportDTO>>() {
+//        }.getType());
+//    }
+//	
+//	@GetMapping("prestamos/Vivos")
+//	public List<ClienteReportDTO> getPrestamosVivos(@PathVariable int id) {
+//        return mapper.map(service.findById(id).getCuentas(),new TypeToken<List<ClienteReportDTO>>() {
+//        }.getType());
+//    }
+//	
+//	@GetMapping("prestamos/Amortizados")
+//	public List<ClienteReportDTO> getPrestamosAmortizados(@PathVariable int id) {
+//        return mapper.map(service.findById(id).getCuentas(),new TypeToken<List<ClienteReportDTO>>() {
 //        }.getType());
 //    }
 }
