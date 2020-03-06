@@ -14,7 +14,7 @@ public interface AmortizacionService {
 
 	List<Amortizacion> findAll();
 	
-	void calcularAmortizaciones(Prestamo prestamo);
+	List<Amortizacion> calcularAmortizaciones(Prestamo prestamo);
 	
 	void ejecutarAmortizacionesDiarias();
 	

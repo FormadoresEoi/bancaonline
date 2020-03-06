@@ -37,7 +37,10 @@ public class Amortizacion {
 	@Column(name = "importe")
 	private double importe;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_prestamo", referencedColumnName = "id")
+	@Column(name = "id_prestamo")
+	private int id_prestamo;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_prestamo", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
 	private Prestamo prestamo;
 }

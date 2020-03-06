@@ -1,6 +1,7 @@
 package es.eoi.mundobancario.service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +9,7 @@ import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import es.eoi.mundobancario.entity.Amortizacion;
 import es.eoi.mundobancario.entity.Cuenta;
@@ -17,6 +19,7 @@ import es.eoi.mundobancario.enums.Tipos;
 import es.eoi.mundobancario.repository.AmortizacionRepository;
 
 @Service
+@Transactional
 public class AmortizacionServiceImpl implements AmortizacionService {
 
 	@Autowired
@@ -45,7 +48,8 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 	}
 
 	@Override
-	public void calcularAmortizaciones(Prestamo prestamo) {
+	public List<Amortizacion> calcularAmortizaciones(Prestamo prestamo) {
+		List<Amortizacion> amortizaciones = new ArrayList<Amortizacion>();
 		Timestamp timestamp = new Timestamp(prestamo.getFecha().getTime());
 		System.out.println(timestamp);
 		Calendar cal = Calendar.getInstance();
@@ -61,9 +65,10 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 			cal.add(Calendar.MONTH, 1);
 			timestamp = new Timestamp(cal.getTime().getTime());
 			amortizacion.setFecha(timestamp);
-			System.out.println(amortizacion.getFecha());
-			create(amortizacion);
+//			create(amortizacion);
+			amortizaciones.add(amortizacion);
 		}
+		return amortizaciones;
 	}
 
 
