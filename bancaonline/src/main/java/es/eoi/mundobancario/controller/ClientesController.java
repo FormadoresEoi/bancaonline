@@ -75,7 +75,7 @@ public class ClientesController {
 	@GetMapping("/{id}/cuentas")
 	public ResponseEntity<ClienteDto> findAllCuentasById(@PathVariable int id) {
 		ClienteDto cliente = model.map(clienteService.find(id).get(), ClienteDto.class);
-
+		
 		return new ResponseEntity<ClienteDto>(cliente, HttpStatus.OK);
 	}
 	

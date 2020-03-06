@@ -86,6 +86,8 @@ public class CuentasController {
 		Optional<Cuenta> cuenta = cuentaService.find(dto.getId_cuenta());
 		if (!cuenta.isPresent() || dto.getPlazos() == 0)
 			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+		if(findPrestamosVivos(cuenta.get().getNumCuenta()).getBody().size() > 0)
+			return new ResponseEntity<String>("Prestamo sin amortizar pendiente", HttpStatus.NOT_ACCEPTABLE);
 		else {
 			CuentaBasicaDto cuentaDto = model.map(cuenta.get(), CuentaBasicaDto.class);
 			PrestamoDto prestamoDto = model.map(dto, PrestamoDto.class);
@@ -136,9 +138,10 @@ public class CuentasController {
 		if (!cuenta.isPresent())
 			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 		else {
-			//CuentaBasicaDto cuentaDto = model.map(cuenta.get(), CuentaBasicaDto.class);
+			CuentaBasicaDto cuentaDto = model.map(cuenta.get(), CuentaBasicaDto.class);
 			MovimientoDto movimientoDto = model.map(dto, MovimientoDto.class);
 			Movimiento movimiento = model.map(movimientoDto, Movimiento.class);
+			movimiento.setCuenta(model.map(cuentaDto, Cuenta.class));
 
 			Tipos tipo = Tipos.Ingreso;
 			TipoMovimiento tipoMov = new TipoMovimiento();
@@ -161,10 +164,12 @@ public class CuentasController {
 		if (!cuenta.isPresent())
 			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 		else {
-			//CuentaBasicaDto cuentaDto = model.map(cuenta.get(), CuentaBasicaDto.class);
+			if(cuenta.get().getSaldo() <= 0)
+				return new ResponseEntity<String>("Saldo insuficiente en la cuenta", HttpStatus.NOT_ACCEPTABLE);
+			CuentaBasicaDto cuentaDto = model.map(cuenta.get(), CuentaBasicaDto.class);
 			MovimientoDto movimientoDto = model.map(dto, MovimientoDto.class);
 			Movimiento movimiento = model.map(movimientoDto, Movimiento.class);
-
+			movimiento.setCuenta(model.map(cuentaDto, Cuenta.class));
 			Tipos tipo = Tipos.Pago;
 			TipoMovimiento tipoMov = new TipoMovimiento();
 			tipoMov.setId(tipo.getEnumCode());

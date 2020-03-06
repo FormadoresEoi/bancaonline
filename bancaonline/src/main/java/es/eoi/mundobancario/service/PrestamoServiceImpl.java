@@ -1,6 +1,7 @@
 package es.eoi.mundobancario.service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import es.eoi.mundobancario.entity.Amortizacion;
 import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.entity.TipoMovimiento;
 import es.eoi.mundobancario.enums.Tipos;
@@ -71,10 +73,23 @@ public class PrestamoServiceImpl implements PrestamoService{
 		
 	@Override
 	public List<Prestamo> findAllByCuentaIdVivos(int id) {
-		return this.findAllByCuenta(id)
-				.stream()
-				.filter(p -> p.getAmortizaciones().size() < p.getPlazos())
-				.collect(Collectors.toList());
+		 List<Prestamo> prestamos=prestamoRepository.findAllByCuentaNumCuenta(id);
+		 List<Prestamo> prestamosVivos = new ArrayList<>();		 
+		 
+		 boolean isVivo;
+		 for (Prestamo prestamo : prestamos) {
+			 isVivo = false;
+			for (Amortizacion a : prestamo.getAmortizaciones()) {
+				
+				if(a.getFecha().after(Calendar.getInstance().getTime())) {
+					isVivo = true;
+				}
+			}
+			if(isVivo)
+				prestamosVivos.add(prestamo);
+		}
+		 
+		 return prestamosVivos;
 	}
 	
 	@Override

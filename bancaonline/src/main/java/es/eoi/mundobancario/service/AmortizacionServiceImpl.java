@@ -51,21 +51,22 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 	public List<Amortizacion> calcularAmortizaciones(Prestamo prestamo) {
 		List<Amortizacion> amortizaciones = new ArrayList<Amortizacion>();
 		Timestamp timestamp = new Timestamp(prestamo.getFecha().getTime());
-		System.out.println(timestamp);
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(timestamp.getTime());
-		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
 		
 		double importe = prestamo.getImporte() / prestamo.getPlazos();
 		
 		for (int i = 1; i <= prestamo.getPlazos(); i++) {
+			
+			Calendar cal = Calendar.getInstance();
+			cal.setTimeInMillis(timestamp.getTime());
+			cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+			cal.add(Calendar.MONTH, 1);
+			
 			Amortizacion amortizacion = new Amortizacion();
 			amortizacion.setImporte(importe);
+			amortizacion.setId_prestamo(prestamo.getId());
 			amortizacion.setPrestamo(prestamo);
-			cal.add(Calendar.MONTH, 1);
 			timestamp = new Timestamp(cal.getTime().getTime());
 			amortizacion.setFecha(timestamp);
-//			create(amortizacion);
 			amortizaciones.add(amortizacion);
 		}
 		return amortizaciones;
@@ -91,6 +92,7 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 		cuenta.setSaldo(cuenta.getSaldo() + (-(a.getPrestamo().getImporte() * 1.02)));
 		cuentaService.update(cuenta);
 		
+		//a.getPrestamo().getAmortizaciones().stream().filter(am -> am.equals(a) == 0).findFirst().get().//Set Estado;
 		Tipos tipo = Tipos.Amortizacion;
 		TipoMovimiento tipoMov = new TipoMovimiento();
 		tipoMov.setId(tipo.getEnumCode());
@@ -101,7 +103,6 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 				a.getFecha(), 
 				a.getPrestamo().getDescripcion(),
 				tipoMov);
-		
 		
 		tipo = Tipos.Interes;
 		tipoMov.setId(tipo.getEnumCode());
