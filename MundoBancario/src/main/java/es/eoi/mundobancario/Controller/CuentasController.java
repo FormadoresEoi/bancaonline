@@ -115,7 +115,7 @@ public class CuentasController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/ejecutarAmortizacionsDiarias")
-	public void ejecutarAmortizacionsDiarias(@PathVariable int id) {
+	public void ejecutarAmortizacionsDiarias() {
 		service.ejecutarAmortizacionsDiarias();
 	}
 }

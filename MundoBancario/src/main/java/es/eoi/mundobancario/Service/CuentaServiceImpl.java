@@ -113,6 +113,10 @@ public class CuentaServiceImpl implements CuentaService {
 			}
 			prestamo.setAmortizacion(amortizaciones);
 			prestamo = prestamoRepository.save(prestamo);
+			for (Amortizacion amortizacion : amortizaciones) {
+				amortizacion.setPrestamo(prestamo);
+				amortizacionRepository.save(amortizacion);
+			}
 			//movimiento.setTipoMovimiento(new TipoMovimiento(tipo.PRESTAMO));
 			movimiento.setCuenta(cuenta);
 			movimientoRepository.save(movimiento);
@@ -163,11 +167,14 @@ public class CuentaServiceImpl implements CuentaService {
 			double saldo = cuenta.getSaldo();
 			Movimiento movimiento = new Movimiento("pago de amortizacion", Calendar.getInstance(), amortizacion.getImporte());
 			//movimiento.setTipoMovimiento(new TipoMovimiento(tipo.AMORTIZACION));
+			movimiento.setCuenta(cuenta);
 			movimientoRepository.save(movimiento);
-			Movimiento interes = new Movimiento("pago de intereses", Calendar.getInstance(), (amortizacion.getImporte() * 0.2));
+			Movimiento interes = new Movimiento("pago de intereses", Calendar.getInstance(), (amortizacion.getImporte() * 0.02));
 			//movimiento.setTipoMovimiento(new TipoMovimiento(tipo.INTERES));
+			movimiento.setCuenta(cuenta);
 			movimientoRepository.save(interes);
-			cuenta.setSaldo(saldo - amortizacion.getImporte() - (amortizacion.getImporte() * 0.2));
+			cuenta.setSaldo(saldo - amortizacion.getImporte() - (amortizacion.getImporte() * 0.02));
+			cuentasRepository.save(cuenta);
 		}
 	}
 }
