@@ -39,6 +39,7 @@ public class Reports {
 			Chunk chunk = new Chunk("Cliente " + cliente.getUsuario());
 			Chapter chapter = new Chapter(new Paragraph(chunk), 1);
 			chapter.setNumberDepth(0);
+			document.add(chapter);
 			for (CuentaDtoMovimientos cuenta : cliente.getCuenta()) {
 				Paragraph paragraph = new Paragraph("Cuenta " + cuenta.getAlias());
 				for (MovimientoDto movimiento : cuenta.getMovimiento()) {
@@ -48,6 +49,7 @@ public class Reports {
 					} else {
 						paragraph.add(new Chunk(movimiento.toString()).setBackground(BaseColor.RED));
 					}
+					document.add(paragraph);
 				}
 			}
 			document.close();
@@ -73,9 +75,10 @@ public class Reports {
 			Chunk chunk = new Chunk("Cliente " + prestamo.getCliente().getUsuario());
 			Chapter chapter = new Chapter(new Paragraph(chunk), 1);
 			chapter.setNumberDepth(0);
+			document.add(chapter);
 			for (AmortizacionDto amortizacion : prestamo.getAmortizacion()) {
 				chapter.add(new Paragraph(amortizacion.toString()));
-				
+				document.add(chapter);
 			}
 			document.close();
 			System.out.println("¡Se ha generado tu hoja PDF!");
