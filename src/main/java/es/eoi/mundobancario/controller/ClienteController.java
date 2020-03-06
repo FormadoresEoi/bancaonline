@@ -52,10 +52,6 @@ public class ClienteController implements IController<ClienteDto, Integer> {
 	 * 
 	 */
 	@GetMapping("/{id}")
-<<<<<<< HEAD
-	public FullClienteDto findById(@PathVariable Integer id) {
-		return mapper.map(clienteService.find(id).orElseThrow(RuntimeException::new), FullClienteDto.class);
-=======
 	public ClienteDto findById(@PathVariable Integer id) {
 		return mapper.map(
 				clienteService.find(id).orElseThrow(RuntimeException::new),
@@ -64,39 +60,15 @@ public class ClienteController implements IController<ClienteDto, Integer> {
 	}
 
 	/**
-	 * Creates an entity.
-	 *
-	 * @param entity Entity to create.
-	 *
-	 * @return Created entity.
-	 */
-	@Override
-	public ClienteDto create(ClienteDto entity) {
-		return null;
->>>>>>> 538ef91967123b6a44646889a30dab162dc77103
-	}
-
-	/**
 	 * Devuelve el cliente solicitado.
 	 * 
 	 */
 	@GetMapping("/login")
-<<<<<<< HEAD
-	public FullClienteDto login(@PathVariable Integer id, String nombre, String email, String usuario,
-			@RequestBody FullClienteDto entity) {
-		Cliente cliente = clienteService.find(id).orElseThrow(RuntimeException::new);
-		cliente.getNombre();
-		cliente.getEmail();
-		cliente.get
-		
-		return mapper.map(clienteService..stream().map(c -> mapper.map(c, FullClienteDto.class)));
-=======
 	public ClienteDto login(@RequestBody LoginDto cliente) {
 		return mapper.map(
 				clienteService.login(cliente.getUsuario(), cliente.getPass()),
 				ClienteDto.class
 		);
->>>>>>> 538ef91967123b6a44646889a30dab162dc77103
 	}
 
 	/**
@@ -104,13 +76,8 @@ public class ClienteController implements IController<ClienteDto, Integer> {
 	 * 
 	 */
 	@PutMapping("/{id}")
-<<<<<<< HEAD
 	public FullClienteDto update(@PathVariable Integer id, @RequestBody FullClienteDto entity) {
-		Cliente cliente = clienteService.find(id).orElseThrow(RuntimeException::new);
-=======
-	public ClienteDto update(@PathVariable Integer id, @RequestBody ClienteDto entity) {
-		Cliente cliente = mapper.map(findById(id), Cliente.class);
->>>>>>> 538ef91967123b6a44646889a30dab162dc77103
+		Cliente cliente = clienteService.find(id).orElseThrow(RuntimeException::new);3
 		cliente.setEmail(entity.getEmail());
 		return mapper.map(clienteService.update(cliente), ClienteDto.class);
 	}
