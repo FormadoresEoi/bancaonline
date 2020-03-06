@@ -11,8 +11,6 @@ import es.eoi.mundobancario.entity.Cliente;
  *
  * @author Carlos Sánchez <karlos.sangar@gmail.com>
  */
-
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
-
-
+    Cliente findByUsuarioAndPass(String username, String password);
 }
