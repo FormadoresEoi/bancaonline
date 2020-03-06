@@ -3,13 +3,14 @@ package es.eoi.mundobancario.Service;
 import java.util.List;
 import java.util.Optional;
 
+import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.entity.Prestamo;
 
 public interface PrestamoService {
 	
-	public List<Prestamo> findAllVivos(int id);
+	public List<Prestamo> findAllVivos();
 	
-	public List<Prestamo> findAllAmortizados(int id);
+	public List<Prestamo> findAllAmortizados();
 
 	public Prestamo create(Prestamo prestamo);
 

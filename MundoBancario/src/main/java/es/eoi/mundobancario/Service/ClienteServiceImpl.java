@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import es.eoi.mundobancario.Repository.ClientesRepository;
 import es.eoi.mundobancario.entity.Cliente;
+import es.eoi.mundobancario.entity.Cuenta;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
