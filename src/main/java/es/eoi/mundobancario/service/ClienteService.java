@@ -1,7 +1,5 @@
 package es.eoi.mundobancario.service;
 
-import es.eoi.mundobancario.dto.ClienteDto;
-import es.eoi.mundobancario.dto.FullClienteDto;
 import es.eoi.mundobancario.entity.Cliente;
 
 /**
@@ -13,7 +11,9 @@ import es.eoi.mundobancario.entity.Cliente;
  */
 public interface ClienteService extends IService<Cliente, Integer> {
 
-//	ClienteDto showLogin(int id, String nombre, String email, String usuario);
+	Cliente saveCliente(Cliente entity);
+
+
 	
 
 

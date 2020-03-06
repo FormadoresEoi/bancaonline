@@ -14,6 +14,5 @@ import es.eoi.mundobancario.entity.Cliente;
 
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
-	Cliente save(String email);
 
 }

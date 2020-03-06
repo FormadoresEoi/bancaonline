@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,42 +52,61 @@ public class ClienteController implements IController<FullClienteDto, Integer> {
 	 * 
 	 */
 	@GetMapping("/{id}")
-	public FullClienteDto findById(int id) {
-		return mapper.map(clienteService.find(id).orElseThrow(RuntimeException::new), FullClienteDto.class);
+	public FullClienteDto findById(@PathVariable Integer id) {
+		return mapper.map(clienteService.find(id).orElseThrow(RuntimeException::new), 
+				FullClienteDto.class);
 	}
 
-//	@GetMapping("/login")
-//	public ClienteDto login(@PathVariable int id, String nombre, String email, String usuario) {
-//		Cliente cli = mapper.map(findById(id), Cliente.class);
-//		return clienteService.showLogin(cli.getId(), cli.getNombre(), cli.getEmail(), cli.getUsuario());
-//
-//	}
-
-//	@PutMapping("/{id}")
-//	public FullClienteDto updateEmail(@PathVariable String email, @RequestBody ClienteDto entity) {
-//		Cliente cliente = mapper.map(findById(id), Cliente.class);
-//		return mapper.map(clienteService.update(entity, cliente.setEmail(email), FullClienteDto.class);
-//	}
-	
-	@GetMapping("/{id}")
-	public ClienteDto updateCliente(@PathVariable int id, String email, ClienteDto entity) {
+	/**
+	 * Devuelve el cliente solicitado.
+	 * 
+	 */
+	@GetMapping("/login")
+	public FullClienteDto login(@PathVariable int id, String nombre, String email, String usuario) {
 		Cliente cliente = mapper.map(findById(id), Cliente.class);
-		cliente.getEmail();
-		return mapper.map(clienteService.update(cliente), ClienteDto.class);
+		return (FullClienteDto) clienteService.find().stream().map(c -> mapper.map(c, FullClienteDto.class));
 	}
 	
+	/**
+	 * Modifica un cliente.
+	 * 
+	 */
+	@PutMapping("/{id}")
+	public FullClienteDto update(@PathVariable Integer id, @RequestBody FullClienteDto entity) {
+		Cliente cliente = mapper.map(findById(id), Cliente.class);
+		cliente.setEmail(entity.getEmail());
+		return mapper.map(clienteService.update(cliente), FullClienteDto.class);
+	}
 
+	/**
+	 * Devuelve las cuentas del cliente solicitado.
+	 * 
+	 */
 	@GetMapping("/{id}/cuentas")
-	public List<CuentaDto> listCuentas(@PathVariable int id) {
-
+	public List<CuentaDto> listCuentas(@PathVariable Integer id) {
 		return cuentaService.findAllByClientesId(id).stream().map(c -> mapper.map(c, CuentaDto.class))
 				.collect(Collectors.toList());
 	}
 
-	@PostMapping()
-	public ClienteDto create(@RequestBody ClienteDto entity) {
-		return mapper.map(clienteService.create(mapper.map(entity, Cliente.class)), ClienteDto.class);
+	/**
+	 * Crea un nuevo cliente.
+	 * 
+	 */
+	@PostMapping("")
+	public FullClienteDto create(@PathVariable Integer id, String nombre, String usuario, String email) {
+		Cliente cliente = mapper.map(findById(id), Cliente.class);
+		cliente.setId(id);
+		cliente.setNombre(nombre);
+		cliente.setUsuario(usuario);
+		cliente.setEmail(email);
+		return mapper.map(clienteService.create(cliente), FullClienteDto.class);
 	}
 
+
+	@Override
+	public FullClienteDto create(FullClienteDto entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
