@@ -14,8 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.eoi.mundobancario.dto.CuentaClienteDTO;
 import es.eoi.mundobancario.dto.CuentaDTO;
+import es.eoi.mundobancario.dto.IngresoDTO;
 import es.eoi.mundobancario.dto.MovimientoDTO;
 import es.eoi.mundobancario.dto.PrestamoDTO;
+
+
+import es.eoi.mundobancario.dto.TiposMovimientoDTO;
+import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.entity.TiposMovimiento;
+import es.eoi.mundobancario.service.ClienteService;
+
+
 import es.eoi.mundobancario.service.CuentaService;
 import lombok.RequiredArgsConstructor;
 
@@ -83,12 +93,13 @@ public class CuentasController {
 		service.CreatePrestamo(mapper.map(prestamo,es.eoi.mundobancario.entity.Prestamo.class), id);
 	}
 	@PostMapping("{id}/ingresos")
-	public void postIngreso() {
-		service.CreateIngreso();
+	public void postIngreso(@RequestBody IngresoDTO ingreso, @PathVariable int id) {
+		service.CreateIngreso(mapper.map(ingreso, es.eoi.mundobancario.entity.Movimiento.class), id );
 	}
 	@PostMapping("{id}/pagos")
-	public void postPago() {
-		service.CreatePago();
+	public void postPago(@RequestBody IngresoDTO ingreso, @PathVariable int id){
+		service.CreatePago(mapper.map(ingreso, es.eoi.mundobancario.entity.Movimiento.class), id);
 	}
+	
 
 }

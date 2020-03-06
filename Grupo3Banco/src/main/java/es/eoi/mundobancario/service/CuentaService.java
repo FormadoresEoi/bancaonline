@@ -2,6 +2,7 @@ package es.eoi.mundobancario.service;
 
 import java.util.List;
 
+import es.eoi.mundobancario.dto.MovimientoDTO;
 import es.eoi.mundobancario.dto.NewPrestamoDTO;
 import es.eoi.mundobancario.dto.PrestamoDTO;
 import es.eoi.mundobancario.dto.TiposMovimientoDTO;
@@ -48,9 +49,9 @@ public interface CuentaService {
 	void CreatePrestamo(Prestamo prestamo, int id);
 	
 	//Creacion de Ingreso
-	void CreateIngreso();
+	void CreateIngreso(Movimiento movimiento, int id);
 	
 	//Create Pago
-	void CreatePago();
+	void CreatePago(Movimiento movimiento, int id);
 	
 }
