@@ -6,12 +6,13 @@ import static es.eoi.mundobancario.utils.DtoConverter.toCuentaConClienteDto;
 import static es.eoi.mundobancario.utils.DtoConverter.toCuentaConClienteDtoList;
 import static es.eoi.mundobancario.utils.DtoConverter.toMovimientoDtoList;
 import static es.eoi.mundobancario.utils.DtoConverter.toPrestamoDtoList;
+import static es.eoi.mundobancario.utils.Fechas.queDiaEsHoy;
+import static es.eoi.mundobancario.utils.Fechas.sumaMesesAHoy;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,7 +38,6 @@ import es.eoi.mundobancario.service.CuentaService;
 import es.eoi.mundobancario.service.MovimientoService;
 import es.eoi.mundobancario.service.PrestamoService;
 import es.eoi.mundobancario.service.TipoMovimientoService;
-import static es.eoi.mundobancario.utils.Fechas.*;
 
 @RestController
 @RequestMapping(value = "/cuentas")
@@ -100,25 +100,34 @@ public class CuentasController {
 
 	@PostMapping("/{id}/ingresos")
 	public boolean postIngreso(@PathVariable Integer id, @RequestBody MovimientoNuevoDto dto) {
+		Cuenta cuenta = cuentaService.getById(id);
 		Movimiento movimiento = fromMovimientoNuevoDto(dto);
 		movimiento.setCuenta(cuentaService.getById(id));
 		movimiento.setFecha(queDiaEsHoy());
 		movimiento.setTipo(tipoMovimientoService.getByTipo("INGRESO"));
+		cuenta.setSaldo(cuenta.getSaldo()+dto.getImporte());
+		cuentaService.post(cuenta);
 		return movimientoService.post(movimiento);
 	}
 
 	@PostMapping("/{id}/pagos")
 	public boolean postPagos(@PathVariable Integer id, @RequestBody MovimientoNuevoDto dto) {
-		Movimiento movimiento = fromMovimientoNuevoDto(dto);
-		movimiento.setCuenta(cuentaService.getById(id));
-		movimiento.setFecha(queDiaEsHoy());
-		movimiento.setTipo(tipoMovimientoService.getByTipo("PAGO"));
-		return movimientoService.post(movimiento);
+		Cuenta cuenta = cuentaService.getById(id);
+		if(cuentaService.getById(id).getSaldo()-dto.getImporte()>0) {
+			Movimiento movimiento = fromMovimientoNuevoDto(dto);
+			movimiento.setCuenta(cuentaService.getById(id));
+			movimiento.setFecha(queDiaEsHoy());
+			movimiento.setTipo(tipoMovimientoService.getByTipo("PAGO"));
+			cuenta.setSaldo(cuenta.getSaldo()-movimiento.getImporte());
+			return movimientoService.post(movimiento);
+		}
+		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	@PostMapping("/{id}/prestamos")
 	public boolean postPrestamo(@PathVariable Integer id, @RequestBody PrestamoNuevoDto dto) {
+		if(prestamoService.getByCuentaAndPagado(cuentaService.getById(id), "PENDIENTE").isPresent())
+			return false;
 		Movimiento movimiento = new Movimiento();
 		movimiento.setCuenta(cuentaService.getById(id));
 		movimiento.setTipo(tipoMovimientoService.getByTipo("PRÉSTAMO"));
@@ -132,17 +141,20 @@ public class CuentasController {
 		prestamo.setImporte(dto.getImporte());
 		prestamo.setPlazos(dto.getPlazos());
 		prestamo.setCuenta(cuentaService.getById(id));
-
+		prestamo.setPagado("PENDIENTE");
 		prestamoService.post(prestamo);
-
-		for (int i = 0; i < dto.getPlazos(); i++) {
+		for (int i = 1; i <= dto.getPlazos(); i++) {
 			Amortizacion amortizacion = new Amortizacion();
 			amortizacion.setImporte(dto.getImporte() / dto.getPlazos());
 			amortizacion.setFecha(sumaMesesAHoy(i));
 			amortizacion.setPrestamo(prestamo);
+			amortizacion.setPagado("PENDIENTE");
 			prestamo.addAmortizacion(amortizacion);
 			amortizacionService.post(amortizacion);
 		}
+		Cuenta cuenta = cuentaService.getById(id);
+		cuenta.setSaldo(cuenta.getSaldo() + dto.getImporte());
+		cuentaService.post(cuenta);
 		return true;
 	}
 
@@ -156,9 +168,10 @@ public class CuentasController {
 		return toPrestamoDtoList(prestamoService.getPrestamosAmortizados(id));
 	}
 
-
+	
 	@PostMapping("/ejecutarAmortizacionesDiarias")
-	public boolean ejecutarAmortizacionesDiarias() {
-		return amortizacionService.ejecutarAmortizacionesDiarias();
+	@Scheduled(fixedDelay = 1000)
+	public void ejecutarAmortizacionesDiarias() {
+		amortizacionService.ejecutarAmortizacionesDiarias();
 	}
 }

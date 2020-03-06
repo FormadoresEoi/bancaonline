@@ -40,6 +40,9 @@ public class Prestamo {
 	@Column
 	int plazos;
 
+	@Column(columnDefinition = "varchar(20) default 'PENDIENTE'")
+	String pagado;
+	
 	@ManyToOne
 	@JoinColumn(name = "cuenta", referencedColumnName = "num_cuenta")
 	Cuenta cuenta;

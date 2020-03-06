@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
@@ -32,6 +36,8 @@ import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
 import es.eoi.mundobancario.service.PrestamoService;
+import es.eoi.mundobancario.utils.SendEmailAttachment;
+
 @RestController
 @RequestMapping("/reports")
 public class ReportsController {
@@ -39,6 +45,7 @@ public class ReportsController {
 	@Autowired
 	ClienteService service;
 	CuentaService cuentaService;
+
 	@GetMapping(value = "/clientes/{id}")
 	public List<CuentaConMovimientosDto> getClientesWithCuentasAndMovimientos(@PathVariable("id") Integer id) {
 		return toCuentaConMovimientosDtoList(service.getById(id).getCuentas());
@@ -49,37 +56,43 @@ public class ReportsController {
 		Document document = new Document();
 		Cliente cliente = service.getById(id);
 		try {
-		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:/Users/formacion/Documents/ClientesConCuentas.pdf"));
-		
-		document.open();
-		document.add(new Paragraph(Integer.toString((cliente.getId()))));
-		document.add(new Paragraph(cliente.getUsuario()));
-		document.add(new Paragraph(cliente.getPass()));
-		document.add(new Paragraph(cliente.getNombre()));
-		document.add(new Paragraph(cliente.getEmail()));
-		for (Cuenta cuenta : cliente.getCuentas()) {
-			document.add(new Paragraph(Integer.toString((cuenta.getNum_cuenta()))));
-			document.add(new Paragraph(cuenta.getAlias()));
-			document.add(new Paragraph(Float.toString((cuenta.getSaldo()))));
-			for (Movimiento movimiento : cuenta.getMovimientos()) {
-				document.add(new Paragraph(Integer.toString((movimiento.getId()))));
-				document.add(new Paragraph(movimiento.getDescripcion()));
-				document.add(new Paragraph((new SimpleDateFormat("dd-MM-yyyy")).format(movimiento.getFecha().getTime())));
-				document.add(new Paragraph(Float.toString((movimiento.getImporte()))));				
+			PdfWriter writer = PdfWriter.getInstance(document,
+					new FileOutputStream("EOI_BANK_CLIENTE_" + id.toString() + ".pdf"));
+			document.open();
+			document.add(new Paragraph("Cliente: " + cliente.getNombre()));
+			document.add(new Paragraph("Correo electrónico: " + cliente.getEmail() + "\n\n"));
+			for (Cuenta cuenta : cliente.getCuentas()) {
+				document.add(new Paragraph("Cuenta: " + cuenta.getAlias() + " con un saldo de "
+						+ Float.toString(cuenta.getSaldo()) + " €\n\n"));
+				for (Movimiento movimiento : cuenta.getMovimientos()) {
+					Paragraph entrada = new Paragraph();
+					entrada.add(new Chunk("       "));
+					entrada.add(
+							new Chunk((new SimpleDateFormat("dd-MM-yyyy")).format(movimiento.getFecha().getTime())));
+					entrada.add(new Chunk(" | " + movimiento.getDescripcion() + " | "));
+					if (movimiento.getTipo().getTipo().equals("INGRESO")
+							|| movimiento.getTipo().getTipo().equals("PRÉSTAMO"))
+						entrada.add(new Chunk(Float.toString(movimiento.getImporte()) + " €",
+								new Font(FontFamily.HELVETICA, 12, Font.NORMAL, BaseColor.GREEN)));
+					else
+						entrada.add(new Chunk(Float.toString(-1 * movimiento.getImporte())+ " €",
+								new Font(FontFamily.HELVETICA, 12, Font.NORMAL, BaseColor.RED)));
+					entrada.add(new Chunk(" | " + movimiento.getTipo().getTipo()));
+					document.add(entrada);
+				}
 			}
+			document.close();
+			writer.close();
+
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
-		document.close();
-		writer.close();
-		
-		} catch  (DocumentException e) {
-	         e.printStackTrace();
-	    } catch (FileNotFoundException e) {
-	         e.printStackTrace();
-	    }
-		
+		(new SendEmailAttachment()).Enviar("EOI_BANK_CLIENTE_" + id.toString() + ".pdf",
+				cliente.getEmail());
 	}
 
-	
 	@Autowired
 	PrestamoService prestamoService;
 
@@ -93,15 +106,18 @@ public class ReportsController {
 		Prestamo prestamo = prestamoService.getById(id);
 		Document document = new Document();
 		try {
-			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("EOI_BANK_PRESTAMO_" + id.toString() + ".pdf"));
+			PdfWriter writer = PdfWriter.getInstance(document,
+					new FileOutputStream("EOI_BANK_PRESTAMO_" + id.toString() + ".pdf"));
 			document.open();
 			document.add(new Paragraph("Cliente: " + prestamo.getCuenta().getCliente().getNombre()));
-			document.add(new Paragraph("Correo electrónico: " + prestamo.getCuenta().getCliente().getEmail()+"\n"));
+			document.add(new Paragraph("Correo electrónico: " + prestamo.getCuenta().getCliente().getEmail() + "\n"));
 			document.add(new Paragraph("\nPréstamo: " + prestamo.getDescripcion()));
 			document.add(new Paragraph("\n" + prestamo.getPlazos() + " amortizaciones: "));
 			for (Amortizacion amortizacion : prestamo.getAmortizaciones()) {
-				document.add(new Paragraph("       " + (new SimpleDateFormat("dd-MM-yyyy")).format(amortizacion.getFecha().getTime()) +" con un importe de " + amortizacion.getImporte() + "€"));
-				
+				document.add(new Paragraph(
+						"       " + (new SimpleDateFormat("dd-MM-yyyy")).format(amortizacion.getFecha().getTime())
+								+ " con un importe de " + amortizacion.getImporte() + "€"));
+
 			}
 			document.close();
 			writer.close();
@@ -110,6 +126,8 @@ public class ReportsController {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		(new SendEmailAttachment()).Enviar("EOI_BANK_PRESTAMO_" + id.toString() + ".pdf",
+				prestamo.getCuenta().getCliente().getEmail());
 		return true;
 	}
 
