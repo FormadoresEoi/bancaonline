@@ -1,5 +1,6 @@
 package es.eoi.mundobancario.controller;
 
+import static es.eoi.mundobancario.utils.DtoConverter.toCuentaConMovimientosDtoList;
 import static es.eoi.mundobancario.utils.DtoConverter.toPrestamoConClienteDto;
 import static es.eoi.mundobancario.utils.DtoConverter.toPrestamoDtoList;
 
@@ -20,39 +21,17 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import es.eoi.mundobancario.dto.CuentaConMovimientosDto;
 import es.eoi.mundobancario.dto.PrestamoConClienteDto;
 import es.eoi.mundobancario.dto.PrestamoDto;
 import es.eoi.mundobancario.entity.Amortizacion;
-import es.eoi.mundobancario.entity.Prestamo;
-import es.eoi.mundobancario.service.PrestamoService;
-
-@RestController
-@RequestMapping("/reports")
-import static es.eoi.mundobancario.utils.DtoConverter.toCuentaConMovimientosDtoList;
-
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
-
-import es.eoi.mundobancario.dto.CuentaConMovimientosDto;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
+import es.eoi.mundobancario.entity.Prestamo;
 import es.eoi.mundobancario.service.ClienteService;
 import es.eoi.mundobancario.service.CuentaService;
+import es.eoi.mundobancario.service.PrestamoService;
 @RestController
 @RequestMapping("/reports")
 public class ReportsController {
