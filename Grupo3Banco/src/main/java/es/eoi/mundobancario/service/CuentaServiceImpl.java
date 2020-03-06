@@ -112,7 +112,7 @@ public class CuentaServiceImpl implements CuentaService {
 	public void CreatePrestamo(Prestamo prestamo , int id) {
 		//Insertamos el prestamo
 		Calendar c = Calendar.getInstance();
-		Date d = new Date();
+		
 
 		prestamo.setCuenta(repository.findById(id).get());
 		prestamosrepo.save(prestamo);
@@ -159,24 +159,48 @@ public class CuentaServiceImpl implements CuentaService {
 		
 		
 	}
+
+
 	@Override
-	public void CreateIngreso()
-	{
-		TiposMovimiento tipo = new TiposMovimiento();
-		tipo.setTipo("Ingreso");
-		tiporepo.save(tipo);
+	public void CreateIngreso(Movimiento movimiento, int id) {
+		movimiento.setTiposmovimiento(tiporepo.findById(1).get());
+		Date d = new Date();
+		movimiento.setFecha(d);
+		movimiento.setCuenta(repository.findById(id).get());
+		movimientorepo.save(movimiento);
+		//Actualizamos Saldo Cuenta
+				double saldoc = repository.findById(id).get().getSaldo();
+				double importec = movimiento.getImporte();
+				double saldof = saldoc + importec;
+		repository.findById(id).get().setSaldo(saldof);
+		repository.save(repository.findById(id).get());
+		
 	}
 
 
 	@Override
-	public void CreatePago() {
-
-		TiposMovimiento tipo = new TiposMovimiento();
-		tipo.setTipo("Pago");
-		tiporepo.save(tipo);
+	public void CreatePago(Movimiento movimiento, int id) {
+		double saldo = repository.findById(id).get().getSaldo();
+		try {
+		if (saldo >= movimiento.getImporte())
+		{
+		movimiento.setTiposmovimiento(tiporepo.findById(1).get());
+		Date d = new Date();
+		movimiento.setFecha(d);
+		movimiento.setCuenta(repository.findById(id).get());
+		movimientorepo.save(movimiento);
+		//Actualizamos Saldo Cuenta
+				double saldoc = repository.findById(id).get().getSaldo();
+				double importec = movimiento.getImporte();
+				double saldof = saldoc - importec;
+		repository.findById(id).get().setSaldo(saldof);
+		repository.save(repository.findById(id).get());
+		
+		}else {
+			throw new IllegalArgumentException("No hay dinero para este pago.");
+		}
+		
+	}finally {
+		}
 	}
-	
-
-	
-	
 }
