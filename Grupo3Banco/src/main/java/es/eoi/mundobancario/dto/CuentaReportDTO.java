@@ -8,5 +8,5 @@ public class CuentaReportDTO {
 	private int numcuenta;
 	private String alias;
 	private double saldo;
-	private ClienteDTO cliente;
+	private MovimientoDTO movimiento;
 }

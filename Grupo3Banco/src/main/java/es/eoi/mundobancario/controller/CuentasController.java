@@ -6,19 +6,25 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import es.eoi.mundobancario.dto.CuentaClienteDTO;
 import es.eoi.mundobancario.dto.CuentaDTO;
-
+import es.eoi.mundobancario.dto.IngresoDTO;
 import es.eoi.mundobancario.dto.MovimientoDTO;
+import es.eoi.mundobancario.dto.PrestamoDTO;
+
+
+import es.eoi.mundobancario.dto.TiposMovimientoDTO;
 import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.entity.TiposMovimiento;
 import es.eoi.mundobancario.service.ClienteService;
+
 
 import es.eoi.mundobancario.service.CuentaService;
 import lombok.RequiredArgsConstructor;
@@ -33,26 +39,25 @@ public class CuentasController {
 	
 	// Devuelve todas las cuentas.
 	@GetMapping
-	public List<CuentaDTO> getCuentas(){
-		return mapper.map(service.listCuentas(),new TypeToken<List<CuentaDTO>>() {
+	public List<CuentaClienteDTO> getCuentas(){
+		return mapper.map(service.listCuentas(),new TypeToken<List<CuentaClienteDTO>>() {
 		}.getType());
 	}
 	// Devuelve la cuenta solicitada.
 	@GetMapping("{id}")
-	public CuentaDTO getCuenta(@PathVariable int id) {
-		return mapper.map(service.findById(id),CuentaDTO.class);
+	public CuentaClienteDTO getCuenta(@PathVariable int id) {
+		return mapper.map(service.findById(id),CuentaClienteDTO.class);
 	}
 	// Devuelve las cuentas con saldo negativo.
 	@GetMapping("/deudoras")
-	public List<CuentaDTO> getCuentasDeudoras(){
-		return mapper.map(service.listDeudoras(),new TypeToken<List<CuentaDTO>>() {
+	public List<CuentaClienteDTO> getCuentasDeudoras(){
+		return mapper.map(service.listDeudoras(),new TypeToken<List<CuentaClienteDTO>>() {
 			}.getType());
 	}
 	// Crear una nueva cuenta - TO-DO; Pedir id cliente unicamente, en caso de que cliente no exista mostrar mensaje.
 	@PostMapping
 	public void post(@RequestBody CuentaDTO cuenta) {
         service.createCuenta(mapper.map(cuenta,es.eoi.mundobancario.entity.Cuenta.class));
-         
     }
 	//Modifica campo alias de la cuenta solicitada.
 	@PutMapping("{id}")
@@ -65,24 +70,36 @@ public class CuentasController {
 		return mapper.map(service.findById(id).getMovimientos(), new TypeToken<List<MovimientoDTO>>(){
 		}.getType());
 	}
-//	@DeleteMapping
-//	public void deleteCuenta(@RequestBody Cuenta cuenta) {
-//		service.deleteCuenta(cuenta);
-//	}
+	//Devuelve los prestamos de la cuenta. + Amortizaciones Planificadas
+	@GetMapping("{id}/prestamos")
+	public List<PrestamoDTO> getPrestamos(@PathVariable int id){
+		return mapper.map(service.findById(id).getPrestamos(), new TypeToken<List<PrestamoDTO>>() {
+		}.getType());
+	}
+	// Devuelve los prestamos VIVOS de la cuenta. + Amortizaciones Planificadas
+	@GetMapping("{id}/prestamosVivos")
+	public List<PrestamoDTO> getPrestamosVivos(@PathVariable int id){
+		return mapper.map(service.listPrestamosVivos(id),new TypeToken<List<PrestamoDTO>>(){
+		}.getType());
+	}
+	@GetMapping("{id}/prestamosAmortizados")
+	public List<PrestamoDTO> getPrestamosAmortizados(@PathVariable int id){
+		return mapper.map(service.listPrestamosAmortizados(id),new TypeToken<List<PrestamoDTO>>() {
+		}.getType());
+	}
+	
+	@PostMapping("{id}/prestamos")
+	public void post(@RequestBody PrestamoDTO prestamo, @PathVariable int id) {
+		service.CreatePrestamo(mapper.map(prestamo,es.eoi.mundobancario.entity.Prestamo.class), id);
+	}
+	@PostMapping("{id}/ingresos")
+	public void postIngreso(@RequestBody IngresoDTO ingreso, @PathVariable int id) {
+		service.CreateIngreso(mapper.map(ingreso, es.eoi.mundobancario.entity.Movimiento.class), id );
+	}
+	@PostMapping("{id}/pagos")
+	public void postPago(@RequestBody IngresoDTO ingreso, @PathVariable int id){
+		service.CreatePago(mapper.map(ingreso, es.eoi.mundobancario.entity.Movimiento.class), id);
+	}
+	
 
-
-
-	//@GetMapping
-	//public List<CuentaDTO> listCuentas() {
-	//	List<Cuenta> listCuentas = service.listCuentas();
-	//	List<CuentaDTO> dto = new ArrayList<CuentaDTO>();
-	//	for (Cuenta cuenta : listCuentas) {
-	//		CuentaDTO cuentadto = new CuentaDTO();
-	//		cuentadto.setNumcuenta(cuenta.getNumcuenta());
-	//		cuentadto.setAlias(cuenta.getAlias());
-	//		cuentadto.setSaldo(cuenta.getSaldo());
-	///		dto.add(cuentadto);
-	//	}
-	//	return dto;
-	//}
 }

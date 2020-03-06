@@ -1,14 +1,22 @@
 package es.eoi.mundobancario.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-
 
 import org.springframework.stereotype.Service;
 
-import es.eoi.mundobancario.entity.Cliente;
+import es.eoi.mundobancario.entity.Amortizacion;
 import es.eoi.mundobancario.entity.Cuenta;
+import es.eoi.mundobancario.entity.Movimiento;
+import es.eoi.mundobancario.entity.Prestamo;
+import es.eoi.mundobancario.entity.TiposMovimiento;
+import es.eoi.mundobancario.repository.AmortizacionRepository;
 import es.eoi.mundobancario.repository.CuentaRepository;
+import es.eoi.mundobancario.repository.MovimientoRepository;
+import es.eoi.mundobancario.repository.PrestamoRepository;
+import es.eoi.mundobancario.repository.TipoMovimientoRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -16,6 +24,10 @@ import lombok.RequiredArgsConstructor;
 public class CuentaServiceImpl implements CuentaService {
 
 	public final CuentaRepository repository;
+	public final PrestamoRepository prestamosrepo;
+	public final AmortizacionRepository amorrepo;
+	public final TipoMovimientoRepository tiporepo;
+	public final MovimientoRepository movimientorepo;
 
 	@Override
 	public Cuenta findById(int id) {
@@ -56,5 +68,139 @@ public class CuentaServiceImpl implements CuentaService {
 			}
 		}
 		return cuentasD;
+	}
+
+
+	@Override
+	public List<Movimiento> listMovimientos(int id) {
+
+		return repository.findById(id).get().getMovimientos();
+	}
+
+
+	@Override
+	public List<Prestamo> listPrestamosVivos(int id) {
+		List<Prestamo> prestamos = repository.findById(id).get().getPrestamos();
+		List<Prestamo> prestamosvivos = new ArrayList<Prestamo>();
+		for(int i = 0; i < prestamos.size(); i++)
+		{
+			if (prestamos.get(i).getPlazos() > 0)
+			{
+				prestamosvivos.add(prestamos.get(i));
+			}
+		}
+		return prestamosvivos;
+	}
+
+
+	@Override
+	public List<Prestamo> listPrestamosAmortizados(int id) {
+		List<Prestamo> prestamos = repository.findById(id).get().getPrestamos();
+		List<Prestamo> prestamosAmortizados = new ArrayList<Prestamo>();
+		for(int i = 0; i < prestamos.size(); i++)
+		{
+			if (prestamos.get(i).getPlazos() == 0)
+			{
+				prestamosAmortizados.add(prestamos.get(i));
+			}
+		}
+		return prestamosAmortizados;
+	}
+
+
+	@Override
+	public void CreatePrestamo(Prestamo prestamo , int id) {
+		//Insertamos el prestamo
+		Calendar c = Calendar.getInstance();
+		
+
+		prestamo.setCuenta(repository.findById(id).get());
+		prestamosrepo.save(prestamo);
+		
+		int a = prestamo.getImporte()/prestamo.getPlazos(); // Sacamos el importe de las amortizaciones
+		//Calculamos amortizacion y la insertamos
+		List<Amortizacion> amor = new ArrayList<Amortizacion>();
+		
+		
+		for(int i= 0; i < prestamo.getPlazos() ; i++)
+		{
+			Amortizacion A = new Amortizacion();
+			A.setImporte(a); // Seteamos el Importe de la amortizacion.
+			c.add(Calendar.MONTH, 1);
+			A.setPrestamo(prestamo);
+			A.setFecha(c.getTime());
+			amor.add(A); // Añadimo Amortizacion a la Lista de Amortizaciones
+			amorrepo.save(A);
+			
+		}
+		
+		
+		
+		//Creamos Movimiento Prestamo
+		Movimiento tipo = new Movimiento();
+		Date date = new Date();
+		tipo.setDescripcion("Prestamo");
+		tipo.setFecha(date);
+		tipo.setCuenta(repository.findById(id).get());
+		tipo.setImporte(prestamo.getImporte());
+		tipo.setTiposmovimiento(tiporepo.findById(1).get());
+		movimientorepo.save(tipo);
+		
+		//Actualizamos Saldo Cuenta
+		double saldoc = repository.findById(id).get().getSaldo();
+		double importec = prestamo.getImporte();
+		double saldof = saldoc + importec;
+		
+		repository.findById(id).get().setSaldo(saldof);
+		repository.save(repository.findById(id).get());
+		
+		
+		
+		
+		
+	}
+
+
+	@Override
+	public void CreateIngreso(Movimiento movimiento, int id) {
+		movimiento.setTiposmovimiento(tiporepo.findById(1).get());
+		Date d = new Date();
+		movimiento.setFecha(d);
+		movimiento.setCuenta(repository.findById(id).get());
+		movimientorepo.save(movimiento);
+		//Actualizamos Saldo Cuenta
+				double saldoc = repository.findById(id).get().getSaldo();
+				double importec = movimiento.getImporte();
+				double saldof = saldoc + importec;
+		repository.findById(id).get().setSaldo(saldof);
+		repository.save(repository.findById(id).get());
+		
+	}
+
+
+	@Override
+	public void CreatePago(Movimiento movimiento, int id) {
+		double saldo = repository.findById(id).get().getSaldo();
+		try {
+		if (saldo >= movimiento.getImporte())
+		{
+		movimiento.setTiposmovimiento(tiporepo.findById(1).get());
+		Date d = new Date();
+		movimiento.setFecha(d);
+		movimiento.setCuenta(repository.findById(id).get());
+		movimientorepo.save(movimiento);
+		//Actualizamos Saldo Cuenta
+				double saldoc = repository.findById(id).get().getSaldo();
+				double importec = movimiento.getImporte();
+				double saldof = saldoc - importec;
+		repository.findById(id).get().setSaldo(saldof);
+		repository.save(repository.findById(id).get());
+		
+		}else {
+			throw new IllegalArgumentException("No hay dinero para este pago.");
+		}
+		
+	}finally {
+		}
 	}
 }

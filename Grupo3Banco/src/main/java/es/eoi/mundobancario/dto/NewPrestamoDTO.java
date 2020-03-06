@@ -1,12 +1,16 @@
 package es.eoi.mundobancario.dto;
 
+import java.util.Date;
+
 import lombok.Data;
 
 @Data
-public class MovimientoDTO {
+public class NewPrestamoDTO {
 	
 	private int id;
+	private int NUMCUENTA;
 	private String descripcion;
+	private Date fecha;
 	private double importe;
-	private TiposMovimientoDTO tiposmovimiento;
+	private int plazos;
 }

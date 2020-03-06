@@ -15,10 +15,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "TIPOS_MOVIMIENTO")
@@ -32,7 +34,7 @@ public class TiposMovimiento {
 	@Column(name = "TIPO")
 	private String tipo;
 	
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY , mappedBy = "tiposmovimiento")
 	private List<Movimiento> movimientos;
 
 }
