@@ -3,6 +3,7 @@ package es.eoi.mundobancario.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import es.eoi.mundobancario.dto.LoginDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/clientes")
 @RestController
-public class ClienteController implements IController<FullClienteDto, Integer> {
+public class ClienteController implements IController<ClienteDto, Integer> {
 	private final ModelMapper mapper;
 	private final ClienteService clienteService;
 	private final CuentaService cuentaService;
@@ -41,8 +42,8 @@ public class ClienteController implements IController<FullClienteDto, Integer> {
 	 * 
 	 */
 	@GetMapping
-	public List<FullClienteDto> findAll() {
-		return clienteService.find().stream().map(c -> mapper.map(c, FullClienteDto.class))
+	public List<ClienteDto> findAll() {
+		return clienteService.find().stream().map(c -> mapper.map(c, ClienteDto.class))
 				.collect(Collectors.toList());
 
 	}
@@ -52,9 +53,23 @@ public class ClienteController implements IController<FullClienteDto, Integer> {
 	 * 
 	 */
 	@GetMapping("/{id}")
-	public FullClienteDto findById(@PathVariable Integer id) {
-		return mapper.map(clienteService.find(id).orElseThrow(RuntimeException::new), 
-				FullClienteDto.class);
+	public ClienteDto findById(@PathVariable Integer id) {
+		return mapper.map(
+				clienteService.find(id).orElseThrow(RuntimeException::new),
+				ClienteDto.class
+		);
+	}
+
+	/**
+	 * Creates an entity.
+	 *
+	 * @param entity Entity to create.
+	 *
+	 * @return Created entity.
+	 */
+	@Override
+	public ClienteDto create(ClienteDto entity) {
+		return null;
 	}
 
 	/**
@@ -62,9 +77,11 @@ public class ClienteController implements IController<FullClienteDto, Integer> {
 	 * 
 	 */
 	@GetMapping("/login")
-	public FullClienteDto login(@PathVariable int id, String nombre, String email, String usuario) {
-		Cliente cliente = mapper.map(findById(id), Cliente.class);
-		return (FullClienteDto) clienteService.find().stream().map(c -> mapper.map(c, FullClienteDto.class));
+	public ClienteDto login(@RequestBody LoginDto cliente) {
+		return mapper.map(
+				clienteService.login(cliente.getUsuario(), cliente.getPass()),
+				ClienteDto.class
+		);
 	}
 	
 	/**
@@ -72,10 +89,10 @@ public class ClienteController implements IController<FullClienteDto, Integer> {
 	 * 
 	 */
 	@PutMapping("/{id}")
-	public FullClienteDto update(@PathVariable Integer id, @RequestBody FullClienteDto entity) {
+	public ClienteDto update(@PathVariable Integer id, @RequestBody ClienteDto entity) {
 		Cliente cliente = mapper.map(findById(id), Cliente.class);
 		cliente.setEmail(entity.getEmail());
-		return mapper.map(clienteService.update(cliente), FullClienteDto.class);
+		return mapper.map(clienteService.update(cliente), ClienteDto.class);
 	}
 
 	/**
@@ -92,21 +109,11 @@ public class ClienteController implements IController<FullClienteDto, Integer> {
 	 * Crea un nuevo cliente.
 	 * 
 	 */
-	@PostMapping("")
-	public FullClienteDto create(@PathVariable Integer id, String nombre, String usuario, String email) {
-		Cliente cliente = mapper.map(findById(id), Cliente.class);
-		cliente.setId(id);
-		cliente.setNombre(nombre);
-		cliente.setUsuario(usuario);
-		cliente.setEmail(email);
-		return mapper.map(clienteService.create(cliente), FullClienteDto.class);
+	@PostMapping
+	public ClienteDto create(@RequestBody FullClienteDto cliente) {
+		return mapper.map(
+				clienteService.create(mapper.map(cliente, Cliente.class)),
+				ClienteDto.class
+		);
 	}
-
-
-	@Override
-	public FullClienteDto create(FullClienteDto entity) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

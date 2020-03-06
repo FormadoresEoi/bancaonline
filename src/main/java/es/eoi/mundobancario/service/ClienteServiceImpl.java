@@ -59,14 +59,12 @@ public class ClienteServiceImpl implements ClienteService {
 	 * @inheritDoc
 	 */
 	@Override
-	public Cliente saveCliente(Cliente entity) {
-		Cliente cliente = new Cliente();
-		return repository.save(cliente);
+	public Cliente create(Cliente entity) {
+		return repository.save(entity);
 	}
 
 	@Override
-	public Cliente create(Cliente entity) {
-		// TODO Auto-generated method stub
-		return null;
-	}   
+	public Cliente login(String username, String password) {
+		return repository.findByUsuarioAndPass(username, password);
+	}
 }

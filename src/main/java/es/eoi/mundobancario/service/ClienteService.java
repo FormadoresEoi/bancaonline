@@ -10,12 +10,5 @@ import es.eoi.mundobancario.entity.Cliente;
  * @author Carlos Sanchez <karlos.sangar@gmail.com>
  */
 public interface ClienteService extends IService<Cliente, Integer> {
-
-	Cliente saveCliente(Cliente entity);
-
-
-	
-
-
-
+	Cliente login(String username, String password);
 }

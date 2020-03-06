@@ -17,4 +17,5 @@ import java.util.List;
 @Data
 public class FullClienteDto extends ClienteDto {
     private List<CuentaDto> cuentas;
+    private String pass;
 }
