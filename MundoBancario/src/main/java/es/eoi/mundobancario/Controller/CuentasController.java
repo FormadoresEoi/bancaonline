@@ -17,7 +17,7 @@ import es.eoi.mundobancario.dto.CuentaDto;
 import es.eoi.mundobancario.dto.CuentaDtoMovimientos;
 import es.eoi.mundobancario.dto.CuentaDtoPrestamos;
 import es.eoi.mundobancario.dto.MovimientoDto;
-import es.eoi.mundobancario.dto.PrestamoDto;
+import es.eoi.mundobancario.dto.PrestamoDtoAmortizaciones;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
@@ -46,7 +46,7 @@ public class CuentasController {
 	@RequestMapping(method = RequestMethod.GET, value = "/deudoras")
 	public List<CuentaDto> findAllDeudoras() {
 		List<CuentaDto> cuentas = new ArrayList<CuentaDto>();
-		for (Cuenta cuenta : service.findAll()) {
+		for (Cuenta cuenta : service.findAllDeudora()) {
 			cuentas.add(dtoConstructor.toCuentaDto(cuenta));
 		}
 		return cuentas;
@@ -93,11 +93,11 @@ public class CuentasController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}/prestamos")
-	public PrestamoDto createPrestamos(@PathVariable int id, @RequestParam("descripcion") String descripcion,
+	public PrestamoDtoAmortizaciones createPrestamos(@PathVariable int id, @RequestParam("descripcion") String descripcion,
 			@RequestParam("importe") double importe, @RequestParam("plazo") int plazo) {
 		Prestamo prestamo = new Prestamo(descripcion, new Date(), importe, plazo);
 		Movimiento movimiento = new Movimiento(descripcion, new Date(), importe);
-		return dtoConstructor.toPrestamoDto(service.createPrestamos(prestamo, movimiento, id));
+		return dtoConstructor.toPrestamoDtoAmortizaciones(service.createPrestamos(prestamo, movimiento, id));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}/ingresos")

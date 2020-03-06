@@ -1,5 +1,6 @@
 package es.eoi.mundobancario.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -73,8 +74,8 @@ public class CuentaServiceImpl implements CuentaService {
 			if (saldo < movimiento.getImporte())
 				throw new NotMoneyEnoughtException();
 			cuenta.setSaldo(saldo - movimiento.getImporte());
-			TipoMovimiento tipoMov = tipoMovimientoRepository.findByTipo("PAGO").get();
-			movimiento.setTipoMovimiento(tipoMov);
+//			TipoMovimiento tipoMov = tipoMovimientoRepository.findByTipo("PAGO").get();
+//			movimiento.setTipoMovimiento(tipoMov);
 			movimiento.setCuenta(cuenta);
 			return movimientoRepository.save(movimiento);
 		} catch (Exception e) {
@@ -98,19 +99,21 @@ public class CuentaServiceImpl implements CuentaService {
 	}
 	@Transactional
 	public Prestamo createPrestamos(Prestamo prestamo, Movimiento movimiento, int id) {
+		List<Amortizacion> amortizaciones = new ArrayList<Amortizacion>();
 		if (prestamo.getPlazo() > 0) {
 			Date fecha = new Date();
 			int mes = fecha.getMonth();
 			Cuenta cuenta = checkNull(cuentasRepository.findById(id));
 			double saldo = cuenta.getSaldo();
 			prestamo.setCuenta(cuenta);
-			prestamo = prestamoRepository.save(prestamo);
+		
 			for (int i = 0; i < prestamo.getPlazo(); i++) {
 				fecha.setMonth(mes + i);
 				Amortizacion amortizacion = new Amortizacion(fecha, (prestamo.getImporte() / prestamo.getPlazo()));
-				amortizacion.setPrestamo(prestamo);
-				amortizacionRepository.save(amortizacion);
+				amortizaciones.add(amortizacion);
 			}
+			prestamo.setAmortizacion(amortizaciones);
+			prestamo = prestamoRepository.save(prestamo);
 			//movimiento.setTipoMovimiento(new TipoMovimiento(tipo.PRESTAMO));
 			movimiento.setCuenta(cuenta);
 			movimientoRepository.save(movimiento);
@@ -146,13 +149,13 @@ public class CuentaServiceImpl implements CuentaService {
 	}
 
 	public List<Cuenta> findAllDeudora() {
-		return cuentasRepository.findBySaldoLessThan();
+		return cuentasRepository.findAllBySaldoLessThan(0.0);
 	}
 
 	public List<Cuenta> findAll() {
 		return cuentasRepository.findAll();
 	}
-	@Transactional
+	
 	public void ejecutarAmortizacionsDiarias() {
 		List<Amortizacion> amortizaciones = amortizacionRepository.findAllByFechaEquals(new Date());
 		for (Amortizacion amortizacion : amortizaciones) {

@@ -12,6 +12,7 @@ import es.eoi.mundobancario.dto.CuentaDtoMovimientos;
 import es.eoi.mundobancario.dto.CuentaDtoPrestamos;
 import es.eoi.mundobancario.dto.MovimientoDto;
 import es.eoi.mundobancario.dto.PrestamoDto;
+import es.eoi.mundobancario.dto.PrestamoDtoAmortizaciones;
 import es.eoi.mundobancario.dto.PrestamoDtoCliente;
 import es.eoi.mundobancario.entity.Cliente;
 import es.eoi.mundobancario.entity.Cuenta;
@@ -51,6 +52,11 @@ public class DtoConstructor {
 	
 	public PrestamoDtoCliente toPrestamoDtoCliente(Prestamo prestamo) {
 		PrestamoDtoCliente prestamoDto = modelMapper.map(prestamo, PrestamoDtoCliente.class);
+		return prestamoDto;
+	}
+	
+	public PrestamoDtoAmortizaciones toPrestamoDtoAmortizaciones(Prestamo prestamo) {
+		PrestamoDtoAmortizaciones prestamoDto = modelMapper.map(prestamo, PrestamoDtoAmortizaciones.class);
 		return prestamoDto;
 	}
 	

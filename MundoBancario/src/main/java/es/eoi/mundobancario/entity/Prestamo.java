@@ -3,6 +3,7 @@ package es.eoi.mundobancario.entity;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -39,7 +40,7 @@ public class Prestamo {
 	private double importe;
 	@Column(name = "PLAZOS")
 	private int plazo;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "prestamo")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "prestamo",cascade = CascadeType.PERSIST)
 	private List<Amortizacion> amortizacion;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "NUM_CUENTA", referencedColumnName = "NUM_CUENTA")
