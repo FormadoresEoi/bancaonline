@@ -1,7 +1,7 @@
 package es.eoi.mundobancario.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +19,6 @@ import es.eoi.mundobancario.entity.Amortizacion;
 import es.eoi.mundobancario.entity.Cuenta;
 import es.eoi.mundobancario.entity.Movimiento;
 import es.eoi.mundobancario.entity.Prestamo;
-import es.eoi.mundobancario.entity.TipoMovimiento;
 import es.eoi.mundobancario.enums.TiposMovimiento;
 import es.eoi.mundobancario.excepcion.NotMoneyEnoughtException;
 
@@ -101,14 +100,14 @@ public class CuentaServiceImpl implements CuentaService {
 	public Prestamo createPrestamos(Prestamo prestamo, Movimiento movimiento, int id) {
 		List<Amortizacion> amortizaciones = new ArrayList<Amortizacion>();
 		if (prestamo.getPlazo() > 0) {
-			Date fecha = new Date();
-			int mes = fecha.getMonth();
+			Calendar fecha = Calendar.getInstance();
+			int mes = fecha.get(Calendar.MONTH) + 1;
 			Cuenta cuenta = checkNull(cuentasRepository.findById(id));
 			double saldo = cuenta.getSaldo();
 			prestamo.setCuenta(cuenta);
 		
 			for (int i = 0; i < prestamo.getPlazo(); i++) {
-				fecha.setMonth(mes + i);
+				fecha.set(Calendar.MONTH, (mes + i));
 				Amortizacion amortizacion = new Amortizacion(fecha, (prestamo.getImporte() / prestamo.getPlazo()));
 				amortizaciones.add(amortizacion);
 			}
@@ -128,7 +127,7 @@ public class CuentaServiceImpl implements CuentaService {
 		Cuenta cuenta = checkNull(cuentasRepository.findById(id));
 		for (Prestamo prestamo : cuenta.getPrestamo()) {
 			for (Amortizacion amortizacion : prestamo.getAmortizacion()) {
-				if (amortizacion.getFecha().compareTo(new Date()) <= 0)
+				if (amortizacion.getFecha().getTime().compareTo(Calendar.getInstance().getTime()) <= 0)
 					amortizacion.setPrestamo(prestamo);
 			}
 			prestamo.setCuenta(cuenta);
@@ -140,7 +139,7 @@ public class CuentaServiceImpl implements CuentaService {
 		Cuenta cuenta = checkNull(cuentasRepository.findById(id));
 		for (Prestamo prestamo : cuenta.getPrestamo()) {
 			for (Amortizacion amortizacion : prestamo.getAmortizacion()) {
-				if (amortizacion.getFecha().compareTo(new Date()) > 0)
+				if (amortizacion.getFecha().getTime().compareTo(Calendar.getInstance().getTime()) > 0)
 					amortizacion.setPrestamo(prestamo);
 			}
 			prestamo.setCuenta(cuenta);
@@ -157,15 +156,15 @@ public class CuentaServiceImpl implements CuentaService {
 	}
 	
 	public void ejecutarAmortizacionsDiarias() {
-		List<Amortizacion> amortizaciones = amortizacionRepository.findAllByFechaEquals(new Date());
+		List<Amortizacion> amortizaciones = amortizacionRepository.findAllByFechaEquals(Calendar.getInstance().getTime());
 		for (Amortizacion amortizacion : amortizaciones) {
 			Cuenta cuenta = checkNull(
 					cuentasRepository.findById(amortizacion.getPrestamo().getCuenta().getNumeroCuenta()));
 			double saldo = cuenta.getSaldo();
-			Movimiento movimiento = new Movimiento("pago de amortizacion", new Date(), amortizacion.getImporte());
+			Movimiento movimiento = new Movimiento("pago de amortizacion", Calendar.getInstance(), amortizacion.getImporte());
 			//movimiento.setTipoMovimiento(new TipoMovimiento(tipo.AMORTIZACION));
 			movimientoRepository.save(movimiento);
-			Movimiento interes = new Movimiento("pago de intereses", new Date(), (amortizacion.getImporte() * 0.2));
+			Movimiento interes = new Movimiento("pago de intereses", Calendar.getInstance(), (amortizacion.getImporte() * 0.2));
 			//movimiento.setTipoMovimiento(new TipoMovimiento(tipo.INTERES));
 			movimientoRepository.save(interes);
 			cuenta.setSaldo(saldo - amortizacion.getImporte() - (amortizacion.getImporte() * 0.2));

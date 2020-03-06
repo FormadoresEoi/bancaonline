@@ -1,5 +1,6 @@
 package es.eoi.mundobancario.entity;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -35,18 +36,18 @@ public class Prestamo {
 	private String descripcion;
 	@Temporal(TemporalType.DATE)
 	@Column(name = "FECHA")
-	private Date fecha;
+	private Calendar fecha;
 	@Column(name = "IMPORTE")
 	private double importe;
 	@Column(name = "PLAZOS")
 	private int plazo;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "prestamo",cascade = CascadeType.PERSIST)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "prestamo", cascade = CascadeType.PERSIST)
 	private List<Amortizacion> amortizacion;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "NUM_CUENTA", referencedColumnName = "NUM_CUENTA")
 	private Cuenta cuenta;
 
-	public Prestamo(String descripcion, Date fecha, double importe, int plazo) {
+	public Prestamo(String descripcion, Calendar fecha, double importe, int plazo) {
 		super();
 		this.descripcion = descripcion;
 		this.fecha = fecha;

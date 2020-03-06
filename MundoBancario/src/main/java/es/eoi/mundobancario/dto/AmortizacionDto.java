@@ -1,6 +1,6 @@
 package es.eoi.mundobancario.dto;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -16,7 +16,7 @@ public class AmortizacionDto {
 	private int id;
 	private int idPrestamo;
 	@Temporal(TemporalType.DATE)
-	private Date fecha;
+	private Calendar fecha;
 	private double importe;
 
 }

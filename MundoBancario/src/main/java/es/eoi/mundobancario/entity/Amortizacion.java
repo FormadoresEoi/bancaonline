@@ -1,5 +1,6 @@
 package es.eoi.mundobancario.entity;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -34,7 +35,7 @@ public class Amortizacion {
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "FECHA")
-	private Date fecha;
+	private Calendar fecha;
 
 	@Column(name = "IMPORTE")
 	private double importe;
@@ -43,9 +44,9 @@ public class Amortizacion {
 	@JoinColumn(name = "ID_PRESTAMO", referencedColumnName = "ID")
 	private Prestamo prestamo;
 
-	public Amortizacion(Date fecha, double importe) {
+	public Amortizacion(Calendar fecha2, double importe) {
 		super();
-		this.fecha = fecha;
+		this.fecha = fecha2;
 		this.importe = importe;
 	}
 

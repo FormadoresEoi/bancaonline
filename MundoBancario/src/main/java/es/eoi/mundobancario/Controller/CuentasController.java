@@ -1,7 +1,7 @@
 package es.eoi.mundobancario.Controller;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,22 +95,22 @@ public class CuentasController {
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}/prestamos")
 	public PrestamoDtoAmortizaciones createPrestamos(@PathVariable int id, @RequestParam("descripcion") String descripcion,
 			@RequestParam("importe") double importe, @RequestParam("plazo") int plazo) {
-		Prestamo prestamo = new Prestamo(descripcion, new Date(), importe, plazo);
-		Movimiento movimiento = new Movimiento(descripcion, new Date(), importe);
+		Prestamo prestamo = new Prestamo(descripcion, Calendar.getInstance(), importe, plazo);
+		Movimiento movimiento = new Movimiento(descripcion, Calendar.getInstance(), importe);
 		return dtoConstructor.toPrestamoDtoAmortizaciones(service.createPrestamos(prestamo, movimiento, id));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}/ingresos")
 	public MovimientoDto createIngresos(@PathVariable int id, @RequestParam("descripcion") String descripcion,
 			@RequestParam("importe") double importe) {
-		Movimiento movimiento = new Movimiento(descripcion, new Date(), importe);
+		Movimiento movimiento = new Movimiento(descripcion, Calendar.getInstance(), importe);
 		return dtoConstructor.toMovimientoDto(service.createIngresos(movimiento, id));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}/pagos")
 	public MovimientoDto createPagos(@PathVariable int id, @RequestParam("descripcion") String descripcion,
 			@RequestParam("importe") double importe) {
-		Movimiento movimiento = new Movimiento(descripcion, new Date(), importe);
+		Movimiento movimiento = new Movimiento(descripcion, Calendar.getInstance(), importe);
 		return dtoConstructor.toMovimientoDto(service.createPagos(movimiento, id));
 	}
 

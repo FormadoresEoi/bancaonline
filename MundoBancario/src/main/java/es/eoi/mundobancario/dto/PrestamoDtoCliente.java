@@ -1,6 +1,6 @@
 package es.eoi.mundobancario.dto;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.Temporal;
@@ -16,7 +16,7 @@ public class PrestamoDtoCliente {
 	private int id;
 	private String descripcion;
 	@Temporal(TemporalType.DATE)
-	private Date fecha;
+	private Calendar fecha;
 	private double importe;
 	private int plazo;
 	private ClienteDto cliente;

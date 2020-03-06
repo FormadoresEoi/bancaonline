@@ -1,6 +1,6 @@
 package es.eoi.mundobancario.entity;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,7 +32,7 @@ public class Movimiento {
 	private String descripcion;
 	@Temporal(TemporalType.DATE)
 	@Column(name = "FECHA")
-	private Date fecha;
+	private Calendar fecha;
 	@Column(name = "IMPORTE")
 	private double importe;
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -42,7 +42,7 @@ public class Movimiento {
 	@JoinColumn(name = "NUM_CUENTA", referencedColumnName = "NUM_CUENTA")
 	private Cuenta cuenta;
 
-	public Movimiento(String descripcion, Date fecha, double importe) {
+	public Movimiento(String descripcion, Calendar fecha, double importe) {
 		super();
 		this.descripcion = descripcion;
 		this.fecha = fecha;
