@@ -10,7 +10,4 @@ public class CuentaDTO {
 	private int numcuenta;
 	private String alias;
 	private double saldo;
-
-	
-
 }

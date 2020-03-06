@@ -48,7 +48,6 @@ public class CuentasController {
 	@PostMapping
 	public void post(@RequestBody CuentaDTO cuenta) {
         service.createCuenta(mapper.map(cuenta,es.eoi.mundobancario.entity.Cuenta.class));
-         
     }
 	//Modifica campo alias de la cuenta solicitada.
 	@PutMapping("{id}")
