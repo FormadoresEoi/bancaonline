@@ -20,4 +20,6 @@ public class AmortizacionDto {
 	private double importe;
 	
 	private int id_prestamo;
+	
+	private String estado;
 }

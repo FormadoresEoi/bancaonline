@@ -14,16 +14,14 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class CuentaDto {
-	
-private int numCuenta;
+
+	private int numCuenta;
 	
 	private String alias;
 	
 	private double saldo;
 	
-	private ClienteDto cliente;
-	
-	private String id_cliente;
+	private ClienteBasicoDto cliente;
 	
 	private List<MovimientoDto> movimientos;
 	
