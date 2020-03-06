@@ -23,10 +23,6 @@ public class TipoMovimiento {
 	@Column(name = "ID")
 	private int id;
 	@Column(name = "TIPO")
-	private TiposMovimiento tipo;
-
-	public TipoMovimiento(TiposMovimiento tipo) {
-		this.tipo = tipo;
-	}
+	private String tipo;
 
 }
