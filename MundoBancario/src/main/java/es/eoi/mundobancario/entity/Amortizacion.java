@@ -34,6 +34,9 @@ public class Amortizacion {
 	@Column
 	float importe;
 
+	@Column(columnDefinition = "varchar(20) default 'PENDIENTE'")
+	String pagado;
+	
 	@ManyToOne
 	@JoinColumn(name = "prestamo", referencedColumnName = "id")
 	Prestamo prestamo;

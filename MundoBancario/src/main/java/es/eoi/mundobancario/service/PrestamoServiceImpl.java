@@ -1,6 +1,7 @@
 package es.eoi.mundobancario.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,15 @@ public class PrestamoServiceImpl implements PrestamoService {
 	@Override
 	public List<Prestamo> getPrestamosAmortizados(){
 		return repository.findByPrestamoAmortizadoAll();
+	}
+	
+	@Override
+	public List<Prestamo> getPrestamosRecienPagados(){
+		return repository.findByPrestamoRecienPagado();
+	}
+	@Override
+	public Optional<Prestamo> getByCuentaAndPagado(Cuenta cuenta, String pagado){
+		return repository.findByCuentaAndPagado(cuenta, pagado);
 	}
 
 }
