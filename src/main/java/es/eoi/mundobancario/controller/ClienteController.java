@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import es.eoi.mundobancario.dto.ClienteDto;
 import es.eoi.mundobancario.dto.CuentaDto;
 import es.eoi.mundobancario.dto.FullClienteDto;
 import es.eoi.mundobancario.entity.Cliente;
@@ -53,8 +52,7 @@ public class ClienteController implements IController<FullClienteDto, Integer> {
 	 */
 	@GetMapping("/{id}")
 	public FullClienteDto findById(@PathVariable Integer id) {
-		return mapper.map(clienteService.find(id).orElseThrow(RuntimeException::new), 
-				FullClienteDto.class);
+		return mapper.map(clienteService.find(id).orElseThrow(RuntimeException::new), FullClienteDto.class);
 	}
 
 	/**
@@ -62,18 +60,23 @@ public class ClienteController implements IController<FullClienteDto, Integer> {
 	 * 
 	 */
 	@GetMapping("/login")
-	public FullClienteDto login(@PathVariable int id, String nombre, String email, String usuario) {
-		Cliente cliente = mapper.map(findById(id), Cliente.class);
-		return (FullClienteDto) clienteService.find().stream().map(c -> mapper.map(c, FullClienteDto.class));
+	public FullClienteDto login(@PathVariable Integer id, String nombre, String email, String usuario,
+			@RequestBody FullClienteDto entity) {
+		Cliente cliente = clienteService.find(id).orElseThrow(RuntimeException::new);
+		cliente.getNombre();
+		cliente.getEmail();
+		cliente.get
+		
+		return mapper.map(clienteService..stream().map(c -> mapper.map(c, FullClienteDto.class)));
 	}
-	
+
 	/**
 	 * Modifica un cliente.
 	 * 
 	 */
 	@PutMapping("/{id}")
 	public FullClienteDto update(@PathVariable Integer id, @RequestBody FullClienteDto entity) {
-		Cliente cliente = mapper.map(findById(id), Cliente.class);
+		Cliente cliente = clienteService.find(id).orElseThrow(RuntimeException::new);
 		cliente.setEmail(entity.getEmail());
 		return mapper.map(clienteService.update(cliente), FullClienteDto.class);
 	}
@@ -93,20 +96,8 @@ public class ClienteController implements IController<FullClienteDto, Integer> {
 	 * 
 	 */
 	@PostMapping("")
-	public FullClienteDto create(@PathVariable Integer id, String nombre, String usuario, String email) {
-		Cliente cliente = mapper.map(findById(id), Cliente.class);
-		cliente.setId(id);
-		cliente.setNombre(nombre);
-		cliente.setUsuario(usuario);
-		cliente.setEmail(email);
-		return mapper.map(clienteService.create(cliente), FullClienteDto.class);
-	}
-
-
-	@Override
-	public FullClienteDto create(FullClienteDto entity) {
-		// TODO Auto-generated method stub
-		return null;
+	public FullClienteDto create(@RequestBody FullClienteDto entity) {
+		return mapper.map(clienteService.create(mapper.map(entity, Cliente.class)), FullClienteDto.class);
 	}
 
 }
