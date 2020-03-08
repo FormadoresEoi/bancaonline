@@ -1,6 +1,7 @@
 package es.eoi.app.controller;
 
-import java.time.Instant;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,11 +9,7 @@ import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -21,10 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import es.eoi.app.dto.ClienteBasicoDto;
-import es.eoi.app.dto.ClienteDto;
-import es.eoi.app.dto.NewPrestamoDto;
-import es.eoi.app.dto.PrestamoDto;
+import es.eoi.app.dto.*;
 
 @Controller
 public class MenuController {
@@ -48,7 +42,7 @@ public class MenuController {
 		System.out.println("1 - Modificar información de usuario");
 		System.out.println("2 - Consultar mis cuentas");
 		System.out.println("3 - Gestionar/ solicitar prestamos");
-		System.out.println("4 - amortizar prestamos");
+		System.out.println("4 - Amortizar prestamos");
 		System.out.println("5 - Generacion de reportes");
 		System.out.println("6 - Exit");
 		System.out.print("Opcion: ");
@@ -75,60 +69,14 @@ public class MenuController {
 				getCuentasCliente(idCliente);
 				break;
 			case "3":
-				String uri = url.concat("cuentas/").concat(idCuenta).concat("/prestamos");
-				
-				System.out.println("Quiere consultar los prestamos o solicitar(1/2): ");
-				String opt = scan.nextLine();
-				if(opt.equals("1")) {
-					System.out.println("Introduzca el numero de cuenta para consultar los prestamos: ");
-					idCuenta = scan.nextLine();
-					HttpHeaders headers = new HttpHeaders();
-					HttpEntity<List<PrestamoDto>> requestEntity = new HttpEntity<>(headers);
-					ResponseEntity<List<PrestamoDto>> prestamo = restTemplate
-							.exchange(
-									uri, 
-									HttpMethod.GET, 
-									requestEntity, 
-									new ParameterizedTypeReference <List<PrestamoDto>>(){});
-					
-					gson = new GsonBuilder().setPrettyPrinting().create();
-					
-					System.out.println(gson.toJson(prestamo.getBody()));				
-					
-				}
-				else if(opt.equals("2")) {
-					System.out.println("Introduzca el numero de cuenta para solicitar un préstamo: ");
-					idCuenta = scan.nextLine();
-					
-					
-					NewPrestamoDto newPrestamo = new NewPrestamoDto();
-					System.out.println("Descripción del préstamo: ");
-					String descripcion = scan.nextLine();
-				
-					long fecha = Instant.now().toEpochMilli();
-					
-					System.out.println("Importe del préstamo: ");
-					double importe = scan.nextDouble();
-					
-					System.out.println("Plazos del préstamo: ");
-					String plazos = scan.nextLine();
-					
-					System.out.println("Id de la cuenta para el préstamo: ");
-					
-					
-					
-				}
+				gestionarPrestamos(idCuenta);
 				break;
 			case "4":
-				
-				HttpEntity<ClienteDto> requeste = new HttpEntity<>(new ClienteDto());
-				ClienteDto clientee = restTemplate.postForObject(url + "/cuentas/ejecutarAmortizacionesDiarias", requeste, ClienteDto.class);
-					
+				amortizarPrestamos();
 				break;
 			case "5":
-
+				//ToDo
 				break;
-				
 			case "6":
 				exit = true;
 				break;
@@ -200,6 +148,100 @@ public class MenuController {
 			System.out.println("Cliente not found");
 			return;
 		}
+	}
+	
+	private void gestionarPrestamos(String idCuenta) {
+		
+		System.out.println("Quiere consultar los prestamos o solicitar(1/2): ");
+		String opt = scan.nextLine();
+		
+		if(opt.equals("1")) {
+			System.out.println("Introduzca el numero de cuenta para consultar los prestamos: ");
+			idCuenta = scan.nextLine();
+			
+			HttpHeaders headers = new HttpHeaders();
+			HttpEntity<List<PrestamoDto>> requestEntity = new HttpEntity<>(headers);
+			
+			String uri = url.concat("cuentas/").concat(idCuenta).concat("/prestamos");
+			try {				
+				ResponseEntity<List<PrestamoDto>> prestamo = restTemplate
+						.exchange(
+								uri, 
+								HttpMethod.GET, 
+								requestEntity, 
+								new ParameterizedTypeReference <List<PrestamoDto>>(){});
+				
+				gson = new GsonBuilder().setPrettyPrinting().create();
+				
+				System.out.println(gson.toJson(prestamo.getBody()));				
+			} catch (RestClientException e) {
+				System.out.println(e.getMessage());
+			}
+			
+		}
+		else if(opt.equals("2")) {
+			System.out.println("Introduzca el numero de cuenta para solicitar un préstamo: ");
+			idCuenta = scan.nextLine();
+			
+			NewPrestamoDto newPrestamo = new NewPrestamoDto();
+			System.out.println("Descripción del préstamo: ");
+			String descripcion = scan.nextLine();
+			if(!descripcion.isEmpty())
+				newPrestamo.setDescripcion(descripcion);
+			
+			Calendar cal = Calendar.getInstance();
+			cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+			Timestamp time = new Timestamp(cal.getTime().getTime());
+			newPrestamo.setFecha(time.toString());
+			
+			System.out.println("Importe del préstamo: ");
+			double importe = scan.nextDouble();
+			if(importe > 0.0)
+				newPrestamo.setImporte(importe);
+			
+			System.out.println("Plazos del préstamo: ");
+			int plazos = scan.nextInt();
+			if(plazos > 0)
+				newPrestamo.setPlazos(plazos);
+			scan.nextLine();
+			
+			System.out.println("Id de la cuenta para el préstamo: ");
+			String cuenta = scan.nextLine();
+			newPrestamo.setId_cuenta(Integer.parseInt(cuenta));
+			
+			String uri = url.concat("cuentas/").concat("prestamos");
+			HttpHeaders headers = new HttpHeaders();
+			HttpEntity<NewPrestamoDto> entity = new HttpEntity<NewPrestamoDto>(newPrestamo, headers);
+			
+			try {
+				ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);
+				if (response.getStatusCode() == HttpStatus.OK) {
+					System.out.println("response received");
+					System.out.println(response.getStatusCodeValue());
+				} else {
+					System.out.println("error occurred");
+					System.out.println(response.getStatusCode());
+				}
+				
+			} catch (RestClientException e) {
+				System.out.println(e.getMessage());
+			}
+			
+		}
+	}
+	
+	private void amortizarPrestamos() {
+		HttpEntity<String> requeste = new HttpEntity<>(null);
+		ResponseEntity<String> response = restTemplate.exchange(
+				url.concat("cuentas/ejecutarAmortizacionesDiarias"), HttpMethod.POST, requeste, String.class);
+			
+		if (response.getStatusCode() == HttpStatus.OK) {
+            System.out.println("response received");
+            System.out.println(response.getStatusCode());
+        } else {
+            System.out.println("error occurred");
+            System.out.println(response.getStatusCode());
+        }
 	}
 	
 }
