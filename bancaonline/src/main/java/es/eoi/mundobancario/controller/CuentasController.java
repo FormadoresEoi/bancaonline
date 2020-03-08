@@ -81,7 +81,7 @@ public class CuentasController {
 	}
 	
 
-	@PostMapping("/{id}/prestamos")
+	@PostMapping("/prestamos")
 	public ResponseEntity<String> createPrestamo(@RequestBody NewPrestamoDto dto) {
 		Optional<Cuenta> cuenta = cuentaService.find(dto.getId_cuenta());
 		if (!cuenta.isPresent() || dto.getPlazos() == 0)
@@ -94,8 +94,8 @@ public class CuentasController {
 			prestamoDto.setCuenta(cuentaDto);
 			Prestamo prestamo = model.map(prestamoDto, Prestamo.class);
 			
-			prestamo.setAmortizaciones(amortizacionService.calcularAmortizaciones(prestamo));
 			prestamoService.create(prestamo);
+			prestamo.setAmortizaciones(amortizacionService.calcularAmortizaciones(prestamo));
 		}
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
@@ -187,9 +187,8 @@ public class CuentasController {
 	
 	@PostMapping("/ejecutarAmortizacionesDiarias")
 	public ResponseEntity<String> ejecutarAmortizacionesDiarias() {
-		
-			amortizacionService.ejecutarAmortizacionesDiarias();
-			return new ResponseEntity<String>(HttpStatus.OK);
+		amortizacionService.ejecutarAmortizacionesDiarias();
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}/movimientos")

@@ -2,6 +2,7 @@ package es.eoi.mundobancario.entity;
 
 import java.sql.Timestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -43,7 +44,7 @@ public class Amortizacion {
 	@Column(name = "estado")
 	private String estado;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "id_prestamo", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
 	private Prestamo prestamo;
 }

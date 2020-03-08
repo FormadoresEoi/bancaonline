@@ -55,6 +55,6 @@ public class Prestamo {
 	@JoinColumn(name = "id_cuenta", referencedColumnName = "num_cuenta")
 	private Cuenta cuenta;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "prestamo")
+	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, mappedBy = "prestamo")
 	private List<Amortizacion> amortizaciones;
 }

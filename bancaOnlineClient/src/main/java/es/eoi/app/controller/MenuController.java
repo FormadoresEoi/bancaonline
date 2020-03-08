@@ -1,11 +1,15 @@
 package es.eoi.app.controller;
 
+import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +23,8 @@ import com.google.gson.GsonBuilder;
 
 import es.eoi.app.dto.ClienteBasicoDto;
 import es.eoi.app.dto.ClienteDto;
+import es.eoi.app.dto.NewPrestamoDto;
+import es.eoi.app.dto.PrestamoDto;
 
 @Controller
 public class MenuController {
@@ -56,6 +62,7 @@ public class MenuController {
 		boolean exit = false;
 		String option = "";
 		String idCliente = "";
+		String idCuenta = "";
 		
 		do {
 			option = printMainMenu();
@@ -68,12 +75,49 @@ public class MenuController {
 				getCuentasCliente(idCliente);
 				break;
 			case "3":
-				//get prestamos, create prestamos
-				System.out.println("introduzca el numero de cuenta para consultar los prestamos");
-				idCliente= scan.nextLine();		
-				ResponseEntity prestamo = restTemplate.getForObject(url+"/cuentas/" + idCliente + "/prestamos",ResponseEntity.class); 	 
-				System.out.println(prestamo.toString());
+				String uri = url.concat("cuentas/").concat(idCuenta).concat("/prestamos");
 				
+				System.out.println("Quiere consultar los prestamos o solicitar(1/2): ");
+				String opt = scan.nextLine();
+				if(opt.equals("1")) {
+					System.out.println("Introduzca el numero de cuenta para consultar los prestamos: ");
+					idCuenta = scan.nextLine();
+					HttpHeaders headers = new HttpHeaders();
+					HttpEntity<List<PrestamoDto>> requestEntity = new HttpEntity<>(headers);
+					ResponseEntity<List<PrestamoDto>> prestamo = restTemplate
+							.exchange(
+									uri, 
+									HttpMethod.GET, 
+									requestEntity, 
+									new ParameterizedTypeReference <List<PrestamoDto>>(){});
+					
+					gson = new GsonBuilder().setPrettyPrinting().create();
+					
+					System.out.println(gson.toJson(prestamo.getBody()));				
+					
+				}
+				else if(opt.equals("2")) {
+					System.out.println("Introduzca el numero de cuenta para solicitar un préstamo: ");
+					idCuenta = scan.nextLine();
+					
+					
+					NewPrestamoDto newPrestamo = new NewPrestamoDto();
+					System.out.println("Descripción del préstamo: ");
+					String descripcion = scan.nextLine();
+				
+					long fecha = Instant.now().toEpochMilli();
+					
+					System.out.println("Importe del préstamo: ");
+					double importe = scan.nextDouble();
+					
+					System.out.println("Plazos del préstamo: ");
+					String plazos = scan.nextLine();
+					
+					System.out.println("Id de la cuenta para el préstamo: ");
+					
+					
+					
+				}
 				break;
 			case "4":
 				
@@ -99,9 +143,9 @@ public class MenuController {
 		
 		System.out.println("Introduzca el id de usuario a modificar: ");
 		idCliente= scan.nextLine();
-		
+		String uri = url.concat("clientes/").concat(idCliente);
 		try {
-			clienteDto = restTemplate.getForObject(url.concat("clientes/").concat(idCliente), ClienteBasicoDto.class);
+			clienteDto = restTemplate.getForObject(uri, ClienteBasicoDto.class);
 			
 		} catch (RestClientException e) {
 			System.err.println(e.getMessage());
@@ -115,7 +159,7 @@ public class MenuController {
 		System.out.println("Introduzca el nuevo email(" + clienteDto.getEmail() + "): ");
 		String email = scan.nextLine();
 		
-		UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url.concat("clientes/").concat(idCliente))
+		UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(uri)
 				.queryParam("email",email);
 
 		Map<String, String> params = new HashMap<String, String>();
@@ -143,13 +187,9 @@ public class MenuController {
 		idCliente= scan.nextLine();
 		
 		gson = new GsonBuilder().setPrettyPrinting().create();
-		
+		String uri = url.concat("clientes/").concat(idCliente).concat("/cuentas");
 		try {
-			clienteDto = restTemplate.getForObject(url
-													.concat("clientes/")
-													.concat(idCliente)
-													.concat("/cuentas"), 
-													ClienteDto.class);
+			clienteDto = restTemplate.getForObject(uri, ClienteDto.class);
 			
 			System.out.println(gson.toJson(clienteDto, ClienteDto.class));
 		} catch (RestClientException e) {

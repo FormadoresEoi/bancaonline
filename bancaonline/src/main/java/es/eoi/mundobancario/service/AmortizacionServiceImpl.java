@@ -66,6 +66,8 @@ public class AmortizacionServiceImpl implements AmortizacionService {
 			amortizacion.setPrestamo(prestamo);
 			timestamp = new Timestamp(cal.getTime().getTime());
 			amortizacion.setFecha(timestamp);
+			amortizacion.setEstado("PENDIENTE");
+			create(amortizacion);
 			amortizaciones.add(amortizacion);
 		}
 		return amortizaciones;
