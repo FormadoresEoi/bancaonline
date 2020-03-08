@@ -1,5 +1,6 @@
 package es.eoi.app.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -8,12 +9,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@SuppressWarnings("serial")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class CuentaDto {
+public class CuentaDto implements Serializable{
 
 	private int numCuenta;
 	

@@ -14,6 +14,9 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import es.eoi.app.dto.ClienteBasicoDto;
 import es.eoi.app.dto.ClienteDto;
 
@@ -22,6 +25,7 @@ public class MenuController {
 		
 	private final Scanner scan= new Scanner(System.in);
 	private final RestTemplate restTemplate = new RestTemplate();
+	private static Gson gson;
 	
 	@Value("${bancaonline.server.url}")
 	public String url;
@@ -49,7 +53,6 @@ public class MenuController {
 	
 	public void menu() {
 		
-		
 		boolean exit = false;
 		String option = "";
 		String idCliente = "";
@@ -61,13 +64,8 @@ public class MenuController {
 				updateCliente(idCliente);
 				break;
 				
-			case "2":
-				System.out.println("introduzca el numero de cuenta");
-				idCliente= scan.nextLine();
-				
-				ClienteDto result = restTemplate.getForObject(url+"/clientes/" + idCliente + "/cuentas", ClienteDto.class); 	 
-				System.out.println(result.toString());
-				
+			case "2":				
+				getCuentasCliente(idCliente);
 				break;
 			case "3":
 				//get prestamos, create prestamos
@@ -81,12 +79,15 @@ public class MenuController {
 				
 				HttpEntity<ClienteDto> requeste = new HttpEntity<>(new ClienteDto());
 				ClienteDto clientee = restTemplate.postForObject(url + "/cuentas/ejecutarAmortizacionesDiarias", requeste, ClienteDto.class);
-			
-		
-		break;
+					
+				break;
 			case "5":
 
-		break;
+				break;
+				
+			case "6":
+				exit = true;
+				break;
 			default:
 				break;
 			}
@@ -134,6 +135,31 @@ public class MenuController {
             System.out.println("error occurred");
             System.out.println(response.getStatusCode());
         }
+	}
+	
+	private void getCuentasCliente(String idCliente) {
+		ClienteDto clienteDto = null;
+		System.out.println("Introduzca el id del cliente para ver sus cuentas: ");
+		idCliente= scan.nextLine();
+		
+		gson = new GsonBuilder().setPrettyPrinting().create();
+		
+		try {
+			clienteDto = restTemplate.getForObject(url
+													.concat("clientes/")
+													.concat(idCliente)
+													.concat("/cuentas"), 
+													ClienteDto.class);
+			
+			System.out.println(gson.toJson(clienteDto, ClienteDto.class));
+		} catch (RestClientException e) {
+			System.err.println(e.getMessage());
+		}
+		
+		if(clienteDto == null) {			
+			System.out.println("Cliente not found");
+			return;
+		}
 	}
 	
 }
