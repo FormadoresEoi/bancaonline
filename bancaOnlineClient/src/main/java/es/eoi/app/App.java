@@ -17,7 +17,7 @@ public class App {
 	public static void main(String[] args) {		
 		ConfigurableApplicationContext context = SpringApplication.run(App.class, args);		
 		MenuController controller = context.getBean(MenuController.class);
-		controller.printMainMenu();
+		controller.menu();
 	}
 	
 	

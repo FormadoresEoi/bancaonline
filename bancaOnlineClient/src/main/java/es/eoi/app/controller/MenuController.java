@@ -1,30 +1,40 @@
 package es.eoi.app.controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import es.eoi.app.dto.*;
+import es.eoi.app.dto.ClienteBasicoDto;
+import es.eoi.app.dto.ClienteDto;
 
 @Controller
 public class MenuController {
 		
-	public  Scanner scan= new Scanner(System.in);
-	public  String idCliente="";	
-	public  String seleccion="";	
+	private final Scanner scan= new Scanner(System.in);
+	private final RestTemplate restTemplate = new RestTemplate();
+	
 	@Value("${bancaonline.server.url}")
 	public String url;
 	
 	public String printMainMenu() {	
 		
 		
+		System.out.println("*************************************************");
+		System.out.println("Bienvenido a tu aplicación de Banca Flipante!!!!!");
+		System.out.println("*************************************************");
 		System.out.println();
-		System.out.println("--¿ Que operacion desea realizar ?--");			
+		System.out.println("¿Que operacion desea realizar?");
+		System.out.println();
 		System.out.println("1 - Modificar información de usuario");
 		System.out.println("2 - Consultar mis cuentas");
 		System.out.println("3 - Gestionar/ solicitar prestamos");
@@ -38,32 +48,22 @@ public class MenuController {
 	}
 	
 	public void menu() {
-		RestTemplate restTemplate = new RestTemplate();
+		
 		
 		boolean exit = false;
 		String option = "";
+		String idCliente = "";
 		
 		do {
 			option = printMainMenu();
-			switch (seleccion) {
+			switch (option) {
 			case "1":
-				System.out.println("Introduzca el id de usuario a modificar: ");
-				idCliente= scan.next();
-				
-				System.out.println("Introduzca el nuevo email: ");
-				String email = scan.next();
-				
-				ResponseEntity<ClienteBasicoDto> cliente = restTemplate.getForObject(url+"/clientes/" + idCliente, ResponseEntity.class);
-
-				ClienteBasicoDto clienteDto = (ClienteBasicoDto) cliente.getBody();
-				clienteDto.setEmail(email);
-				HttpEntity<ClienteBasicoDto> requestUpdate = new HttpEntity<>(clienteDto);
-				restTemplate.exchange(url, HttpMethod.PUT, requestUpdate, Void.class);
+				updateCliente(idCliente);
 				break;
 				
 			case "2":
 				System.out.println("introduzca el numero de cuenta");
-				idCliente= scan.next();
+				idCliente= scan.nextLine();
 				
 				ClienteDto result = restTemplate.getForObject(url+"/clientes/" + idCliente + "/cuentas", ClienteDto.class); 	 
 				System.out.println(result.toString());
@@ -72,10 +72,9 @@ public class MenuController {
 			case "3":
 				//get prestamos, create prestamos
 				System.out.println("introduzca el numero de cuenta para consultar los prestamos");
-				idCliente= scan.next();		
+				idCliente= scan.nextLine();		
 				ResponseEntity prestamo = restTemplate.getForObject(url+"/cuentas/" + idCliente + "/prestamos",ResponseEntity.class); 	 
 				System.out.println(prestamo.toString());
-				
 				
 				break;
 			case "4":
@@ -92,27 +91,49 @@ public class MenuController {
 				break;
 			}
 		}while(!exit);
+	}
+	
+	private void updateCliente(String idCliente) {
+		ClienteBasicoDto clienteDto = null;
 		
-		//hacer un post
-		//HttpEntity<ClienteDto> request = new HttpEntity<>(new ClienteDto());
-		//ClienteDto cliente = restTemplate.postForObject(url, request, ClienteDto.class);
+		System.out.println("Introduzca el id de usuario a modificar: ");
+		idCliente= scan.nextLine();
 		
-		/*
-		//headers
-		HttpHeaders httpHeaders = restTemplate.headForHeaders(url);
+		try {
+			clienteDto = restTemplate.getForObject(url.concat("clientes/").concat(idCliente), ClienteBasicoDto.class);
+			
+		} catch (RestClientException e) {
+			System.err.println(e.getMessage());
+		}
 		
+		if(clienteDto == null) {			
+			System.out.println("Cliente not found");
+			return;
+		}
 		
-		//creo el cliente a modificar
-		ClienteDto updatedInstance = new ClienteDto();
+		System.out.println("Introduzca el nuevo email(" + clienteDto.getEmail() + "): ");
+		String email = scan.nextLine();
 		
-		updatedInstance.setEmail("mail");
-		String resourceUrl = 
-				url +"/clientes/" + idCliente;		
+		UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url.concat("clientes/").concat(idCliente))
+				.queryParam("email",email);
+
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("email", email);
+		HttpEntity<Map<String, String>> requestUpdate = new HttpEntity<Map<String,String>>(params);
+		ResponseEntity<ClienteBasicoDto> response = restTemplate.exchange(
+				builder.toUriString(), 
+				HttpMethod.PUT, 
+				requestUpdate, 
+				ClienteBasicoDto.class, 
+				params);
 		
-		HttpEntity<ClienteDto> requestUpdate = new HttpEntity<>(updatedInstance, headers);
-		restTemplate.exchange(resourceUrl, HttpMethod.PUT, requestUpdate, Void.class);
-		
-		*/
+		if (response.getStatusCode() == HttpStatus.OK) {
+            System.out.println("response received");
+            System.out.println(response.getBody());
+        } else {
+            System.out.println("error occurred");
+            System.out.println(response.getStatusCode());
+        }
 	}
 	
 }
