@@ -41,10 +41,10 @@ public class MenuController {
 		System.out.println();
 		System.out.println("1 - Modificar información de usuario");
 		System.out.println("2 - Consultar mis cuentas");
-		System.out.println("3 - Gestionar/ solicitar prestamos");
+		System.out.println("3 - Gestionar/solicitar prestamos");
 		System.out.println("4 - Amortizar prestamos");
 		System.out.println("5 - Generacion de reportes");
-		System.out.println("6 - Exit");
+		System.out.println("6 - Salir");
 		System.out.print("Opcion: ");
 		System.out.println();
 		
